@@ -7,17 +7,21 @@ import com.zeroxn.pay.core.exception.PayException;
 import com.zeroxn.pay.module.alipay.AlipayPayHandler;
 import com.zeroxn.pay.module.wechat.WechatPayHandler;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
 
 /**
  * @Author: lisang
  * @DateTime: 2023/4/27 09:40
  * @Description: APi适配器 统一提供对外调用的接口
  */
-@Slf4j
-public class ApiAdapter {
-    private final AlipayPayHandler alipayPayHandler = new AlipayPayHandler();
-    private final WechatPayHandler wechatPayHandler = new WechatPayHandler();
 
+public class ApiAdapter {
+    private final AlipayPayHandler alipayPayHandler;
+    private final WechatPayHandler wechatPayHandler;
+    public ApiAdapter(AlipayPayHandler alipayPayHandler, WechatPayHandler wechatPayHandler){
+        this.alipayPayHandler = alipayPayHandler;
+        this.wechatPayHandler = wechatPayHandler;
+    }
     /**
      * 统一下单接口 可以提供的泛型
      * AlipayTradeCreateResponse.class 支付宝小程序支付

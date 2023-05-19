@@ -3,7 +3,6 @@ package com.zeroxn.pay.module.alipay.utils;
 import com.alibaba.fastjson.JSONObject;
 import com.alipay.api.AlipayApiException;
 import com.alipay.api.internal.util.AlipaySignature;
-import com.zeroxn.pay.module.alipay.constant.AlipayConstant;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Map;
@@ -22,9 +21,10 @@ public class AlipayUtils {
      * @return true：成功 false：失败
      * @throws AlipayApiException 支付宝API调用异常
      */
-    public static boolean signVerified(Map<String, String> paramsMap) throws AlipayApiException {
-        return AlipaySignature.rsaCheckV1(paramsMap, AlipayConstant.getAlipayPublicKey(), AlipayConstant.getCharset(), AlipayConstant.getSignType());
-    }
+//    public static boolean signVerified(Map<String, String> paramsMap) throws AlipayApiException {
+//        return AlipaySignature.rsaCheckV1(paramsMap, AlipayConstant.getAlipayPublicKey(), AlipayConstant.getCharset(), AlipayConstant.getSignType());
+//    }
+
     /**
      * 工具方法 生成支付宝请求参数的请求体 传入请求参数 返回json格式的字符串
      * @param args 请求参数 参数格式为 kye, value, key, value
