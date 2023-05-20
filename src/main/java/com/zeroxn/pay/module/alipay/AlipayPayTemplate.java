@@ -7,8 +7,8 @@ import com.alipay.api.domain.AlipayTradeWapPayModel;
 import com.zeroxn.pay.core.entity.PayParams;
 import com.zeroxn.pay.core.enums.PayMethod;
 import com.zeroxn.pay.module.alipay.exception.AlipayPayException;
-import com.zeroxn.pay.core.handler.PayTemplate;
-import com.zeroxn.pay.module.alipay.service.AlipayPayService;
+import com.zeroxn.pay.core.interfaces.PayTemplate;
+import com.zeroxn.pay.module.alipay.business.AlipayPayBusiness;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,8 +21,8 @@ import java.util.Map;
  */
 public class AlipayPayTemplate implements PayTemplate {
     private final Logger logger = LoggerFactory.getLogger(AlipayPayTemplate.class);
-    private final AlipayPayService alipayService;
-    public AlipayPayTemplate(AlipayPayService alipayService){
+    private final AlipayPayBusiness alipayService;
+    public AlipayPayTemplate(AlipayPayBusiness alipayService){
         this.alipayService = alipayService;
     }
     /**

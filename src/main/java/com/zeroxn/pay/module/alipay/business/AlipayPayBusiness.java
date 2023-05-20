@@ -1,4 +1,4 @@
-package com.zeroxn.pay.module.alipay.service;
+package com.zeroxn.pay.module.alipay.business;
 
 import com.alipay.api.AlipayApiException;
 import com.alipay.api.AlipayClient;
@@ -19,11 +19,11 @@ import java.util.Map;
  * @DateTime: 2023/4/27 15:41
  * @Description:
  */
-public class AlipayPayService {
-    private final Logger logger = LoggerFactory.getLogger(AlipayPayService.class);
+public class AlipayPayBusiness {
+    private final Logger logger = LoggerFactory.getLogger(AlipayPayBusiness.class);
     private final AlipayClient alipayClient;
     private final AlipayPayConfig alipayConfig;
-    public AlipayPayService(AlipayClient alipayClient, AlipayPayConfig alipayConfig){
+    public AlipayPayBusiness(AlipayClient alipayClient, AlipayPayConfig alipayConfig){
         this.alipayClient = alipayClient;
         this.alipayConfig = alipayConfig;
     }

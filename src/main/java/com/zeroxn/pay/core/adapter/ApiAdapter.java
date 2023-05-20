@@ -5,7 +5,7 @@ import com.zeroxn.pay.core.enums.PayMethod;
 import com.zeroxn.pay.core.enums.PayPlatform;
 import com.zeroxn.pay.core.exception.PayException;
 import com.zeroxn.pay.module.alipay.AlipayPayTemplate;
-import com.zeroxn.pay.module.wechat.WechatPayHandler;
+import com.zeroxn.pay.module.wechat.WechatPayTemplate;
 
 /**
  * @Author: lisang
@@ -15,8 +15,8 @@ import com.zeroxn.pay.module.wechat.WechatPayHandler;
 
 public class ApiAdapter {
     private final AlipayPayTemplate alipayPayHandler;
-    private final WechatPayHandler wechatPayHandler;
-    public ApiAdapter(AlipayPayTemplate alipayPayHandler, WechatPayHandler wechatPayHandler){
+    private final WechatPayTemplate wechatPayHandler;
+    public ApiAdapter(AlipayPayTemplate alipayPayHandler, WechatPayTemplate wechatPayHandler){
         this.alipayPayHandler = alipayPayHandler;
         this.wechatPayHandler = wechatPayHandler;
     }

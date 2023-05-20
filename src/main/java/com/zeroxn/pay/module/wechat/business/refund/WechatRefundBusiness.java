@@ -1,5 +1,6 @@
-package com.zeroxn.pay.module.wechat.service.refund;
+package com.zeroxn.pay.module.wechat.business.refund;
 
+import com.wechat.pay.java.core.Config;
 import com.wechat.pay.java.service.refund.RefundService;
 import com.wechat.pay.java.service.refund.model.AmountReq;
 import com.wechat.pay.java.service.refund.model.CreateRequest;
@@ -13,10 +14,10 @@ import com.zeroxn.pay.module.wechat.constant.WechatConstant;
  * @DateTime: 2023/4/27 13:00
  * @Description: 微信支付退款服务类 支持所有平台的退款
  */
-public class WechatRefundService {
-    private static final RefundService service;
-    static {
-        service = new RefundService.Builder().config(WechatConstant.getConfig()).build();
+public class WechatRefundBusiness {
+    private final RefundService service;
+    public WechatRefundBusiness(Config config){
+        this.service = new RefundService.Builder().config(config).build();
     }
 
     /**
@@ -24,7 +25,7 @@ public class WechatRefundService {
      * @param param 封装退款请求参数
      * @return 返回退款信息
      */
-    public static Refund orderRefund(PayParams param){
+    public Refund orderRefund(PayParams param){
         AmountReq amount = new AmountReq();
         amount.setRefund(Long.valueOf(param.getWechatRefundTotal()));
         amount.setTotal(Long.valueOf(param.getWechatTotal()));
@@ -43,7 +44,7 @@ public class WechatRefundService {
      * @param orderRefundId 商户系统内订单退款id
      * @return 返回退款信息
      */
-    public static Refund queryRefund(String orderRefundId){
+    public Refund queryRefund(String orderRefundId){
         QueryByOutRefundNoRequest request = new QueryByOutRefundNoRequest();
         request.setOutRefundNo(orderRefundId);
         return service.queryByOutRefundNo(request);

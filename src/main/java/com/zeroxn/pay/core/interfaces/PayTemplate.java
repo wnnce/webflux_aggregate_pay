@@ -1,4 +1,4 @@
-package com.zeroxn.pay.core.handler;
+package com.zeroxn.pay.core.interfaces;
 
 import com.zeroxn.pay.core.entity.PayParams;
 import com.zeroxn.pay.core.enums.PayMethod;

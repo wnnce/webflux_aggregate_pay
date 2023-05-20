@@ -2,6 +2,10 @@ package com.zeroxn.pay.module.wechat.config;
 
 import com.wechat.pay.java.core.Config;
 import com.wechat.pay.java.core.RSAAutoCertificateConfig;
+import com.zeroxn.pay.module.wechat.WechatPayTemplate;
+import com.zeroxn.pay.module.wechat.business.h5.WechatPayH5Business;
+import com.zeroxn.pay.module.wechat.business.jsapi.WechatPayJsapiBusiness;
+import com.zeroxn.pay.module.wechat.business.refund.WechatRefundBusiness;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -26,6 +30,28 @@ public class WechatPayAutoConfig {
                 .merchantSerialNumber(payConfig.getMerchantSerialNumber())
                 .privateKey(payConfig.getPrivateKey())
                 .build();
+    }
+    @Bean
+    @ConditionalOnClass(Config.class)
+    public WechatPayH5Business wechatPayH5Service(Config config){
+        return new WechatPayH5Business(config);
+    }
+
+    @Bean
+    @ConditionalOnClass(Config.class)
+    public WechatPayJsapiBusiness wechatPayJsapiService(Config config){
+        return new WechatPayJsapiBusiness(config);
+    }
+
+    @Bean
+    @ConditionalOnClass(Config.class)
+    public WechatRefundBusiness wechatRefundService(Config config){
+        return new WechatRefundBusiness(config);
+    }
+    @Bean
+    @ConditionalOnClass(value = {WechatPayH5Business.class, WechatPayJsapiBusiness.class, WechatRefundBusiness.class})
+    public WechatPayTemplate wechatPayTemplate(WechatPayH5Business h5Service, WechatPayJsapiBusiness jsapiService, WechatRefundBusiness refundService){
+        return new WechatPayTemplate(h5Service, jsapiService, refundService);
     }
 
 }

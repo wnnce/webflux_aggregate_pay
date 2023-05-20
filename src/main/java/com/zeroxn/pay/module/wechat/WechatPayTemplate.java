@@ -4,11 +4,11 @@ import com.wechat.pay.java.service.payments.model.Transaction;
 import com.zeroxn.pay.core.entity.PayParams;
 import com.zeroxn.pay.core.enums.PayMethod;
 import com.zeroxn.pay.core.exception.WechatPayException;
-import com.zeroxn.pay.core.handler.PayTemplate;
+import com.zeroxn.pay.core.interfaces.PayTemplate;
 import com.zeroxn.pay.core.utils.BaseUtils;
-import com.zeroxn.pay.module.wechat.service.h5.WechatPayH5Service;
-import com.zeroxn.pay.module.wechat.service.jsapi.WechatPayJsapiService;
-import com.zeroxn.pay.module.wechat.service.refund.WechatRefundService;
+import com.zeroxn.pay.module.wechat.business.h5.WechatPayH5Business;
+import com.zeroxn.pay.module.wechat.business.jsapi.WechatPayJsapiBusiness;
+import com.zeroxn.pay.module.wechat.business.refund.WechatRefundBusiness;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Objects;
@@ -19,7 +19,15 @@ import java.util.Objects;
  * @Description: 微信支付交易请求处理 负责参数校验 调用下层Service方法和响应参数处理
  */
 @Slf4j
-public class WechatPayHandler implements PayTemplate {
+public class WechatPayTemplate implements PayTemplate {
+    private final WechatPayH5Business h5Service;
+    private final WechatPayJsapiBusiness jsapiService;
+    private final WechatRefundBusiness refundService;
+    public WechatPayTemplate(WechatPayH5Business h5Service, WechatPayJsapiBusiness jsapiService, WechatRefundBusiness refundService){
+        this.h5Service = h5Service;
+        this.jsapiService = jsapiService;
+        this.refundService = refundService;
+    }
     /**
      * 下订单 下订单之前先查询当前订单号是否已经存在
      * @param param 封装下单参数
@@ -33,9 +41,9 @@ public class WechatPayHandler implements PayTemplate {
         Transaction transaction = null;
         // 先查询订单
         if (Objects.requireNonNull(method) == PayMethod.APPLETS) {
-            transaction = WechatPayJsapiService.queryOrderByOrderId(param.getOrderId());
+            transaction = WechatPayJsapiBusiness.queryOrderByOrderId(param.getOrderId());
         } else {
-            transaction = WechatPayH5Service.queryOrderByOrderId(param.getOrderId());
+            transaction = WechatPayH5Business.queryOrderByOrderId(param.getOrderId());
         }
         // 判断订单是否存在
         if(transaction != null){
@@ -48,13 +56,13 @@ public class WechatPayHandler implements PayTemplate {
                 if(BaseUtils.checkObjectFieldIsNull(param, "orderId", "description", "openId", "total")){
                     throw new WechatPayException("微信支付小程序下单参数错误");
                 }
-                return (T) WechatPayJsapiService.confirmOrder(param);
+                return (T) WechatPayJsapiBusiness.confirmOrder(param);
             }
             default:{
                 if(BaseUtils.checkObjectFieldIsNull(param, "orderId", "description", "ipAddress", "total", "type")){
                     throw new WechatPayException("微信支付H5下单参数错误");
                 }
-                return (T) WechatPayH5Service.confirmOrder(param);
+                return (T) WechatPayH5Business.confirmOrder(param);
             }
         }
     }
@@ -68,10 +76,10 @@ public class WechatPayHandler implements PayTemplate {
     public <T> T closeOrder(String orderId, PayMethod method, Class<T> clazz) {
         switch (method){
             case APPLETS:{
-                WechatPayJsapiService.closeOrder(orderId);
+                WechatPayJsapiBusiness.closeOrder(orderId);
             }
             default:{
-                WechatPayH5Service.closeOrder(orderId);
+                WechatPayH5Business.closeOrder(orderId);
             }
         }
         log.info("微信关闭订单，订单号：{}", orderId);
@@ -90,10 +98,10 @@ public class WechatPayHandler implements PayTemplate {
     public <T> T queryOrder(String orderId, PayMethod method, Class<T> clazz) {
         switch (method){
             case APPLETS:{
-                return (T) WechatPayJsapiService.queryOrderByOrderId(orderId);
+                return (T) WechatPayJsapiBusiness.queryOrderByOrderId(orderId);
             }
             default:{
-                return (T) WechatPayH5Service.queryOrderByOrderId(orderId);
+                return (T) WechatPayH5Business.queryOrderByOrderId(orderId);
             }
         }
     }
@@ -110,7 +118,7 @@ public class WechatPayHandler implements PayTemplate {
         if (BaseUtils.checkObjectFieldIsNull(param, "orderId", "orderRefundId", "total", "refundTotal")){
             throw new WechatPayException("微信支付退款参数错误");
         }
-        return (T) WechatRefundService.orderRefund(param);
+        return (T) WechatRefundBusiness.orderRefund(param);
     }
 
     /**
@@ -123,6 +131,6 @@ public class WechatPayHandler implements PayTemplate {
      */
     @Override
     public <T> T queryRefundOrder(String orderId, String orderRefundId, Class<T> clazz) {
-        return (T) WechatRefundService.queryRefund(orderRefundId);
+        return (T) WechatRefundBusiness.queryRefund(orderRefundId);
     }
 }

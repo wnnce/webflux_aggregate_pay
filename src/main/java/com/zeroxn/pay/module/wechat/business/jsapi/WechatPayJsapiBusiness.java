@@ -1,5 +1,6 @@
-package com.zeroxn.pay.module.wechat.service.jsapi;
+package com.zeroxn.pay.module.wechat.business.jsapi;
 
+import com.wechat.pay.java.core.Config;
 import com.wechat.pay.java.service.payments.jsapi.JsapiServiceExtension;
 import com.wechat.pay.java.service.payments.jsapi.model.*;
 import com.wechat.pay.java.service.payments.model.Transaction;
@@ -11,11 +12,11 @@ import com.zeroxn.pay.module.wechat.constant.WechatConstant;
  * @DateTime: 2023/4/27 12:00
  * @Description: 微信支付JSAPI下单服务类 对应小程序下单
  */
-public class WechatPayJsapiService {
-    private static final JsapiServiceExtension service;
-    static {
-        service = new JsapiServiceExtension.Builder()
-                .config(WechatConstant.getConfig())
+public class WechatPayJsapiBusiness {
+    private final JsapiServiceExtension service;
+    public WechatPayJsapiBusiness(Config config){
+        this.service = new JsapiServiceExtension.Builder()
+                .config(config)
                 .signType("RSA")
                 .build();
     }
@@ -23,7 +24,7 @@ public class WechatPayJsapiService {
      * jsapi关闭订单
      * @param orderId 商户系统内的订单id
      */
-    public static void closeOrder(String orderId) {
+    public void closeOrder(String orderId) {
 
         CloseOrderRequest request = new CloseOrderRequest();
         request.setMchid(WechatConstant.getMerchantId());
@@ -37,7 +38,7 @@ public class WechatPayJsapiService {
      * @param param 封装下单请求参数
      * @return 返回小程序支付所需的参数
      */
-    public static PrepayWithRequestPaymentResponse confirmOrder(PayParams param) {
+    public PrepayWithRequestPaymentResponse confirmOrder(PayParams param) {
         Amount amount = new Amount();
         amount.setTotal(param.getWechatTotal());
         // 人民币
@@ -60,7 +61,7 @@ public class WechatPayJsapiService {
      * @param orderId 商户订单号
      * @return 订单详细信息或空
      */
-    public static Transaction queryOrderByOrderId(String orderId) {
+    public Transaction queryOrderByOrderId(String orderId) {
 
         QueryOrderByOutTradeNoRequest request = new QueryOrderByOutTradeNoRequest();
         request.setMchid(WechatConstant.getMerchantId());

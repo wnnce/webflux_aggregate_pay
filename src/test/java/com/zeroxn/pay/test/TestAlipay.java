@@ -4,7 +4,7 @@ import com.alipay.api.AlipayClient;
 import com.alipay.api.response.AlipayTradeCloseResponse;
 import com.alipay.api.response.AlipayTradeQueryResponse;
 import com.zeroxn.pay.module.alipay.config.AlipayPayConfig;
-import com.zeroxn.pay.module.alipay.service.AlipayPayService;
+import com.zeroxn.pay.module.alipay.business.AlipayPayBusiness;
 import com.zeroxn.pay.web.alipay.AlipayParamDTO;
 import com.zeroxn.pay.web.alipay.AlipayService;
 import org.junit.jupiter.api.Test;
@@ -21,7 +21,7 @@ public class TestAlipay {
     @Autowired
     private AlipayPayConfig alipayPayConfig;
     @Autowired
-    private AlipayPayService alipayPayService;
+    private AlipayPayBusiness alipayPayService;
     @Autowired
     private AlipayService alipayService;
     @Autowired
