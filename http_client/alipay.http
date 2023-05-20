@@ -1,0 +1,52 @@
+### 支付宝手机下单
+POST http://localhost:8081/pay/alipay/wap
+Content-Type: application/json
+
+{
+  "orderId": "88",
+  "total": -1,
+  "description": "订单描述",
+  "quitUrl": "http://ihi.zw/fkksvm"
+}
+### 支付宝电脑下单
+POST http://localhost:8081/pay/alipay/desktop
+Content-Type: application/json
+
+{
+  "orderId": "11",
+  "total": 100,
+  "description": "心产调交了证受济道家海精种感。地采酸能好种术选科下社三选存它表做。极区周给红连石平同流团记产公程段委。平被越有值整压状必数素大命细。示作把支军新团安品消今已叫利今。片育两始律严行制是技采取。",
+  "qrMode": 4,
+  "qrWidth": 20
+}
+### 支付宝小程序下单
+POST http://localhost:8081/pay/alipay/applets
+Content-Type: application/json
+
+{
+  "orderId": "6",
+  "total": 100,
+  "description": "对新系重完到从五手快府自群外想加力。区代大别接住度精元克命外即与议务。家江越受表山即布年越三员着家电。族克入年求观划先革得了学件也起。",
+  "userId": "12"
+}
+
+### 支付宝查询订单
+GET http://localhost:8081/pay/alipay/70501111111S101111119
+
+### 支付宝关闭订单
+POST http://localhost:8081/pay/alipay/close/70501111111S101111119
+
+### 支付宝退款
+POST http://localhost:8081/pay/alipay/refund
+Content-Type: application/json
+
+{
+  "orderId": "1122",
+  "total": 100,
+  "refundId": "112233",
+  "refundTotal": 50,
+  "refundDescription": "发起退款"
+}
+
+### 查询支付宝退款订单
+GET http://localhost:8081/pay/alipay/refund/70501111111S101111119/70501111111S101111119

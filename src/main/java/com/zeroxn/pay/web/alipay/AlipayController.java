@@ -70,7 +70,8 @@ public class AlipayController {
     }
     @PostMapping("/refund")
     @Operation(summary = "支付宝订单退款接口")
-    public Mono<Result<AlipayTradeRefundResponse>> alipayOrderRefund(AlipayParamDTO paramDTO){
+    public Mono<Result<AlipayTradeRefundResponse>> alipayOrderRefund(@RequestBody @Validated(ValidationGroups.AlipayRefundValidation.class)
+                                                                         AlipayParamDTO paramDTO){
         AlipayTradeRefundResponse response = alipayService.alipayOrderRefund(paramDTO);
         return Mono.just(Result.success(response));
     }
