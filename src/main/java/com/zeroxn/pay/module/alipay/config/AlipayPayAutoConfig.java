@@ -4,7 +4,7 @@ import com.alipay.api.AlipayApiException;
 import com.alipay.api.AlipayClient;
 import com.alipay.api.AlipayConfig;
 import com.alipay.api.DefaultAlipayClient;
-import com.zeroxn.pay.module.alipay.AlipayPayHandler;
+import com.zeroxn.pay.module.alipay.AlipayPayTemplate;
 import com.zeroxn.pay.module.alipay.service.AlipayPayService;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
@@ -41,7 +41,7 @@ public class AlipayPayAutoConfig {
     }
     @Bean
     @ConditionalOnClass(AlipayPayService.class)
-    public AlipayPayHandler alipayPayHandler(AlipayPayService alipayPayService){
-        return new AlipayPayHandler(alipayPayService);
+    public AlipayPayTemplate alipayPayHandler(AlipayPayService alipayPayService){
+        return new AlipayPayTemplate(alipayPayService);
     }
 }

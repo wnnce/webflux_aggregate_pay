@@ -5,7 +5,7 @@ import com.wechat.pay.java.service.refund.model.AmountReq;
 import com.wechat.pay.java.service.refund.model.CreateRequest;
 import com.wechat.pay.java.service.refund.model.QueryByOutRefundNoRequest;
 import com.wechat.pay.java.service.refund.model.Refund;
-import com.zeroxn.pay.core.entity.PayParam;
+import com.zeroxn.pay.core.entity.PayParams;
 import com.zeroxn.pay.module.wechat.constant.WechatConstant;
 
 /**
@@ -24,7 +24,7 @@ public class WechatRefundService {
      * @param param 封装退款请求参数
      * @return 返回退款信息
      */
-    public static Refund orderRefund(PayParam param){
+    public static Refund orderRefund(PayParams param){
         AmountReq amount = new AmountReq();
         amount.setRefund(Long.valueOf(param.getWechatRefundTotal()));
         amount.setTotal(Long.valueOf(param.getWechatTotal()));

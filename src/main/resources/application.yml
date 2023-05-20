@@ -1,15 +1,15 @@
 server:
   port: 8081
-  servlet:
-    context-path: /pay
-
+logging:
+  pattern:
+    dateformat: yyyy-MM-dd HH:mm:ss:SSS
+springdoc:
+  swagger-ui:
+    path: /pay/swagger-ui.html
 pay:
   alipay:
     enable: true
-    app-id: ''
-    private-key: ''
-    public-key: ''
-    notify-url: ''
-    char-set: ''
-    format: ''
-    sign-type: ''
+    private-key: 'MIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQCZZU9cLNPrjjz2x3qWAT8Pm7T7xPb/ENjYiFq0UiBIm+zgjahDvMII6Az5NjF5AycyaICvZRQUJEAwPTaMeZgSjcmTvSyCRW9wPuhtiA/gZY741lSa42zgpb35SgA4iILIbRrO69SD2nN6f736lq26vEgaC8f7XSow+LAO8xl2rr7bfLeURPkbomOhVIGp49bQBaRBUNAdmYDqcPTBDzegoR3sxrKLJ+btPgdgQN/sZcmt+2jnDnCJ0FaiIbJGrnKPmDXz8niMbJxq/g+IXwCOPkwxHr3wmxrq78Fm7/cAtvFVmjw9m9RmzXMz0Bg89QDthv6c18aeNdPeCoanq7g7AgMBAAECggEAYelwxn02p9yavUqGzMju35+b3jjTD+xI/a3Ld94UDUS55nuFM/eAQv8biNc2rO9+TYa23T2/mzuoXSI1d2UF1JH8YPkXN+/qOdNtuLxopestX1gvmM4h6SLiKAU8Ltmz4QsDWaDefWsq2r4/HXygV9lmjHmIpMHK9IdImcJCNqZGZxdb04KGR1jVeaSCkmoaKuaOGz25+PL5S6CuRFSroIs0wVzHkR7OedUMb9vmuOpNzoZpNrrgkKIqlKP8SyUe/h3jYBhNqYLY5M69H5UnPo+9AwxAJK0r5t21AayTYUCw0UEpYHBv3ScpckIatx4qU3xEkynP9uUaoyug2I6jQQKBgQDSxOqjkqMBm7bM/Sw3Fr1DxVBjLQV9fD2TmtbPBAuiDmiTmQQHLUmWiK/OTK/ACUJM6K5c9wC2yAIfTw7CPIEPWQWUVMNP5OyzOcUJVsR15/Uz4YrvkD01AvaRQ+v9mS+Epx+eNtTDeCDrqwxHo4cGRH3ilRUANWKUackaT2GrBwKBgQC6UHPN7ihYRxX00h3WZ5lBGtwSUEr/Q22JvU3om8Dz+o6TWz3XZHzXdplx4uadCu9a75MbU/OJnDB0YdGr2NG5wCnBNj7KQK9vJIuBk9kRW8cwL2eHYc2RLz76Yo2QQajmIkB9BOf2wTK7LQua+66xQzZMD7OtSjIR0ubHIsgYLQKBgA/Te27m3tiLEbHYvM4yJeoF0eBwi/39Kz5/HOwUeK8ld9LFZZkIXIMyJklOVtALoe/WdOlEHsiawhYJwKjzFBnL7HBT4QqJvQBEMThfTIcx8KaBpAYTBZWKcGs992VmcDv8tJITuewnhAlOIbDrZYMh93XhDd+jIpDUVKZmGYZXAoGANHOFxomvjfqlMcEdaUjNGkkHf5hfJLHE2qwSjNOcZJM7JDzhkgvWIYpf9HHeXoO/kqgzj9P4kdsIwRrwviJSGKsClkRBNQs02GM/awFGcN6XmvcdfD2Kc78LSc4I8H2roO4vnYKOEyecspkh1UXZjknPtWYOPVDP+7iWA6XFExkCgYBBx5HbfMXOm2BR0w2A+OQA1aV2XHh5ErzKacvcL4RUeAJBMnLJEPLPzSjFEb8BK/fNN0crgl8NIZJynOX9uiYQI6fDPucvZ/1YeLxvZuZeyHHtL414sjlxmgUY9gyv6cRk1s6WwCnDOgFaZAL1xQKq1jFMJd2dOErzAbKemNi/kA=='
+    public-key: 'MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAl8qy7/ZM1rPbKGaNhREx+k7cnZfiV54JHHqnilVtRsNmGInDL8Vu06Mde3ItzY8d6xCiKC9VWn0hNuIkNhcWvKtPNRyzVmxSrRYfdQzzgZI/CyQhoRv8MLJIIkCeE9ifHLEYdZUY/FrP+1sNiapLtiB2D8ymzuif5DdcVtCijP6G9Pt+n6dAymOQv8oVfIS/wTNLWhB8g+5UH9sSxZqVvfhjfCAuut9ZQ1ZZq2EnUZNsj5wLIDRTWf5T80DLAjZjpwmSv3P4tDLZ1ZaLNBDCnkh5X7NKq/R3WWcUpwcN/bkS3GRYY0upI1wPOLw2b/kP4S7vaS+63hSkG4WDLL2FfQIDAQAB'
+    app-id: '2021000122668052'
+    seller-id: "11"

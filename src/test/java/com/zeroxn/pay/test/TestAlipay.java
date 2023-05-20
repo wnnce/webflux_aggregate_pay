@@ -5,9 +5,13 @@ import com.alipay.api.response.AlipayTradeCloseResponse;
 import com.alipay.api.response.AlipayTradePagePayResponse;
 import com.alipay.api.response.AlipayTradeQueryResponse;
 import com.alipay.api.response.AlipayTradeWapPayResponse;
-import com.zeroxn.pay.core.entity.PayParam;
+import com.zeroxn.pay.core.entity.PayParams;
+import com.zeroxn.pay.core.enums.ResultCode;
+import com.zeroxn.pay.core.exception.AlipayPayException;
 import com.zeroxn.pay.module.alipay.config.AlipayPayConfig;
 import com.zeroxn.pay.module.alipay.service.AlipayPayService;
+import com.zeroxn.pay.web.alipay.AlipayParamDTO;
+import com.zeroxn.pay.web.alipay.AlipayService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -22,47 +26,33 @@ public class TestAlipay {
     @Autowired
     private AlipayPayConfig alipayPayConfig;
     @Autowired
-    private AlipayPayService alipayService;
+    private AlipayPayService alipayPayService;
+    @Autowired
+    private AlipayService alipayService;
     @Autowired
     private AlipayClient alipayClient;
     @Test
     public void testAlipay(){
-        PayParam param = new PayParam.BuilderAliPayWap()
-                .setOrderId("70501111111S001111119")
-                .setTotal(900)
-                .setDescription("乐透")
-                .setQuitUrl(" ")
-                .setReturnUrl(" ")
-                .build();
-        AlipayTradeWapPayResponse response = alipayService.wapConfirmOrder(param);
-        if (response != null && response.isSuccess()){
-            System.out.println(response.getBody());
-        }else {
-            System.out.println("error");
-        }
+        AlipayParamDTO paramDTO = new AlipayParamDTO();
+        paramDTO.setOrderId("70501111111S001111119");
+        paramDTO.setTotal(900);
+        paramDTO.setDescription("大乐透");
+        paramDTO.setQuitUrl("");
+        String str = alipayService.alipayWapPay(paramDTO);
+        System.out.println(str);
     }
     @Test
     public void testAlipayDesktop(){
-        PayParam param = new PayParam.BuilderAlipayDesktop()
-                .setOrderId("20150320010101001")
-                .setTotal(8888)
-                .setDescription("Iphone6 16G")
-                .build();
-        AlipayTradePagePayResponse response = alipayService.desktopConfirmOrder(param);
-        if(response != null && response.isSuccess()){
-            System.out.println(response.getBody());
-        }else {
-            System.out.println("error");
-        }
+
     }
     @Test
     public void testAlipayQuery(){
-        AlipayTradeQueryResponse response = alipayService.queryOrderByOrderId("20150320010101001");
-        System.out.println(response.getBody());
+        AlipayTradeQueryResponse response = alipayPayService.queryOrderByOrderId("70501111111S001111119");
+
     }
     @Test
     public void testAlipayClose(){
-        AlipayTradeCloseResponse response = alipayService.closeOrder("20150320010101001");
+        AlipayTradeCloseResponse response = alipayPayService.closeOrder("20150320010101001");
         if (response != null && response.isSuccess()){
             System.out.println(response.getBody());
         }else {

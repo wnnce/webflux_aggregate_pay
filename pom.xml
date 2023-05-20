@@ -17,6 +17,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <alipay.version>4.35.110.ALL</alipay.version>
         <weahat-pay.version>0.2.7</weahat-pay.version>
+        <spring-doc.version>2.1.0</spring-doc.version>
     </properties>
     <dependencies>
         <dependency>
@@ -29,8 +30,17 @@
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-validation</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-configuration-processor</artifactId>
             <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-starter-webflux-ui</artifactId>
+            <version>${spring-doc.version}</version>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>

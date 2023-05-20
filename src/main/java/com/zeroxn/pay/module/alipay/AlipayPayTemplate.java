@@ -1,10 +1,13 @@
 package com.zeroxn.pay.module.alipay;
 
+import com.alipay.api.domain.AlipayTradeCreateModel;
+import com.alipay.api.domain.AlipayTradePagePayModel;
+import com.alipay.api.domain.AlipayTradeWapPayModel;
 import com.alipay.api.response.AlipayTradeCloseResponse;
 import com.alipay.api.response.AlipayTradeFastpayRefundQueryResponse;
 import com.alipay.api.response.AlipayTradeQueryResponse;
 import com.alipay.api.response.AlipayTradeRefundResponse;
-import com.zeroxn.pay.core.entity.PayParam;
+import com.zeroxn.pay.core.entity.PayParams;
 import com.zeroxn.pay.core.enums.PayMethod;
 import com.zeroxn.pay.core.exception.AlipayPayException;
 import com.zeroxn.pay.core.handler.PayHandler;
@@ -18,10 +21,10 @@ import org.slf4j.LoggerFactory;
  * @DateTime: 2023/4/28 08:47
  * @Description: 支付宝交易请求处理 负责参数校验 调用Service层方法和响应参数处理
  */
-public class AlipayPayHandler implements PayHandler {
-    private final Logger logger = LoggerFactory.getLogger(AlipayPayHandler.class);
+public class AlipayPayTemplate implements PayHandler {
+    private final Logger logger = LoggerFactory.getLogger(AlipayPayTemplate.class);
     private final AlipayPayService alipayService;
-    public AlipayPayHandler(AlipayPayService alipayService){
+    public AlipayPayTemplate(AlipayPayService alipayService){
         this.alipayService = alipayService;
     }
     /**
@@ -32,32 +35,34 @@ public class AlipayPayHandler implements PayHandler {
      * @return
      * @param <T>
      */
-    public <T> T handlerConfirmOrder(PayParam param, PayMethod method, Class<T> clazz) {
-        AlipayTradeQueryResponse queryResponse = handlerQueryOrder(param.getOrderId(), method,
-                AlipayTradeQueryResponse.class);
-        if(queryResponse != null){
-            logger.warn("订单已存在，订单号：{}", param.getOrderId());
-            throw new AlipayPayException("订单已存在", param.getOrderId());
-        }
-        logger.info("订单未创建，可以下单。订单号：{}", param.getOrderId());
-        switch (method){
-            case APPLETS:{
-                if(BaseUtils.checkObjectFieldIsNull(param, "orderId", "description", "userId", "total")){
-                    throw new AlipayPayException("支付宝小程序下单参数错误");
-                }
-                return (T) alipayService.appletsConfirmOrder(param);
+    public <T> T handlerConfirmOrder(PayParams param, PayMethod method, Class<T> clazz) {
+        switch (method) {
+            case APPLETS -> {
+                AlipayTradeCreateModel model = new AlipayTradeCreateModel();
+                model.setOutTradeNo(param.getOrderId());
+                model.setTotalAmount(param.getAlipayTotal().toString());
+                model.setSubject(param.getDescription());
+                model.setBuyerId(param.getUserId());
+                return (T) alipayService.appletsConfirmOrder(model);
             }
-            case WAP:{
-                if(BaseUtils.checkObjectFieldIsNull(param, "orderId", "description", "quitUrl", "total", "returnUrl")){
-                    throw new AlipayPayException("支付宝WAP下单参数错误");
-                }
-                return (T) alipayService.wapConfirmOrder(param);
+            case WAP -> {
+                AlipayTradeWapPayModel model = new AlipayTradeWapPayModel();
+                model.setOutTradeNo(param.getOrderId());
+                model.setTotalAmount(param.getAlipayTotal().toString());
+                model.setSubject(param.getDescription());
+                model.setProductCode("QUICK_WAP_WAY");
+                model.setQuitUrl(param.getQuitUrl());
+                return (T) alipayService.wapConfirmOrder(model);
             }
-            case DESKTOP:{
-                if(BaseUtils.checkObjectFieldIsNull(param, "orderId", "description", "total")){
-                    throw new AlipayPayException("支付宝DESKTOP下单参数错误");
-                }
-                return (T) alipayService.desktopConfirmOrder(param);
+            case DESKTOP -> {
+                AlipayTradePagePayModel model = new AlipayTradePagePayModel();
+                model.setOutTradeNo(param.getOrderId());
+                model.setTotalAmount(param.getAlipayTotal().toString());
+                model.setSubject(param.getDescription());
+                model.setProductCode("FAST_INSTANT_TRADE_PAY");
+                model.setQrPayMode(param.getQrMode());
+                model.setQrcodeWidth(param.getQrWidth());
+                return (T) alipayService.desktopConfirmOrder(model);
             }
         }
         throw new AlipayPayException("未知异常", param.getOrderId());
@@ -110,7 +115,7 @@ public class AlipayPayHandler implements PayHandler {
         AlipayTradeQueryResponse response = alipayService.queryOrderByOrderId(orderId);
         if(response == null){
             logger.error("支付宝订单查询失败，订单号{}", orderId);
-            return null;
+            throw new AlipayPayException("系统错误，请重试");
         }
         return (T)response;
     }
@@ -123,7 +128,7 @@ public class AlipayPayHandler implements PayHandler {
      * @param <T>
      */
     @Override
-    public <T> T handlerOrderRefund(PayParam param, Class<T> clazz) {
+    public <T> T handlerOrderRefund(PayParams param, Class<T> clazz) {
         if(BaseUtils.checkObjectFieldIsNull(param, "orderId", "orderRefundId", "total", "refundTotal")){
             throw new AlipayPayException("支付宝退款参数错误");
         }

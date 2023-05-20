@@ -3,7 +3,7 @@ package com.zeroxn.pay.module.wechat.service.h5;
 import com.wechat.pay.java.service.payments.h5.model.*;
 import com.wechat.pay.java.service.payments.h5.H5Service;
 import com.wechat.pay.java.service.payments.model.Transaction;
-import com.zeroxn.pay.core.entity.PayParam;
+import com.zeroxn.pay.core.entity.PayParams;
 import com.zeroxn.pay.module.wechat.constant.WechatConstant;
 
 /**
@@ -33,7 +33,7 @@ public class WechatPayH5Service {
      * @param param 封装H5下单参数
      * @return h5下单需要的信息
      */
-    public static PrepayResponse confirmOrder(PayParam param){
+    public static PrepayResponse confirmOrder(PayParams param){
         Amount amount = new Amount();
         amount.setTotal(param.getWechatTotal());
         amount.setCurrency("CNY");

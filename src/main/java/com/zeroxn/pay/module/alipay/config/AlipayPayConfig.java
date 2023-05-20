@@ -55,7 +55,7 @@ public class AlipayPayConfig {
      */
     private String notifyUrl;
     @ConstructorBinding
-    public AlipayPayConfig(Boolean enable, @NotNull String appId,@NotNull String privateKey,@NotNull String publicKey,
+    public AlipayPayConfig(Boolean enable, @NotNull String appId, @NotNull String privateKey, @NotNull String publicKey,
                            @DefaultValue("JSON") String format, @DefaultValue("RSA2") String signType, @DefaultValue("UTF-8") String charSet,
                            @DefaultValue("https://openapi-sandbox.dl.alipaydev.com/gateway.do") String serverUrl,
                            String sellerId, String notifyUrl) {

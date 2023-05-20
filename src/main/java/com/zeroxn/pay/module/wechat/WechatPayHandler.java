@@ -1,7 +1,7 @@
 package com.zeroxn.pay.module.wechat;
 
 import com.wechat.pay.java.service.payments.model.Transaction;
-import com.zeroxn.pay.core.entity.PayParam;
+import com.zeroxn.pay.core.entity.PayParams;
 import com.zeroxn.pay.core.enums.PayMethod;
 import com.zeroxn.pay.core.exception.WechatPayException;
 import com.zeroxn.pay.core.handler.PayHandler;
@@ -29,7 +29,7 @@ public class WechatPayHandler implements PayHandler {
      * @param <T>
      */
     @Override
-    public <T> T handlerConfirmOrder(PayParam param, PayMethod method, Class<T> clazz) {
+    public <T> T handlerConfirmOrder(PayParams param, PayMethod method, Class<T> clazz) {
         Transaction transaction = null;
         // 先查询订单
         if (Objects.requireNonNull(method) == PayMethod.APPLETS) {
@@ -105,7 +105,7 @@ public class WechatPayHandler implements PayHandler {
      * @param <T>
      */
     @Override
-    public <T> T handlerOrderRefund(PayParam param, Class<T> clazz) {
+    public <T> T handlerOrderRefund(PayParams param, Class<T> clazz) {
         if (BaseUtils.checkObjectFieldIsNull(param, "orderId", "orderRefundId", "total", "refundTotal")){
             throw new WechatPayException("微信支付退款参数错误");
         }

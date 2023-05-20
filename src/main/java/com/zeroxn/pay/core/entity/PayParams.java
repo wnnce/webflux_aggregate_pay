@@ -1,13 +1,11 @@
 package com.zeroxn.pay.core.entity;
 
-import java.util.Optional;
-
 /**
  * @Author: lisang
  * @DateTime: 2023/4/27 19:23
  * @Description: 下单参数封装类
  */
-public class PayParam {
+public class PayParams {
     /**
      * 订单id 商户系统内唯一 微信/支付宝通用
      */
@@ -27,7 +25,7 @@ public class PayParam {
     /**
      * 订单金额 单位：分 支付宝下单参数叫做 total_amount 支付宝中下单金额以元为单位
      */
-    private Integer total;
+    private final Integer total;
     /**
      * 订单退款金额 单位：分 不得大于订单支付金额
      */
@@ -45,42 +43,47 @@ public class PayParam {
      */
     private String quitUrl;
     /**
-     * 支付宝手机网站下单参数 支付成后跳转的商户地址
+     * 支付宝电脑下单支付模式
      */
-    private String returnUrl;
+    private String qrMode;
+    /**
+     * 支付宝电脑下单qrMode == 4 时，自定义收款码尺寸
+     */
+    private Long qrWidth;
 
-    public PayParam(BuilderWechatApplets builder){
+    public PayParams(BuilderWechatApplets builder){
         this.orderId = builder.orderId;
         this.description = builder.description;
         this.userId = builder.openId;
         this.total = builder.total;
     }
-    public PayParam(BuilderWechatH5 builder){
+    public PayParams(BuilderWechatH5 builder){
         this.orderId = builder.orderId;
         this.description = builder.description;
         this.total = builder.total;
         this.ipAddress = builder.ipAddress;
         this.type = builder.type;
     }
-    public PayParam(BuilderAliPayApplets builder){
+    public PayParams(BuilderAliPayApplets builder){
         this.orderId = builder.orderId;
         this.description = builder.description;
         this.userId = builder.userId;
         this.total = builder.total;
     }
-    public PayParam(BuilderAliPayWap builder){
+    public PayParams(BuilderAliPayWap builder){
         this.orderId = builder.orderId;
         this.description = builder.description;
         this.total = builder.total;
         this.quitUrl = builder.quitUrl;
-        this.returnUrl = builder.returnUrl;
     }
-    public PayParam(BuilderAlipayDesktop builder){
+    public PayParams(BuilderAlipayDesktop builder){
         this.orderId = builder.orderId;
         this.description = builder.description;
         this.total = builder.total;
+        this.qrMode = builder.qrMode;
+        this.qrWidth = builder.qrWidth;
     }
-    public PayParam(BuilderRefund builder){
+    public PayParams(BuilderRefund builder){
         this.orderId = builder.orderId;
         this.orderRefundId = builder.orderRefundId;
         this.total = builder.total;
@@ -108,8 +111,8 @@ public class PayParam {
             this.total = total;
             return this;
         }
-        public PayParam build(){
-            return new PayParam(this);
+        public PayParams build(){
+            return new PayParams(this);
         }
     }
     // 微信支付H5下单参数
@@ -139,8 +142,8 @@ public class PayParam {
             this.type = type;
             return this;
         }
-        public PayParam build(){
-            return new PayParam(this);
+        public PayParams build(){
+            return new PayParams(this);
         }
     }
     // 支付宝支付小程序下单参数
@@ -165,8 +168,8 @@ public class PayParam {
             this.total = total;
             return this;
         }
-        public PayParam build(){
-            return new PayParam(this);
+        public PayParams build(){
+            return new PayParams(this);
         }
     }
     // 支付宝支付手机网站下单参数
@@ -175,7 +178,6 @@ public class PayParam {
         private String description;
         private Integer total;
         private String quitUrl;
-        private String returnUrl;
         public BuilderAliPayWap setOrderId(String orderId){
             this.orderId = orderId;
             return this;
@@ -192,12 +194,8 @@ public class PayParam {
             this.quitUrl = quitUrl;
             return this;
         }
-        public BuilderAliPayWap setReturnUrl(String returnUrl){
-            this.returnUrl = returnUrl;
-            return this;
-        }
-        public PayParam build(){
-            return new PayParam(this);
+        public PayParams build(){
+            return new PayParams(this);
         }
     }
     // 支付宝支付电脑网站下单参数
@@ -205,6 +203,8 @@ public class PayParam {
         private String orderId;
         private String description;
         private Integer total;
+        private String qrMode;
+        private Long qrWidth;
         public BuilderAlipayDesktop setOrderId(String orderId){
             this.orderId = orderId;
             return this;
@@ -217,8 +217,16 @@ public class PayParam {
             this.total = total;
             return this;
         }
-        public PayParam build(){
-            return new PayParam(this);
+        public BuilderAlipayDesktop setQrMode(String qrMode){
+            this.qrMode = qrMode;
+            return this;
+        }
+        public BuilderAlipayDesktop setQrWidth(Long qrWidth){
+            this.qrWidth = qrWidth;
+            return this;
+        }
+        public PayParams build(){
+            return new PayParams(this);
         }
     }
     // 订单退款参数 通用
@@ -243,8 +251,8 @@ public class PayParam {
             this.refundTotal = refundTotal;
             return this;
         }
-        public PayParam build(){
-            return new PayParam(this);
+        public PayParams build(){
+            return new PayParams(this);
         }
     }
 
@@ -309,8 +317,12 @@ public class PayParam {
         return quitUrl;
     }
 
-    public String getReturnUrl() {
-        return returnUrl;
+    public String getQrMode() {
+        return qrMode;
+    }
+
+    public Long getQrWidth() {
+        return qrWidth;
     }
 
     @Override
@@ -325,7 +337,6 @@ public class PayParam {
                 ", ipAddress='" + ipAddress + '\'' +
                 ", type='" + type + '\'' +
                 ", quitUrl='" + quitUrl + '\'' +
-                ", returnUrl='" + returnUrl + '\'' +
                 '}';
     }
 }

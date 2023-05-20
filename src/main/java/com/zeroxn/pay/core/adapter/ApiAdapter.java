@@ -1,13 +1,11 @@
 package com.zeroxn.pay.core.adapter;
 
-import com.zeroxn.pay.core.entity.PayParam;
+import com.zeroxn.pay.core.entity.PayParams;
 import com.zeroxn.pay.core.enums.PayMethod;
 import com.zeroxn.pay.core.enums.PayPlatform;
 import com.zeroxn.pay.core.exception.PayException;
-import com.zeroxn.pay.module.alipay.AlipayPayHandler;
+import com.zeroxn.pay.module.alipay.AlipayPayTemplate;
 import com.zeroxn.pay.module.wechat.WechatPayHandler;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Component;
 
 /**
  * @Author: lisang
@@ -16,9 +14,9 @@ import org.springframework.stereotype.Component;
  */
 
 public class ApiAdapter {
-    private final AlipayPayHandler alipayPayHandler;
+    private final AlipayPayTemplate alipayPayHandler;
     private final WechatPayHandler wechatPayHandler;
-    public ApiAdapter(AlipayPayHandler alipayPayHandler, WechatPayHandler wechatPayHandler){
+    public ApiAdapter(AlipayPayTemplate alipayPayHandler, WechatPayHandler wechatPayHandler){
         this.alipayPayHandler = alipayPayHandler;
         this.wechatPayHandler = wechatPayHandler;
     }
@@ -37,7 +35,7 @@ public class ApiAdapter {
      * @return 返回支付平台的响应体
      * @param <T>
      */
-    public <T> T confirmOrder(PayParam param, PayPlatform platform, PayMethod method, Class<T> clazz){
+    public <T> T confirmOrder(PayParams param, PayPlatform platform, PayMethod method, Class<T> clazz){
         switch (platform){
             case ALIPAY: return alipayPayHandler.handlerConfirmOrder(param, method, clazz);
             case WECHAT: return wechatPayHandler.handlerConfirmOrder(param, method, clazz);
@@ -90,7 +88,7 @@ public class ApiAdapter {
      * @return 退款信息或空
      * @param <T>
      */
-    public <T> T orderRefund(PayParam param, PayPlatform platform, Class<T> clazz){
+    public <T> T orderRefund(PayParams param, PayPlatform platform, Class<T> clazz){
         switch (platform){
             case ALIPAY: return alipayPayHandler.handlerOrderRefund(param, clazz);
             case WECHAT: return wechatPayHandler.handlerOrderRefund(param, clazz);

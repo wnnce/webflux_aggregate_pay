@@ -3,7 +3,7 @@ package com.zeroxn.pay.module.wechat.service.jsapi;
 import com.wechat.pay.java.service.payments.jsapi.JsapiServiceExtension;
 import com.wechat.pay.java.service.payments.jsapi.model.*;
 import com.wechat.pay.java.service.payments.model.Transaction;
-import com.zeroxn.pay.core.entity.PayParam;
+import com.zeroxn.pay.core.entity.PayParams;
 import com.zeroxn.pay.module.wechat.constant.WechatConstant;
 
 /**
@@ -37,7 +37,7 @@ public class WechatPayJsapiService {
      * @param param 封装下单请求参数
      * @return 返回小程序支付所需的参数
      */
-    public static PrepayWithRequestPaymentResponse confirmOrder(PayParam param) {
+    public static PrepayWithRequestPaymentResponse confirmOrder(PayParams param) {
         Amount amount = new Amount();
         amount.setTotal(param.getWechatTotal());
         // 人民币
