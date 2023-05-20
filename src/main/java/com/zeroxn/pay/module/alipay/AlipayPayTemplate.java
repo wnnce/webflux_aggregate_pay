@@ -7,7 +7,7 @@ import com.alipay.api.domain.AlipayTradeWapPayModel;
 import com.zeroxn.pay.core.entity.PayParams;
 import com.zeroxn.pay.core.enums.PayMethod;
 import com.zeroxn.pay.module.alipay.exception.AlipayPayException;
-import com.zeroxn.pay.core.handler.PayHandler;
+import com.zeroxn.pay.core.handler.PayTemplate;
 import com.zeroxn.pay.module.alipay.service.AlipayPayService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,7 +19,7 @@ import java.util.Map;
  * @DateTime: 2023/4/28 08:47
  * @Description: 支付宝交易请求处理 负责参数校验 调用Service层方法和响应参数处理
  */
-public class AlipayPayTemplate implements PayHandler {
+public class AlipayPayTemplate implements PayTemplate {
     private final Logger logger = LoggerFactory.getLogger(AlipayPayTemplate.class);
     private final AlipayPayService alipayService;
     public AlipayPayTemplate(AlipayPayService alipayService){
@@ -33,7 +33,7 @@ public class AlipayPayTemplate implements PayHandler {
      * @return
      * @param <T>
      */
-    public <T> T handlerConfirmOrder(PayParams param, PayMethod method, Class<T> clazz) {
+    public <T> T confirmOrder(PayParams param, PayMethod method, Class<T> clazz) {
         switch (method) {
             case APPLETS -> {
                 AlipayTradeCreateModel model = new AlipayTradeCreateModel();
@@ -73,7 +73,7 @@ public class AlipayPayTemplate implements PayHandler {
      * @param method 订单的支付方式
      */
     @Override
-    public <T> T handlerCloseOrder(String orderId, PayMethod method, Class<T> clazz) {
+    public <T> T closeOrder(String orderId, PayMethod method, Class<T> clazz) {
         return (T) alipayService.closeOrder(orderId);
     }
 
@@ -86,7 +86,7 @@ public class AlipayPayTemplate implements PayHandler {
      * @param <T>
      */
     @Override
-    public <T> T handlerQueryOrder(String orderId, PayMethod method, Class<T> clazz) {
+    public <T> T queryOrder(String orderId, PayMethod method, Class<T> clazz) {
         return (T) alipayService.queryOrderByOrderId(orderId);
     }
 
@@ -98,7 +98,7 @@ public class AlipayPayTemplate implements PayHandler {
      * @param <T>
      */
     @Override
-    public <T> T handlerOrderRefund(PayParams param, Class<T> clazz) {
+    public <T> T refundOrder(PayParams param, Class<T> clazz) {
         AlipayTradeRefundModel model = new AlipayTradeRefundModel();
         model.setOutTradeNo(param.getOrderId());
         model.setRefundAmount(param.getAlipayRefundTotal().toString());
@@ -116,7 +116,7 @@ public class AlipayPayTemplate implements PayHandler {
      * @param <T>
      */
     @Override
-    public <T> T handlerQueryRefund(String orderId, String orderRefundId, Class<T> clazz) {
+    public <T> T queryRefundOrder(String orderId, String orderRefundId, Class<T> clazz) {
         return (T) alipayService.queryRefund(orderId, orderRefundId);
     }
 

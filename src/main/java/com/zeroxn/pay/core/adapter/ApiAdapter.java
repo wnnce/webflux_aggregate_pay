@@ -37,8 +37,8 @@ public class ApiAdapter {
      */
     public <T> T confirmOrder(PayParams param, PayPlatform platform, PayMethod method, Class<T> clazz){
         switch (platform){
-            case ALIPAY: return alipayPayHandler.handlerConfirmOrder(param, method, clazz);
-            case WECHAT: return wechatPayHandler.handlerConfirmOrder(param, method, clazz);
+            case ALIPAY: return alipayPayHandler.confirmOrder(param, method, clazz);
+            case WECHAT: return wechatPayHandler.confirmOrder(param, method, clazz);
             default: throw new PayException("不受支持的平台");
         }
     }
@@ -57,8 +57,8 @@ public class ApiAdapter {
      */
     public <T> T queryOrder(String orderId, PayPlatform platform, PayMethod method, Class<T> clazz){
         switch (platform){
-            case ALIPAY: return alipayPayHandler.handlerQueryOrder(orderId, method, clazz);
-            case WECHAT: return wechatPayHandler.handlerQueryOrder(orderId, method, clazz);
+            case ALIPAY: return alipayPayHandler.queryOrder(orderId, method, clazz);
+            case WECHAT: return wechatPayHandler.queryOrder(orderId, method, clazz);
             default: throw new PayException("不受支持的平台");
         }
     }
@@ -71,8 +71,8 @@ public class ApiAdapter {
      */
     public <T> T closeOrder(String orderId, PayPlatform platform, PayMethod method, Class<T> clazz){
         switch (platform){
-            case ALIPAY: return alipayPayHandler.handlerCloseOrder(orderId, method, clazz);
-            case WECHAT: return wechatPayHandler.handlerCloseOrder(orderId, method, clazz);
+            case ALIPAY: return alipayPayHandler.closeOrder(orderId, method, clazz);
+            case WECHAT: return wechatPayHandler.closeOrder(orderId, method, clazz);
             default: throw new PayException("不受支持的平台");
         }
     }
@@ -90,8 +90,8 @@ public class ApiAdapter {
      */
     public <T> T orderRefund(PayParams param, PayPlatform platform, Class<T> clazz){
         switch (platform){
-            case ALIPAY: return alipayPayHandler.handlerOrderRefund(param, clazz);
-            case WECHAT: return wechatPayHandler.handlerOrderRefund(param, clazz);
+            case ALIPAY: return alipayPayHandler.refundOrder(param, clazz);
+            case WECHAT: return wechatPayHandler.refundOrder(param, clazz);
             default: throw new PayException("不受支持的平台");
         }
     }
@@ -110,8 +110,8 @@ public class ApiAdapter {
      */
     public <T> T queryOrderRefund(String orderId, String orderRefundId, PayPlatform platform, Class<T> clazz){
         switch (platform){
-            case ALIPAY: return alipayPayHandler.handlerQueryRefund(orderId, orderRefundId, clazz);
-            case WECHAT: return wechatPayHandler.handlerQueryRefund(orderId, orderRefundId, clazz);
+            case ALIPAY: return alipayPayHandler.queryRefundOrder(orderId, orderRefundId, clazz);
+            case WECHAT: return wechatPayHandler.queryRefundOrder(orderId, orderRefundId, clazz);
             default: throw new PayException("不受支持的平台");
         }
     }

@@ -64,7 +64,7 @@ public class AlipayService {
                 .setDescription(paramDTO.getDescription())
                 .setQuitUrl(paramDTO.getQuitUrl())
                 .build();
-        AlipayTradeWapPayResponse response = payHandler.handlerConfirmOrder(params, PayMethod.WAP, AlipayTradeWapPayResponse.class);
+        AlipayTradeWapPayResponse response = payHandler.confirmOrder(params, PayMethod.WAP, AlipayTradeWapPayResponse.class);
         if(response.isSuccess()){
             logger.info("支付宝手机下单成功，订单号：{}", params.getOrderId());
             return response.getBody();
@@ -91,7 +91,7 @@ public class AlipayService {
                 .setQrMode(paramDTO.getQrMode().toString())
                 .setQrWidth(Long.valueOf(paramDTO.getQrWidth()))
                 .build();
-        AlipayTradePagePayResponse response = payHandler.handlerConfirmOrder(params, PayMethod.DESKTOP, AlipayTradePagePayResponse.class);
+        AlipayTradePagePayResponse response = payHandler.confirmOrder(params, PayMethod.DESKTOP, AlipayTradePagePayResponse.class);
         if (response.isSuccess()){
             logger.info("支付宝电脑下单成功，订单号：{}", params.getOrderId());
             return response.getBody();
@@ -112,7 +112,7 @@ public class AlipayService {
                 .setDescription(paramDTO.getDescription())
                 .setUserId(paramDTO.getUserId())
                 .build();
-        AlipayTradeCreateResponse response = payHandler.handlerConfirmOrder(params, PayMethod.APPLETS, AlipayTradeCreateResponse.class);
+        AlipayTradeCreateResponse response = payHandler.confirmOrder(params, PayMethod.APPLETS, AlipayTradeCreateResponse.class);
         if (response.isSuccess()){
             logger.info("支付宝小程序下单成功，订单号：{}", params.getOrderId());
             return response.getBody();
@@ -127,7 +127,7 @@ public class AlipayService {
      * @return 返回订单详细信息或空
      */
     public AlipayTradeQueryResponse queryAlipayOrder(String orderId){
-        AlipayTradeQueryResponse response = payHandler.handlerQueryOrder(orderId, null, AlipayTradeQueryResponse.class);
+        AlipayTradeQueryResponse response = payHandler.queryOrder(orderId, null, AlipayTradeQueryResponse.class);
         if(response.isSuccess()){
             return response;
         }
@@ -142,7 +142,7 @@ public class AlipayService {
      * @return 关闭成功则返回订单id否则空
      */
     public String alipayOrderClose(String orderId){
-        AlipayTradeCloseResponse response = payHandler.handlerCloseOrder(orderId, null, AlipayTradeCloseResponse.class);
+        AlipayTradeCloseResponse response = payHandler.closeOrder(orderId, null, AlipayTradeCloseResponse.class);
         if(response.isSuccess()){
             return response.getOutTradeNo();
         }
@@ -170,7 +170,7 @@ public class AlipayService {
                 .setRefundTotal(paramDTO.getRefundTotal())
                 .setRefundDescription(paramDTO.getRefundDescription())
                 .build();
-        AlipayTradeRefundResponse response = payHandler.handlerOrderRefund(params, AlipayTradeRefundResponse.class);
+        AlipayTradeRefundResponse response = payHandler.refundOrder(params, AlipayTradeRefundResponse.class);
         if(response.isSuccess()){
             return response;
         }
@@ -186,7 +186,7 @@ public class AlipayService {
      * @return 返回退款订单详情或空
      */
     public AlipayTradeFastpayRefundQueryResponse queryAlipayRefundOrder(String orderId, String refundId){
-        AlipayTradeFastpayRefundQueryResponse response = payHandler.handlerQueryRefund(orderId, refundId, AlipayTradeFastpayRefundQueryResponse.class);
+        AlipayTradeFastpayRefundQueryResponse response = payHandler.queryRefundOrder(orderId, refundId, AlipayTradeFastpayRefundQueryResponse.class);
         if(response.isSuccess()){
             return response;
         }
