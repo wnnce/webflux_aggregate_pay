@@ -69,10 +69,10 @@ public class ApiAdapter {
      * @param platform 支付平台
      * @param method 支付方式
      */
-    public void closeOrder(String orderId, PayPlatform platform, PayMethod method){
+    public <T> T closeOrder(String orderId, PayPlatform platform, PayMethod method, Class<T> clazz){
         switch (platform){
-            case ALIPAY: alipayPayHandler.handlerCloseOrder(orderId, method);break;
-            case WECHAT: wechatPayHandler.handlerCloseOrder(orderId, method);break;
+            case ALIPAY: return alipayPayHandler.handlerCloseOrder(orderId, method, clazz);
+            case WECHAT: return wechatPayHandler.handlerCloseOrder(orderId, method, clazz);
             default: throw new PayException("不受支持的平台");
         }
     }

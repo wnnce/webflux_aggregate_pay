@@ -40,26 +40,15 @@ public class AlipayParamDTO {
     @Range(min = 20, message = "二维码宽度最小20", groups = ValidationGroups.AlipayDesktopValidation.class)
     @Schema(description = "自定义二维码宽度，最小20")
     private Integer qrWidth;
-    @NotBlank(message = "订单退款ID不能为空", groups = {ValidationGroups.AlipayRefundValidation.class})
-    @Schema(description = "订单退款ID，仅订单退款接口需要")
+    @Schema(description = "订单退款ID，仅订单退款接口需要，如果订单为部分退款的话那么此参数必须", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
     private String refundId;
     @NotNull(message = "订单退款金额不能为空", groups = {ValidationGroups.AlipayRefundValidation.class})
     @Range(min = 0, message = "订单退款金额不能低于0", groups = {ValidationGroups.AlipayRefundValidation.class})
     @Schema(description = "订单退款金额，单位：分")
     private Integer refundTotal;
+    @Schema(description = "退款说明", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+    private String refundDescription;
     public AlipayParamDTO() {
-    }
-
-    public AlipayParamDTO(String orderId, Integer total, String description, String userId, String quitUrl, Integer qrMode, Integer qrWidth, String refundId, Integer refundTotal) {
-        this.orderId = orderId;
-        this.total = total;
-        this.description = description;
-        this.userId = userId;
-        this.quitUrl = quitUrl;
-        this.qrMode = qrMode;
-        this.qrWidth = qrWidth;
-        this.refundId = refundId;
-        this.refundTotal = refundTotal;
     }
 
     public String getOrderId() {
@@ -132,5 +121,13 @@ public class AlipayParamDTO {
 
     public void setRefundTotal(Integer refundTotal) {
         this.refundTotal = refundTotal;
+    }
+
+    public String getRefundDescription() {
+        return refundDescription;
+    }
+
+    public void setRefundDescription(String refundDescription) {
+        this.refundDescription = refundDescription;
     }
 }

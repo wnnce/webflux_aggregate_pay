@@ -50,6 +50,10 @@ public class PayParams {
      * 支付宝电脑下单qrMode == 4 时，自定义收款码尺寸
      */
     private Long qrWidth;
+    /**
+     * 订单退款描述
+     */
+    private String refundDescription;
 
     public PayParams(BuilderWechatApplets builder){
         this.orderId = builder.orderId;
@@ -88,6 +92,7 @@ public class PayParams {
         this.orderRefundId = builder.orderRefundId;
         this.total = builder.total;
         this.refundTotal = builder.refundTotal;
+        this.refundDescription = builder.refundDescription;
     }
     // 微信支付小程序下单参数
     public static class BuilderWechatApplets{
@@ -235,6 +240,7 @@ public class PayParams {
         private String orderRefundId;
         private Integer total;
         private Integer refundTotal;
+        private String refundDescription;
         public BuilderRefund setOrderId(String orderId){
             this.orderId = orderId;
             return this;
@@ -249,6 +255,10 @@ public class PayParams {
         }
         public BuilderRefund setRefundTotal(Integer refundTotal){
             this.refundTotal = refundTotal;
+            return this;
+        }
+        public BuilderRefund setRefundDescription(String refundDescription){
+            this.refundDescription = refundDescription;
             return this;
         }
         public PayParams build(){
@@ -323,6 +333,10 @@ public class PayParams {
 
     public Long getQrWidth() {
         return qrWidth;
+    }
+
+    public String getRefundDescription() {
+        return refundDescription;
     }
 
     @Override

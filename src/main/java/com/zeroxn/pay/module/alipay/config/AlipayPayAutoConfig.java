@@ -19,8 +19,8 @@ import org.springframework.stereotype.Component;
  * @Description: 支付宝支付自动配置类
  */
 @Component
-@EnableConfigurationProperties(AlipayPayConfig.class)
 @ConditionalOnProperty(prefix = "pay", name = "alipay.enable", havingValue = "true")
+@EnableConfigurationProperties(AlipayPayConfig.class)
 public class AlipayPayAutoConfig {
     @Bean
     @ConditionalOnClass(AlipayPayConfig.class)

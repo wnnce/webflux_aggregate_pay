@@ -3,13 +3,16 @@ package com.zeroxn.pay.module.alipay.service;
 import com.alipay.api.AlipayApiException;
 import com.alipay.api.AlipayClient;
 import com.alipay.api.domain.*;
+import com.alipay.api.internal.util.AlipaySignature;
 import com.alipay.api.request.*;
 import com.alipay.api.response.*;
-import com.zeroxn.pay.core.entity.PayParams;
+import com.zeroxn.pay.module.alipay.exception.AlipayPaySystemException;
 import com.zeroxn.pay.module.alipay.config.AlipayPayConfig;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.Map;
 
 /**
  * @Author: lisang
@@ -38,9 +41,8 @@ public class AlipayPayService {
         try{
             return alipayClient.execute(request);
         }catch (AlipayApiException ex){
-            ex.printStackTrace();
-            logger.error("支付宝小程序下单接口请求失败，订单号：{}，错误消息：{}", model.getOutTradeNo(), ex.getMessage());
-            return null;
+            logger.error("支付宝小程序下单接口请求失败，错误消息：{}", ex.getMessage());
+            throw new AlipayPaySystemException("小程序下单失败");
         }
     }
 
@@ -55,9 +57,8 @@ public class AlipayPayService {
         try{
             return alipayClient.pageExecute(request);
         }catch (AlipayApiException ex){
-            ex.printStackTrace();
-            logger.error("支付宝手机网站下单接口请求失败，订单号：{}，错误消息：{}", model.getOutTradeNo(), ex.getMessage());
-            return null;
+            logger.error("支付宝手机网站下单接口请求失败，错误消息：{}", ex.getMessage());
+            throw new AlipayPaySystemException("手机下单失败");
         }
     }
 
@@ -73,9 +74,8 @@ public class AlipayPayService {
         try{
             return alipayClient.pageExecute(request);
         }catch (AlipayApiException ex){
-            ex.printStackTrace();
-            logger.error("支付宝电脑网站下单接口请求失败，订单号：{}，错误消息：{}", model.getOutTradeNo(), ex.getMessage());
-            return null;
+            logger.error("支付宝电脑网站下单接口请求失败，错误消息：{}", ex.getMessage());
+            throw new AlipayPaySystemException("网站下单失败");
         }
     }
 
@@ -92,9 +92,8 @@ public class AlipayPayService {
         try{
             return alipayClient.execute(request);
         }catch (AlipayApiException ex){
-            ex.printStackTrace();
-            logger.error("支付宝查询订单接口请求失败，订单号：{}", orderId);
-            return null;
+            logger.error("支付宝查询订单接口请求失败，错误消息：{}", ex.getMessage());
+            throw new AlipayPaySystemException("订单查询失败");
         }
     }
 
@@ -111,29 +110,23 @@ public class AlipayPayService {
         try {
             return alipayClient.execute(request);
         } catch (AlipayApiException ex) {
-            ex.printStackTrace();
-            logger.error("支付宝关闭订单接口请求失败，订单号：{}", orderId);
-            return null;
+            logger.error("支付宝关闭订单接口请求失败，错误消息：{}", ex.getMessage());
+            throw new AlipayPaySystemException("订单关闭失败");
         }
     }
 
     /**
      * 支付宝订单退款
-     * @param param 封装退款参数
+     * @param model 封装退款参数
      */
-    public AlipayTradeRefundResponse refundOrder(PayParams param){
+    public AlipayTradeRefundResponse refundOrder(AlipayTradeRefundModel model){
         AlipayTradeRefundRequest request = new AlipayTradeRefundRequest();
-        AlipayTradeRefundModel model = new AlipayTradeRefundModel();
-        model.setOutTradeNo(param.getOrderId());
-        model.setRefundAmount(param.getAlipayRefundTotal().toString());
-        model.setOutRequestNo(param.getOrderRefundId());
         request.setBizModel(model);
         try{
             return alipayClient.execute(request);
         }catch (AlipayApiException ex){
-            ex.printStackTrace();
-            logger.error("支付宝订单退款接口请求失败，订单号：{}，退款单号：{}", param.getOrderId(), param.getOrderRefundId());
-            return null;
+            logger.error("支付宝订单退款接口请求失败，错误消息：{}", ex.getMessage());
+            throw new AlipayPaySystemException("订单退款失败");
         }
     }
 
@@ -151,9 +144,23 @@ public class AlipayPayService {
         try{
             return alipayClient.execute(request);
         }catch (AlipayApiException ex){
-            ex.printStackTrace();
-            logger.error("支付宝退款订单查询失败，订单号：{}，退款单号：{}", orderId, orderRefundId);
-            return null;
+            logger.error("支付宝退款订单查询失败，错误消息：{}", ex.getMessage());
+            throw new AlipayPaySystemException("退款订单查询失败");
+        }
+    }
+    /**
+     * 支付宝异步通知验签方法 异步通过处理参考：https://opendocs.alipay.com/open/270/105902?pathHash=d5cd617e&ref=api
+     * @param paramsMap 通知的所有参数
+     * @return true：成功 false：失败
+     * @throws AlipayApiException 支付宝API调用异常
+     */
+    public boolean signVerified(Map<String, String> paramsMap) {
+        try{
+            return AlipaySignature.rsaCheckV1(paramsMap, alipayConfig.getPublicKey(), alipayConfig.getCharSet(),
+                    alipayConfig.getSignType());
+        }catch (AlipayApiException ex){
+            logger.error("支付宝通知验签失败，错误消息：{}", ex.getMessage());
+            return false;
         }
     }
 }

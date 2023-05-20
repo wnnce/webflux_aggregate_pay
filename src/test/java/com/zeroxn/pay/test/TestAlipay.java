@@ -2,12 +2,7 @@ package com.zeroxn.pay.test;
 
 import com.alipay.api.AlipayClient;
 import com.alipay.api.response.AlipayTradeCloseResponse;
-import com.alipay.api.response.AlipayTradePagePayResponse;
 import com.alipay.api.response.AlipayTradeQueryResponse;
-import com.alipay.api.response.AlipayTradeWapPayResponse;
-import com.zeroxn.pay.core.entity.PayParams;
-import com.zeroxn.pay.core.enums.ResultCode;
-import com.zeroxn.pay.core.exception.AlipayPayException;
 import com.zeroxn.pay.module.alipay.config.AlipayPayConfig;
 import com.zeroxn.pay.module.alipay.service.AlipayPayService;
 import com.zeroxn.pay.web.alipay.AlipayParamDTO;

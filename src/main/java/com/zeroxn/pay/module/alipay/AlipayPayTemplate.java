@@ -2,19 +2,17 @@ package com.zeroxn.pay.module.alipay;
 
 import com.alipay.api.domain.AlipayTradeCreateModel;
 import com.alipay.api.domain.AlipayTradePagePayModel;
+import com.alipay.api.domain.AlipayTradeRefundModel;
 import com.alipay.api.domain.AlipayTradeWapPayModel;
-import com.alipay.api.response.AlipayTradeCloseResponse;
-import com.alipay.api.response.AlipayTradeFastpayRefundQueryResponse;
-import com.alipay.api.response.AlipayTradeQueryResponse;
-import com.alipay.api.response.AlipayTradeRefundResponse;
 import com.zeroxn.pay.core.entity.PayParams;
 import com.zeroxn.pay.core.enums.PayMethod;
-import com.zeroxn.pay.core.exception.AlipayPayException;
+import com.zeroxn.pay.module.alipay.exception.AlipayPayException;
 import com.zeroxn.pay.core.handler.PayHandler;
-import com.zeroxn.pay.core.utils.BaseUtils;
 import com.zeroxn.pay.module.alipay.service.AlipayPayService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.Map;
 
 /**
  * @Author: lisang
@@ -75,31 +73,8 @@ public class AlipayPayTemplate implements PayHandler {
      * @param method 订单的支付方式
      */
     @Override
-    public void handlerCloseOrder(String orderId, PayMethod method) {
-        AlipayTradeCloseResponse response = alipayService.closeOrder(orderId);
-        // 判断调用是否成功
-        if (response == null || !response.isSuccess()){
-            throw new AlipayPayException("关闭订单接口调用失败", orderId);
-        }
-        // 1000 是操作成功状态码
-        if(!"1000".equals(response.getCode())){
-            switch (response.getSubCode()){
-                case "ACQ.TRADE_NOT_EXIST": {
-                    logger.error("关闭订单异常，该订单不存在，订单号：{}", orderId);
-                    throw new AlipayPayException("订单号不存在", orderId);
-                }
-                case "ACQ.TRADE_STATUS_ERROR": {
-                    logger.error("关闭订单异常，订单状态错误，订单号：{}", orderId);
-                    throw new AlipayPayException("订单状态不合法", orderId);
-                }
-                default:{
-                    logger.error("关闭订单未知异常，错误码：{}，业务错误码：{}", response.getCode(), response.getSubCode());
-                    throw new AlipayPayException("关闭订单未知异常", orderId);
-                }
-            }
-        }else {
-            logger.info("关闭订单成功，订单号：{}", orderId);
-        }
+    public <T> T handlerCloseOrder(String orderId, PayMethod method, Class<T> clazz) {
+        return (T) alipayService.closeOrder(orderId);
     }
 
     /**
@@ -112,12 +87,7 @@ public class AlipayPayTemplate implements PayHandler {
      */
     @Override
     public <T> T handlerQueryOrder(String orderId, PayMethod method, Class<T> clazz) {
-        AlipayTradeQueryResponse response = alipayService.queryOrderByOrderId(orderId);
-        if(response == null){
-            logger.error("支付宝订单查询失败，订单号{}", orderId);
-            throw new AlipayPayException("系统错误，请重试");
-        }
-        return (T)response;
+        return (T) alipayService.queryOrderByOrderId(orderId);
     }
 
     /**
@@ -129,36 +99,12 @@ public class AlipayPayTemplate implements PayHandler {
      */
     @Override
     public <T> T handlerOrderRefund(PayParams param, Class<T> clazz) {
-        if(BaseUtils.checkObjectFieldIsNull(param, "orderId", "orderRefundId", "total", "refundTotal")){
-            throw new AlipayPayException("支付宝退款参数错误");
-        }
-        AlipayTradeRefundResponse response = alipayService.refundOrder(param);
-        if(response != null && response.isSuccess()){
-            if("1000".equals(response.getCode())){
-                return (T) response;
-            }
-            switch (response.getSubCode()){
-                case "ACQ.SELLER_BALANCE_NOT_ENOUGH": {
-                    logger.error("退款卖家余额不足，订单号：{}", param.getOrderId());
-                    throw new AlipayPayException("余额不足", param.getOrderId());
-                }
-                case "ACQ.REFUND_AMT_NOT_EQUAL_TOTAL": {
-                    logger.error("退款金额超限，订单号：{}，退款金额：{}", param.getOrderId(), param.getAlipayRefundTotal());
-                    throw new AlipayPayException("退款金额超限", param.getOrderId());
-                }
-                case "ACQ.TRADE_NOT_EXIST": {
-                    logger.error("退款订单不存在，订单号：{}", param.getOrderId());
-                    throw new AlipayPayException("退款订单不存在", param.getOrderId());
-                }
-                default:{
-                    logger.error("退款未知异常，订单号：{}，退款单号：{}，错误码：{}，业务错误码：{}",
-                            param.getOrderId(), param.getOrderRefundId(), response.getCode(), response.getSubCode());
-                    throw new AlipayPayException("退款未知异常", param.getOrderId());
-                }
-            }
-        }
-        logger.error("退款接口请求失败，订单号：{}", param.getOrderId());
-        throw new AlipayPayException("退款请求失败", param.getOrderId());
+        AlipayTradeRefundModel model = new AlipayTradeRefundModel();
+        model.setOutTradeNo(param.getOrderId());
+        model.setRefundAmount(param.getAlipayRefundTotal().toString());
+        model.setOutRequestNo(param.getOrderRefundId());
+        model.setRefundReason(param.getRefundDescription());
+        return (T) alipayService.refundOrder(model);
     }
 
     /**
@@ -171,27 +117,10 @@ public class AlipayPayTemplate implements PayHandler {
      */
     @Override
     public <T> T handlerQueryRefund(String orderId, String orderRefundId, Class<T> clazz) {
-        AlipayTradeFastpayRefundQueryResponse response = alipayService.queryRefund(orderId, orderRefundId);
-        if(response != null && response.isSuccess()){
-            if("1000".equals(response.getCode())){
-                return (T) response;
-            }
-            switch (response.getSubCode()){
-                case "ACQ.TRADE_NOT_EXIST": {
-                    logger.warn("订单不存在，订单号：{}，退款请求号：{}", orderId, orderRefundId);
-                    throw new AlipayPayException("订单号或退款请求号不存在", orderId);
-                }
-                case "TRADE_NOT_EXIST": {
-                    logger.warn("退款不存在, 订单号：{}，退款请求号：{}", orderId, orderRefundId);
-                    throw new AlipayPayException("订单没有退款", orderId);
-                }
-                default: {
-                    logger.error("查询退款未知异常，订单号：{}，退款请求号：{}，错误码：{}，业务错误码：{}",
-                            orderId, orderRefundId, response.getCode(), response.getSubCode());
-                }
-            }
-        }
-        logger.error("查询退款请求失败，订单号：{}", orderId);
-        throw new AlipayPayException("查询退款请求失败", orderId);
+        return (T) alipayService.queryRefund(orderId, orderRefundId);
+    }
+
+    public boolean notifySignVerified(Map<String, String> paramsMap){
+        return alipayService.signVerified(paramsMap);
     }
 }

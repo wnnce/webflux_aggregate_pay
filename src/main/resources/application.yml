@@ -3,6 +3,8 @@ server:
 logging:
   pattern:
     dateformat: yyyy-MM-dd HH:mm:ss:SSS
+  level:
+    root: info
 springdoc:
   swagger-ui:
     path: /pay/swagger-ui.html

@@ -65,7 +65,7 @@ public class WechatPayHandler implements PayHandler {
      * @param method 支付方式 小程序或H5
      */
     @Override
-    public void handlerCloseOrder(String orderId, PayMethod method) {
+    public <T> T handlerCloseOrder(String orderId, PayMethod method, Class<T> clazz) {
         switch (method){
             case APPLETS:{
                 WechatPayJsapiService.closeOrder(orderId);
@@ -75,6 +75,7 @@ public class WechatPayHandler implements PayHandler {
             }
         }
         log.info("微信关闭订单，订单号：{}", orderId);
+        return null;
     }
 
     /**

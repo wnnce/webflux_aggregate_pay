@@ -1,5 +1,6 @@
-package com.zeroxn.pay.core.exception;
+package com.zeroxn.pay.module.alipay.exception;
 
+import com.zeroxn.pay.core.exception.PayException;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -8,12 +9,11 @@ import lombok.extern.slf4j.Slf4j;
  * @Description: 支付宝支付异常
  */
 @Slf4j
-public class AlipayPayException extends PayException{
+public class AlipayPayException extends PayException {
     public AlipayPayException(String message) {
         super(message);
     }
     public AlipayPayException(String message, String orderId){
         super(message);
-        log.error("抛出支付宝支付异常，错误消息：{}，订单号：{}", message, orderId);
     }
 }

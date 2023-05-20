@@ -1,13 +1,21 @@
 package com.zeroxn.pay.web.alipay;
 
+import com.alipay.api.response.AlipayTradeFastpayRefundQueryResponse;
+import com.alipay.api.response.AlipayTradeQueryResponse;
+import com.alipay.api.response.AlipayTradeRefundResponse;
 import com.zeroxn.pay.core.entity.Result;
 import com.zeroxn.pay.core.validation.ValidationGroups;
+import com.zeroxn.pay.module.alipay.AlipayPayTemplate;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
+
+import java.util.Map;
 
 /**
  * @Author: lisang
@@ -17,6 +25,7 @@ import reactor.core.publisher.Mono;
 @RestController
 @RequestMapping("/pay/alipay")
 @Tag(name = "支付宝支付管理接口")
+@ConditionalOnBean(AlipayPayTemplate.class)
 public class AlipayController {
     private final AlipayService alipayService;
     public AlipayController(AlipayService alipayService){
@@ -47,27 +56,39 @@ public class AlipayController {
     @GetMapping("/{id}")
     @Operation(summary = "支付宝订单查询接口")
     @Parameter(name = "id", description = "商户系统内的订单ID", required = true)
-    public Mono<Result<String>> queryAlipayOrder(@PathVariable("id") String orderId){
-        return null;
+    public Mono<Result<AlipayTradeQueryResponse>> queryAlipayOrder(@PathVariable("id") String orderId){
+        AlipayTradeQueryResponse response = alipayService.queryAlipayOrder(orderId);
+        return Mono.just(Result.success(response));
     }
+
     @PostMapping("/close/{id}")
     @Operation(summary = "支付宝订单关闭接口")
     @Parameter(name = "id", description = "商户系统内的订单ID", required = true)
     public Mono<Result<String>> closeAlipayOrder(@PathVariable("id") String orderId){
-        return null;
+        String tradeId = alipayService.alipayOrderClose(orderId);
+        return Mono.just(Result.success(tradeId));
     }
     @PostMapping("/refund")
     @Operation(summary = "支付宝订单退款接口")
-    public Mono<Result<String>> alipayOrderRefund(AlipayParamDTO paramDTO){
-        return null;
+    public Mono<Result<AlipayTradeRefundResponse>> alipayOrderRefund(AlipayParamDTO paramDTO){
+        AlipayTradeRefundResponse response = alipayService.alipayOrderRefund(paramDTO);
+        return Mono.just(Result.success(response));
     }
 
     @GetMapping("/refund/{orderId}/{refundId}")
     @Operation(summary = "支付宝订单退款查询接口")
     @Parameter(name = "orderId", description = "商户系统内的订单ID", required = true)
-    @Parameter(name = "refundId", description = "商户系统内的订单退款ID", required = true)
-    public Mono<Result<String>> queryAlipayRefundOrder(@PathVariable("orderId") String orderId,
+    @Parameter(name = "refundId", description = "商户系统内的订单退款ID, 如果没有退款ID那么这个值就是订单ID", required = true)
+    public Mono<Result<AlipayTradeFastpayRefundQueryResponse>> queryAlipayRefundOrder(@PathVariable("orderId") String orderId,
                                                        @PathVariable("refundId") String refundId){
-        return null;
+        AlipayTradeFastpayRefundQueryResponse response = alipayService.queryAlipayRefundOrder(orderId, refundId);
+        return Mono.just(Result.success(response));
+    }
+
+    @PostMapping("/notify")
+    @Operation(summary = "支付宝异步通知接口")
+    public Mono<String> alipayNotify(Map<String, String> paramsMap){
+        String result = alipayService.alipayNotifyVerified(paramsMap);
+        return Mono.just(result);
     }
 }
