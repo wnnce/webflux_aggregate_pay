@@ -330,6 +330,13 @@ public class PayParams {
     public Integer getWechatRefundTotal(){
         return this.refundTotal;
     }
+    /**
+     * 获取支付宝订单退款
+     * @return 返回退款金额 * 0.01
+     */
+    public Double getAlipayRefundTotal(){
+        return this.refundTotal * 0.01;
+    }
 
     public String getOrderId() {
         return orderId;
