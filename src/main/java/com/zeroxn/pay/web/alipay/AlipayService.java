@@ -7,7 +7,7 @@ import com.zeroxn.pay.core.enums.PayMethod;
 import com.zeroxn.pay.module.alipay.exception.AlipayPayBusinessException;
 import com.zeroxn.pay.module.alipay.exception.AlipayPaySystemException;
 import com.zeroxn.pay.module.alipay.AlipayPayTemplate;
-import com.zeroxn.pay.module.alipay.config.AlipayPayConfig;
+import com.zeroxn.pay.module.alipay.config.AlipayPayProperties;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -46,10 +46,10 @@ public class AlipayService {
             Map.entry("ACQ.ONLINE_TRADE_VOUCHER_NOT_ALLOW_REFUND", "交易不支持退款")
     );
     private final AlipayPayTemplate payHandler;
-    private final AlipayPayConfig alipayConfig;
-    public AlipayService(AlipayPayTemplate payHandler, AlipayPayConfig alipayConfig){
+    private final AlipayPayProperties alipayProperties;
+    public AlipayService(AlipayPayTemplate payHandler, AlipayPayProperties alipayProperties){
         this.payHandler = payHandler;
-        this.alipayConfig = alipayConfig;
+        this.alipayProperties = alipayProperties;
     }
 
     /**
@@ -205,7 +205,7 @@ public class AlipayService {
             String orderId = paramsMap.get("out_trade_no");
             AlipayTradeQueryResponse response = queryAlipayOrder(orderId);
             if (response != null && response.getTotalAmount().equals(paramsMap.get("total_amount"))){
-                if(alipayConfig.getAppId().equals(paramsMap.get("app_id"))){
+                if(alipayProperties.getAppId().equals(paramsMap.get("app_id"))){
                     // 将通知数据放入消息队列
 
 

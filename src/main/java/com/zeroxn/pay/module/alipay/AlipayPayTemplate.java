@@ -9,8 +9,6 @@ import com.zeroxn.pay.core.enums.PayMethod;
 import com.zeroxn.pay.module.alipay.exception.AlipayPayException;
 import com.zeroxn.pay.core.interfaces.PayTemplate;
 import com.zeroxn.pay.module.alipay.business.AlipayPayBusiness;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.Map;
 
@@ -20,7 +18,6 @@ import java.util.Map;
  * @Description: 支付宝交易请求处理 负责参数校验 调用Service层方法和响应参数处理
  */
 public class AlipayPayTemplate implements PayTemplate {
-    private final Logger logger = LoggerFactory.getLogger(AlipayPayTemplate.class);
     private final AlipayPayBusiness alipayBusiness;
     public AlipayPayTemplate(AlipayPayBusiness alipayService){
         this.alipayBusiness = alipayService;

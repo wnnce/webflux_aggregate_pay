@@ -7,7 +7,7 @@ import com.alipay.api.internal.util.AlipaySignature;
 import com.alipay.api.request.*;
 import com.alipay.api.response.*;
 import com.zeroxn.pay.module.alipay.exception.AlipayPaySystemException;
-import com.zeroxn.pay.module.alipay.config.AlipayPayConfig;
+import com.zeroxn.pay.module.alipay.config.AlipayPayProperties;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,10 +22,10 @@ import java.util.Map;
 public class AlipayPayBusiness {
     private final Logger logger = LoggerFactory.getLogger(AlipayPayBusiness.class);
     private final AlipayClient alipayClient;
-    private final AlipayPayConfig alipayConfig;
-    public AlipayPayBusiness(AlipayClient alipayClient, AlipayPayConfig alipayConfig){
+    private final AlipayPayProperties alipayProperties;
+    public AlipayPayBusiness(AlipayClient alipayClient, AlipayPayProperties alipayProperties){
         this.alipayClient = alipayClient;
-        this.alipayConfig = alipayConfig;
+        this.alipayProperties = alipayProperties;
     }
 
     /**
@@ -34,9 +34,9 @@ public class AlipayPayBusiness {
      * @return 返回支付宝小程序下单所需的数据
      */
     public AlipayTradeCreateResponse appletsConfirmOrder(@NotNull AlipayTradeCreateModel model){
-        model.setSellerId(alipayConfig.getSellerId());
+        model.setSellerId(alipayProperties.getSellerId());
         AlipayTradeCreateRequest request = new AlipayTradeCreateRequest();
-        request.setNotifyUrl(alipayConfig.getNotifyUrl());
+        request.setNotifyUrl(alipayProperties.getNotifyUrl());
         request.setBizModel(model);
         try{
             return alipayClient.execute(request);
@@ -52,7 +52,7 @@ public class AlipayPayBusiness {
      */
     public AlipayTradeWapPayResponse wapConfirmOrder(@NotNull AlipayTradeWapPayModel model) {
         AlipayTradeWapPayRequest request = new AlipayTradeWapPayRequest();
-        request.setNotifyUrl(alipayConfig.getNotifyUrl());
+        request.setNotifyUrl(alipayProperties.getNotifyUrl());
         request.setBizModel(model);
         try{
             return alipayClient.pageExecute(request);
@@ -69,7 +69,7 @@ public class AlipayPayBusiness {
      */
     public AlipayTradePagePayResponse desktopConfirmOrder(AlipayTradePagePayModel model){
         AlipayTradePagePayRequest request = new AlipayTradePagePayRequest();
-        request.setNotifyUrl(alipayConfig.getNotifyUrl());
+        request.setNotifyUrl(alipayProperties.getNotifyUrl());
         request.setBizModel(model);
         try{
             return alipayClient.pageExecute(request);
@@ -155,8 +155,8 @@ public class AlipayPayBusiness {
      */
     public boolean signVerified(Map<String, String> paramsMap) {
         try{
-            return AlipaySignature.rsaCheckV1(paramsMap, alipayConfig.getPublicKey(), alipayConfig.getCharSet(),
-                    alipayConfig.getSignType());
+            return AlipaySignature.rsaCheckV1(paramsMap, alipayProperties.getPublicKey(), alipayProperties.getCharSet(),
+                    alipayProperties.getSignType());
         }catch (AlipayApiException ex){
             logger.error("支付宝通知验签失败，错误消息：{}", ex.getMessage());
             return false;

@@ -5,7 +5,7 @@ import com.wechat.pay.java.service.payments.jsapi.JsapiServiceExtension;
 import com.wechat.pay.java.service.payments.jsapi.model.*;
 import com.wechat.pay.java.service.payments.model.Transaction;
 import com.zeroxn.pay.core.entity.PayParams;
-import com.zeroxn.pay.module.wechat.config.WechatPayConfig;
+import com.zeroxn.pay.module.wechat.config.WechatPayProperties;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -15,12 +15,12 @@ import org.jetbrains.annotations.NotNull;
  */
 public class WechatPayJsapiBusiness {
     private final JsapiServiceExtension service;
-    private final WechatPayConfig wechatConfig;
-    public WechatPayJsapiBusiness(@NotNull Config config, @NotNull WechatPayConfig wechatConfig){
-        this.wechatConfig = wechatConfig;
+    private final WechatPayProperties wechatProperties;
+    public WechatPayJsapiBusiness(@NotNull Config config, @NotNull WechatPayProperties wechatProperties){
+        this.wechatProperties = wechatProperties;
         this.service = new JsapiServiceExtension.Builder()
                 .config(config)
-                .signType(wechatConfig.getSignType())
+                .signType(wechatProperties.getSignType())
                 .build();
     }
     /**
@@ -29,7 +29,7 @@ public class WechatPayJsapiBusiness {
      */
     public void closeOrder(String orderId) {
         CloseOrderRequest request = new CloseOrderRequest();
-        request.setMchid(wechatConfig.getMerchantId());
+        request.setMchid(wechatProperties.getMerchantId());
         request.setOutTradeNo(orderId);
         service.closeOrder(request);
     }
@@ -43,17 +43,17 @@ public class WechatPayJsapiBusiness {
         // 金额
         Amount amount = new Amount();
         amount.setTotal(param.getWechatTotal());
-        amount.setCurrency(wechatConfig.getCurrency());
+        amount.setCurrency(wechatProperties.getCurrency());
 
         Payer payer = new Payer();
         payer.setOpenid(param.getUserId());
 
         PrepayRequest request = new PrepayRequest();
-        request.setAppid(wechatConfig.getAppId());
-        request.setMchid(wechatConfig.getMerchantId());
+        request.setAppid(wechatProperties.getAppId());
+        request.setMchid(wechatProperties.getMerchantId());
         request.setOutTradeNo(param.getOrderId());
         request.setDescription(param.getDescription());
-        request.setNotifyUrl(wechatConfig.getSuccessNotifyUrl());
+        request.setNotifyUrl(wechatProperties.getSuccessNotifyUrl());
         request.setAmount(amount);
         request.setPayer(payer);
         return service.prepayWithRequestPayment(request);
@@ -66,7 +66,7 @@ public class WechatPayJsapiBusiness {
      */
     public Transaction queryOrderByOrderId(String orderId) {
         QueryOrderByOutTradeNoRequest request = new QueryOrderByOutTradeNoRequest();
-        request.setMchid(wechatConfig.getMerchantId());
+        request.setMchid(wechatProperties.getMerchantId());
         request.setOutTradeNo(orderId);
         return service.queryOrderByOutTradeNo(request);
     }

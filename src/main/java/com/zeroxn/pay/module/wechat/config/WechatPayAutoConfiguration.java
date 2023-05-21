@@ -19,12 +19,12 @@ import org.springframework.stereotype.Component;
  * @Description: 微信支付自动配置类
  */
 @Component
-@ConditionalOnProperty(prefix = "pay", name = "wechat.enable", havingValue = "true")
-@EnableConfigurationProperties(WechatPayConfig.class)
-public class WechatPayAutoConfig {
+@ConditionalOnProperty(value = "pay.wechat.enable", havingValue = "true")
+@EnableConfigurationProperties(WechatPayProperties.class)
+public class WechatPayAutoConfiguration {
     @Bean
-    @ConditionalOnClass(WechatPayConfig.class)
-    public Config config(WechatPayConfig payConfig){
+    @ConditionalOnClass(WechatPayProperties.class)
+    public Config config(WechatPayProperties payConfig){
         return new RSAAutoCertificateConfig.Builder()
                 .merchantId(payConfig.getMerchantId())
                 .apiV3Key(payConfig.getApiV3Key())
@@ -34,17 +34,17 @@ public class WechatPayAutoConfig {
     }
     @Bean
     @ConditionalOnClass(Config.class)
-    public WechatPayH5Business wechatPayH5Service(Config config, WechatPayConfig wechatPayConfig){
+    public WechatPayH5Business wechatPayH5Service(Config config, WechatPayProperties wechatPayConfig){
         return new WechatPayH5Business(config, wechatPayConfig);
     }
     @Bean
     @ConditionalOnClass(Config.class)
-    public WechatPayJsapiBusiness wechatPayJsapiService(Config config, WechatPayConfig wechatPayConfig){
+    public WechatPayJsapiBusiness wechatPayJsapiService(Config config, WechatPayProperties wechatPayConfig){
         return new WechatPayJsapiBusiness(config, wechatPayConfig);
     }
     @Bean
     @ConditionalOnClass(Config.class)
-    public WechatRefundBusiness wechatRefundService(Config config, WechatPayConfig wechatPayConfig){
+    public WechatRefundBusiness wechatRefundService(Config config, WechatPayProperties wechatPayConfig){
         return new WechatRefundBusiness(config, wechatPayConfig);
     }
     @Bean

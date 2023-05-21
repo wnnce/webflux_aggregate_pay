@@ -7,7 +7,7 @@ import com.wechat.pay.java.service.refund.model.CreateRequest;
 import com.wechat.pay.java.service.refund.model.QueryByOutRefundNoRequest;
 import com.wechat.pay.java.service.refund.model.Refund;
 import com.zeroxn.pay.core.entity.PayParams;
-import com.zeroxn.pay.module.wechat.config.WechatPayConfig;
+import com.zeroxn.pay.module.wechat.config.WechatPayProperties;
 
 /**
  * @Author: lisang
@@ -16,9 +16,9 @@ import com.zeroxn.pay.module.wechat.config.WechatPayConfig;
  */
 public class WechatRefundBusiness {
     private final RefundService service;
-    private final WechatPayConfig wechatConfig;
-    public WechatRefundBusiness(Config config, WechatPayConfig wechatConfig){
-        this.wechatConfig = wechatConfig;
+    private final WechatPayProperties wechatProperties;
+    public WechatRefundBusiness(Config config, WechatPayProperties wechatProperties){
+        this.wechatProperties = wechatProperties;
         this.service = new RefundService.Builder().config(config).build();
     }
 
@@ -31,13 +31,13 @@ public class WechatRefundBusiness {
         AmountReq amount = new AmountReq();
         amount.setRefund(Long.valueOf(param.getWechatRefundTotal()));
         amount.setTotal(Long.valueOf(param.getWechatTotal()));
-        amount.setCurrency(wechatConfig.getCurrency());
+        amount.setCurrency(wechatProperties.getCurrency());
 
         CreateRequest request = new CreateRequest();
         request.setOutTradeNo(param.getOrderId());
         request.setOutRefundNo(param.getOrderRefundId());
-        if(wechatConfig.getRefundNotifyUrl() != null){
-            request.setNotifyUrl(wechatConfig.getRefundNotifyUrl());
+        if(wechatProperties.getRefundNotifyUrl() != null){
+            request.setNotifyUrl(wechatProperties.getRefundNotifyUrl());
         }
         request.setAmount(amount);
         return service.create(request);

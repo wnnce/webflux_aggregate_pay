@@ -12,8 +12,8 @@ import org.springframework.boot.context.properties.bind.DefaultValue;
  * @Description: 支付宝支付配置类 其他bean都依赖这个bean pay.enable.true属性为true才会自动注入 否则其他bean都不会注入
  */
 @ConfigurationProperties(prefix = "pay.alipay")
-@ConditionalOnProperty(prefix = "pay", name = "alipay.enable", havingValue = "true")
-public class AlipayPayConfig {
+@ConditionalOnProperty(value = "pay.alipay.enable", havingValue = "true")
+public class AlipayPayProperties {
     /**
      * 是否开启支付宝支付功能
      */
@@ -55,10 +55,10 @@ public class AlipayPayConfig {
      */
     private String notifyUrl;
     @ConstructorBinding
-    public AlipayPayConfig(Boolean enable, @NotNull String appId, @NotNull String privateKey, @NotNull String publicKey,
-                           @DefaultValue("JSON") String format, @DefaultValue("RSA2") String signType, @DefaultValue("UTF-8") String charSet,
-                           @DefaultValue("https://openapi-sandbox.dl.alipaydev.com/gateway.do") String serverUrl,
-                           String sellerId, String notifyUrl) {
+    public AlipayPayProperties(Boolean enable, @NotNull String appId, @NotNull String privateKey, @NotNull String publicKey,
+                               @DefaultValue("JSON") String format, @DefaultValue("RSA2") String signType, @DefaultValue("UTF-8") String charSet,
+                               @DefaultValue("https://openapi-sandbox.dl.alipaydev.com/gateway.do") String serverUrl,
+                               String sellerId, String notifyUrl) {
         this.enable = enable;
         this.appId = appId;
         this.privateKey = privateKey;

@@ -12,8 +12,8 @@ import org.springframework.boot.context.properties.bind.DefaultValue;
  * @Description: 微信支付配置类
  */
 @ConfigurationProperties("pay.wechat")
-@ConditionalOnProperty(prefix = "pay", name = "wechat.enable", havingValue = "true")
-public class WechatPayConfig {
+@ConditionalOnProperty(value = "pay.wechat.enable", havingValue = "true")
+public class WechatPayProperties {
     /**
      * 是否启用微信支付
      */
@@ -55,13 +55,13 @@ public class WechatPayConfig {
      */
     private String privateKey;
 
-    public WechatPayConfig() {
+    public WechatPayProperties() {
     }
 
     @ConstructorBinding
-    public WechatPayConfig(Boolean enable, @NotNull String apiV3Key, @NotNull String merchantId, @NotNull String appId,
-                           @DefaultValue("CNY") String currency, @DefaultValue("RSA") String signType, @NotNull String successNotifyUrl,
-                           String refundNotifyUrl, @NotNull String merchantSerialNumber, @NotNull String privateKey) {
+    public WechatPayProperties(Boolean enable, @NotNull String apiV3Key, @NotNull String merchantId, @NotNull String appId,
+                               @DefaultValue("CNY") String currency, @DefaultValue("RSA") String signType, @NotNull String successNotifyUrl,
+                               String refundNotifyUrl, @NotNull String merchantSerialNumber, @NotNull String privateKey) {
         this.enable = enable;
         this.apiV3Key = apiV3Key;
         this.merchantId = merchantId;
