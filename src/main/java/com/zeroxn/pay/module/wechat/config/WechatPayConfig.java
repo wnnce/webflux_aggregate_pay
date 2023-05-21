@@ -4,6 +4,7 @@ import org.jetbrains.annotations.NotNull;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.bind.ConstructorBinding;
+import org.springframework.boot.context.properties.bind.DefaultValue;
 
 /**
  * @Author: lisang
@@ -30,6 +31,14 @@ public class WechatPayConfig {
      */
     private String appId;
     /**
+     * 微信支付币种类型 境内商户仅支持人民币 CNY
+     */
+    private String currency;
+    /**
+     * 签名验证方式
+     */
+    private String signType;
+    /**
      * 微信支付成功通知地址
      */
     private String successNotifyUrl;
@@ -51,12 +60,14 @@ public class WechatPayConfig {
 
     @ConstructorBinding
     public WechatPayConfig(@NotNull Boolean enable, @NotNull String apiV3Key, @NotNull String merchantId, @NotNull String appId,
-                           @NotNull String successNotifyUrl, @NotNull String refundNotifyUrl, @NotNull String merchantSerialNumber,
-                           @NotNull String privateKey) {
+                           @DefaultValue("CNY") String currency, @DefaultValue("RSA") String signType, @NotNull String successNotifyUrl,
+                           @NotNull String refundNotifyUrl, @NotNull String merchantSerialNumber, @NotNull String privateKey) {
         this.enable = enable;
         this.apiV3Key = apiV3Key;
         this.merchantId = merchantId;
         this.appId = appId;
+        this.currency = currency;
+        this.signType = signType;
         this.successNotifyUrl = successNotifyUrl;
         this.refundNotifyUrl = refundNotifyUrl;
         this.merchantSerialNumber = merchantSerialNumber;
@@ -77,6 +88,14 @@ public class WechatPayConfig {
 
     public String getAppId() {
         return appId;
+    }
+
+    public String getCurrency() {
+        return currency;
+    }
+
+    public String getSignType() {
+        return signType;
     }
 
     public String getSuccessNotifyUrl() {

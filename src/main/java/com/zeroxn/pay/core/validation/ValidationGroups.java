@@ -10,7 +10,7 @@ public class ValidationGroups {
     public interface AlipayDesktopValidation{}
     public interface AlipayAppletsValidation{}
     public interface AlipayRefundValidation{}
-    public interface WechatBaseValidation{}
     public interface WechatH5Validation{}
     public interface WechatAppletsValidation{}
+    public interface WechatRefundValidation{}
 }

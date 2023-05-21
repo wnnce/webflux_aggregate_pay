@@ -5,7 +5,8 @@ import com.wechat.pay.java.service.payments.h5.model.*;
 import com.wechat.pay.java.service.payments.h5.H5Service;
 import com.wechat.pay.java.service.payments.model.Transaction;
 import com.zeroxn.pay.core.entity.PayParams;
-import com.zeroxn.pay.module.wechat.constant.WechatConstant;
+import com.zeroxn.pay.module.wechat.config.WechatPayConfig;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * @Author: lisang
@@ -14,7 +15,9 @@ import com.zeroxn.pay.module.wechat.constant.WechatConstant;
  */
 public class WechatPayH5Business {
     private final H5Service service;
-    public WechatPayH5Business(Config config){
+    private final WechatPayConfig wechatConfig;
+    public WechatPayH5Business(@NotNull Config config,@NotNull WechatPayConfig wechatConfig){
+        this.wechatConfig = wechatConfig;
         this.service = new H5Service.Builder().config(config).build();
     }
 
@@ -24,7 +27,7 @@ public class WechatPayH5Business {
      */
     public void closeOrder(String orderId){
         CloseOrderRequest request = new CloseOrderRequest();
-        request.setMchid(WechatConstant.getMerchantId());
+        request.setMchid(wechatConfig.getMerchantId());
         request.setOutTradeNo(orderId);
         service.closeOrder(request);
     }
@@ -37,20 +40,24 @@ public class WechatPayH5Business {
     public PrepayResponse confirmOrder(PayParams param){
         Amount amount = new Amount();
         amount.setTotal(param.getWechatTotal());
-        amount.setCurrency("CNY");
+        amount.setCurrency(wechatConfig.getCurrency());
 
         H5Info h5Info = new H5Info();
         h5Info.setType(param.getType());
+        h5Info.setAppName(param.getAppName());
+        h5Info.setAppUrl(param.getAppUrl());
+        h5Info.setBundleId(param.getBundleId());
+        h5Info.setPackageName(param.getPackageName());
         SceneInfo sceneInfo = new SceneInfo();
         sceneInfo.setPayerClientIp(param.getIpAddress());
         sceneInfo.setH5Info(h5Info);
 
         PrepayRequest request = new PrepayRequest();
-        request.setAppid(WechatConstant.getAppId());
-        request.setMchid(WechatConstant.getMerchantId());
+        request.setAppid(wechatConfig.getAppId());
+        request.setMchid(wechatConfig.getMerchantId());
         request.setDescription(param.getDescription());
         request.setOutTradeNo(param.getOrderId());
-        request.setNotifyUrl(WechatConstant.getSuccessNotifyUrl());
+        request.setNotifyUrl(wechatConfig.getSuccessNotifyUrl());
         request.setAmount(amount);
         request.setSceneInfo(sceneInfo);
         return service.prepay(request);
@@ -63,7 +70,7 @@ public class WechatPayH5Business {
      */
     public Transaction queryOrderByOrderId(String orderId){
         QueryOrderByOutTradeNoRequest request = new QueryOrderByOutTradeNoRequest();
-        request.setMchid(WechatConstant.getMerchantId());
+        request.setMchid(wechatConfig.getMerchantId());
         request.setOutTradeNo(orderId);
         return service.queryOrderByOutTradeNo(request);
     }

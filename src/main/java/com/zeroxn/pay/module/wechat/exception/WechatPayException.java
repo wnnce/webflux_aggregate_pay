@@ -1,19 +1,17 @@
-package com.zeroxn.pay.core.exception;
+package com.zeroxn.pay.module.wechat.exception;
 
-import lombok.extern.slf4j.Slf4j;
+import com.zeroxn.pay.core.exception.PayException;
 
 /**
  * @Author: lisang
  * @DateTime: 2023/4/28 13:56
  * @Description: 微信支付异常类
  */
-@Slf4j
-public class WechatPayException extends PayException{
+public class WechatPayException extends PayException {
     public WechatPayException(String message) {
         super(message);
     }
     public WechatPayException(String message, String orderId){
         super(message);
-        log.error("抛出微信支付异常，错误消息：{}，订单号：{}", message, orderId);
     }
 }

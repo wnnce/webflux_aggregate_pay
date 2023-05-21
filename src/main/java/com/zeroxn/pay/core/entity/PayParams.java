@@ -35,7 +35,7 @@ public class PayParams {
      */
     private String ipAddress;
     /**
-     * 微信H5下单参数 用户的设备类型 参考：IOS/Android
+     * 微信H5下单参数 用户的设备类型 参考：IOS/Android/Wap
      */
     private String type;
     /**
@@ -54,6 +54,22 @@ public class PayParams {
      * 订单退款描述
      */
     private String refundDescription;
+    /**
+     * 微信支付H5下单应用名称
+     */
+    private String appName;
+    /**
+     * 微信支付H5下单网站链接
+     */
+    private String appUrl;
+    /**
+     * 微信支付H5下单IOS的bundleID
+     */
+    private String bundleId;
+    /**
+     * 微信支付H5下单Android平台的包名
+     */
+    private String packageName;
 
     public PayParams(BuilderWechatApplets builder){
         this.orderId = builder.orderId;
@@ -67,6 +83,10 @@ public class PayParams {
         this.total = builder.total;
         this.ipAddress = builder.ipAddress;
         this.type = builder.type;
+        this.appName = builder.appName;
+        this.appUrl = builder.appUrl;
+        this.bundleId = builder.bundleId;
+        this.packageName = builder.packageName;
     }
     public PayParams(BuilderAliPayApplets builder){
         this.orderId = builder.orderId;
@@ -127,6 +147,10 @@ public class PayParams {
         private Integer total;
         private String ipAddress;
         private String type;
+        private String appName;
+        private String appUrl;
+        private String bundleId;
+        private String packageName;
         public BuilderWechatH5 setOrderId(String orderId){
             this.orderId = orderId;
             return this;
@@ -145,6 +169,22 @@ public class PayParams {
         }
         public BuilderWechatH5 setType(String type){
             this.type = type;
+            return this;
+        }
+        public BuilderWechatH5 setAppName(String appName){
+            this.appName = appName;
+            return this;
+        }
+        public BuilderWechatH5 setAppUrl(String appUrl){
+            this.appUrl = appUrl;
+            return this;
+        }
+        public BuilderWechatH5 setBundleId(String bundleId){
+            this.bundleId = bundleId;
+            return this;
+        }
+        public BuilderWechatH5 setPackageName(String packageName){
+            this.packageName = packageName;
             return this;
         }
         public PayParams build(){
@@ -291,14 +331,6 @@ public class PayParams {
         return this.refundTotal;
     }
 
-    /**
-     * 获取支付宝订单退款
-     * @return 返回退款金额 * 0.01
-     */
-    public Double getAlipayRefundTotal(){
-        return this.refundTotal * 0.01;
-    }
-
     public String getOrderId() {
         return orderId;
     }
@@ -313,6 +345,10 @@ public class PayParams {
 
     public String getDescription() {
         return description;
+    }
+
+    public Integer getRefundTotal() {
+        return refundTotal;
     }
 
     public String getIpAddress() {
@@ -338,6 +374,28 @@ public class PayParams {
     public String getRefundDescription() {
         return refundDescription;
     }
+
+    public String getAppName() {
+        return appName;
+    }
+
+    public String getAppUrl() {
+        return appUrl;
+    }
+
+    public String getBundleId() {
+        return bundleId;
+    }
+
+    public String getPackageName() {
+        return packageName;
+    }
+
+    /**
+     * 获取支付宝订单退款
+     * @return 返回退款金额 * 0.01
+     */
+
 
     @Override
     public String toString() {

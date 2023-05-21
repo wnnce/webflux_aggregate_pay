@@ -41,7 +41,7 @@ public class AlipayPayAutoConfig {
     }
     @Bean
     @ConditionalOnClass(AlipayPayBusiness.class)
-    public AlipayPayTemplate alipayPayHandler(AlipayPayBusiness alipayPayService){
-        return new AlipayPayTemplate(alipayPayService);
+    public AlipayPayTemplate alipayPayHandler(AlipayPayBusiness alipayPayBusiness){
+        return new AlipayPayTemplate(alipayPayBusiness);
     }
 }

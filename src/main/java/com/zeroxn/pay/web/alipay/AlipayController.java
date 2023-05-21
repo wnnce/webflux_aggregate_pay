@@ -10,7 +10,6 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
@@ -24,7 +23,7 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("/pay/alipay")
-@Tag(name = "支付宝支付管理接口")
+@Tag(name = "支付宝支付接口")
 @ConditionalOnBean(AlipayPayTemplate.class)
 public class AlipayController {
     private final AlipayService alipayService;

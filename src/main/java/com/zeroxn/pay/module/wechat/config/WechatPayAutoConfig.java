@@ -33,20 +33,20 @@ public class WechatPayAutoConfig {
     }
     @Bean
     @ConditionalOnClass(Config.class)
-    public WechatPayH5Business wechatPayH5Service(Config config){
-        return new WechatPayH5Business(config);
+    public WechatPayH5Business wechatPayH5Service(Config config, WechatPayConfig wechatPayConfig){
+        return new WechatPayH5Business(config, wechatPayConfig);
     }
 
     @Bean
     @ConditionalOnClass(Config.class)
-    public WechatPayJsapiBusiness wechatPayJsapiService(Config config){
-        return new WechatPayJsapiBusiness(config);
+    public WechatPayJsapiBusiness wechatPayJsapiService(Config config, WechatPayConfig wechatPayConfig){
+        return new WechatPayJsapiBusiness(config, wechatPayConfig);
     }
 
     @Bean
     @ConditionalOnClass(Config.class)
-    public WechatRefundBusiness wechatRefundService(Config config){
-        return new WechatRefundBusiness(config);
+    public WechatRefundBusiness wechatRefundService(Config config, WechatPayConfig wechatPayConfig){
+        return new WechatRefundBusiness(config, wechatPayConfig);
     }
     @Bean
     @ConditionalOnClass(value = {WechatPayH5Business.class, WechatPayJsapiBusiness.class, WechatRefundBusiness.class})

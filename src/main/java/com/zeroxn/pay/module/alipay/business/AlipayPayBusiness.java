@@ -152,7 +152,6 @@ public class AlipayPayBusiness {
      * 支付宝异步通知验签方法 异步通过处理参考：https://opendocs.alipay.com/open/270/105902?pathHash=d5cd617e&ref=api
      * @param paramsMap 通知的所有参数
      * @return true：成功 false：失败
-     * @throws AlipayApiException 支付宝API调用异常
      */
     public boolean signVerified(Map<String, String> paramsMap) {
         try{

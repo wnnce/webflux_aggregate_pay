@@ -5,7 +5,8 @@ import com.wechat.pay.java.service.payments.jsapi.JsapiServiceExtension;
 import com.wechat.pay.java.service.payments.jsapi.model.*;
 import com.wechat.pay.java.service.payments.model.Transaction;
 import com.zeroxn.pay.core.entity.PayParams;
-import com.zeroxn.pay.module.wechat.constant.WechatConstant;
+import com.zeroxn.pay.module.wechat.config.WechatPayConfig;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * @Author: lisang
@@ -14,10 +15,12 @@ import com.zeroxn.pay.module.wechat.constant.WechatConstant;
  */
 public class WechatPayJsapiBusiness {
     private final JsapiServiceExtension service;
-    public WechatPayJsapiBusiness(Config config){
+    private final WechatPayConfig wechatConfig;
+    public WechatPayJsapiBusiness(@NotNull Config config, @NotNull WechatPayConfig wechatConfig){
+        this.wechatConfig = wechatConfig;
         this.service = new JsapiServiceExtension.Builder()
                 .config(config)
-                .signType("RSA")
+                .signType(wechatConfig.getSignType())
                 .build();
     }
     /**
@@ -25,11 +28,9 @@ public class WechatPayJsapiBusiness {
      * @param orderId 商户系统内的订单id
      */
     public void closeOrder(String orderId) {
-
         CloseOrderRequest request = new CloseOrderRequest();
-        request.setMchid(WechatConstant.getMerchantId());
+        request.setMchid(wechatConfig.getMerchantId());
         request.setOutTradeNo(orderId);
-
         service.closeOrder(request);
     }
 
@@ -39,18 +40,20 @@ public class WechatPayJsapiBusiness {
      * @return 返回小程序支付所需的参数
      */
     public PrepayWithRequestPaymentResponse confirmOrder(PayParams param) {
+        // 金额
         Amount amount = new Amount();
         amount.setTotal(param.getWechatTotal());
-        // 人民币
-        amount.setCurrency("CNY");
+        amount.setCurrency(wechatConfig.getCurrency());
+
         Payer payer = new Payer();
         payer.setOpenid(param.getUserId());
+
         PrepayRequest request = new PrepayRequest();
-        request.setAppid(WechatConstant.getAppId());
-        request.setMchid(WechatConstant.getMerchantId());
+        request.setAppid(wechatConfig.getAppId());
+        request.setMchid(wechatConfig.getMerchantId());
         request.setOutTradeNo(param.getOrderId());
         request.setDescription(param.getDescription());
-        request.setNotifyUrl(WechatConstant.getSuccessNotifyUrl());
+        request.setNotifyUrl(wechatConfig.getSuccessNotifyUrl());
         request.setAmount(amount);
         request.setPayer(payer);
         return service.prepayWithRequestPayment(request);
@@ -62,12 +65,9 @@ public class WechatPayJsapiBusiness {
      * @return 订单详细信息或空
      */
     public Transaction queryOrderByOrderId(String orderId) {
-
         QueryOrderByOutTradeNoRequest request = new QueryOrderByOutTradeNoRequest();
-        request.setMchid(WechatConstant.getMerchantId());
+        request.setMchid(wechatConfig.getMerchantId());
         request.setOutTradeNo(orderId);
-        // 调用request.setXxx(val)设置所需参数，具体参数可见Request定义
-        // 调用接口
         return service.queryOrderByOutTradeNo(request);
     }
 }

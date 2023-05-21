@@ -7,7 +7,7 @@ import com.wechat.pay.java.service.refund.model.CreateRequest;
 import com.wechat.pay.java.service.refund.model.QueryByOutRefundNoRequest;
 import com.wechat.pay.java.service.refund.model.Refund;
 import com.zeroxn.pay.core.entity.PayParams;
-import com.zeroxn.pay.module.wechat.constant.WechatConstant;
+import com.zeroxn.pay.module.wechat.config.WechatPayConfig;
 
 /**
  * @Author: lisang
@@ -16,7 +16,9 @@ import com.zeroxn.pay.module.wechat.constant.WechatConstant;
  */
 public class WechatRefundBusiness {
     private final RefundService service;
-    public WechatRefundBusiness(Config config){
+    private final WechatPayConfig wechatConfig;
+    public WechatRefundBusiness(Config config, WechatPayConfig wechatConfig){
+        this.wechatConfig = wechatConfig;
         this.service = new RefundService.Builder().config(config).build();
     }
 
@@ -29,12 +31,12 @@ public class WechatRefundBusiness {
         AmountReq amount = new AmountReq();
         amount.setRefund(Long.valueOf(param.getWechatRefundTotal()));
         amount.setTotal(Long.valueOf(param.getWechatTotal()));
-        amount.setCurrency("CNY");
+        amount.setCurrency(wechatConfig.getCurrency());
 
         CreateRequest request = new CreateRequest();
         request.setOutTradeNo(param.getOrderId());
         request.setOutRefundNo(param.getOrderRefundId());
-        request.setNotifyUrl(WechatConstant.getRefundNotifyUrl());
+        request.setNotifyUrl(wechatConfig.getRefundNotifyUrl());
         request.setAmount(amount);
         return service.create(request);
     }

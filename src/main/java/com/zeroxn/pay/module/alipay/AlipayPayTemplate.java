@@ -21,9 +21,9 @@ import java.util.Map;
  */
 public class AlipayPayTemplate implements PayTemplate {
     private final Logger logger = LoggerFactory.getLogger(AlipayPayTemplate.class);
-    private final AlipayPayBusiness alipayService;
+    private final AlipayPayBusiness alipayBusiness;
     public AlipayPayTemplate(AlipayPayBusiness alipayService){
-        this.alipayService = alipayService;
+        this.alipayBusiness = alipayService;
     }
     /**
      * 支付宝下单 下单之前会先通过订单id查询订单 判断订单状态
@@ -41,7 +41,7 @@ public class AlipayPayTemplate implements PayTemplate {
                 model.setTotalAmount(param.getAlipayTotal().toString());
                 model.setSubject(param.getDescription());
                 model.setBuyerId(param.getUserId());
-                return (T) alipayService.appletsConfirmOrder(model);
+                return (T) alipayBusiness.appletsConfirmOrder(model);
             }
             case WAP -> {
                 AlipayTradeWapPayModel model = new AlipayTradeWapPayModel();
@@ -50,7 +50,7 @@ public class AlipayPayTemplate implements PayTemplate {
                 model.setSubject(param.getDescription());
                 model.setProductCode("QUICK_WAP_WAY");
                 model.setQuitUrl(param.getQuitUrl());
-                return (T) alipayService.wapConfirmOrder(model);
+                return (T) alipayBusiness.wapConfirmOrder(model);
             }
             case DESKTOP -> {
                 AlipayTradePagePayModel model = new AlipayTradePagePayModel();
@@ -60,7 +60,7 @@ public class AlipayPayTemplate implements PayTemplate {
                 model.setProductCode("FAST_INSTANT_TRADE_PAY");
                 model.setQrPayMode(param.getQrMode());
                 model.setQrcodeWidth(param.getQrWidth());
-                return (T) alipayService.desktopConfirmOrder(model);
+                return (T) alipayBusiness.desktopConfirmOrder(model);
             }
         }
         throw new AlipayPayException("未知异常", param.getOrderId());
@@ -74,7 +74,7 @@ public class AlipayPayTemplate implements PayTemplate {
      */
     @Override
     public <T> T closeOrder(String orderId, PayMethod method, Class<T> clazz) {
-        return (T) alipayService.closeOrder(orderId);
+        return (T) alipayBusiness.closeOrder(orderId);
     }
 
     /**
@@ -87,7 +87,7 @@ public class AlipayPayTemplate implements PayTemplate {
      */
     @Override
     public <T> T queryOrder(String orderId, PayMethod method, Class<T> clazz) {
-        return (T) alipayService.queryOrderByOrderId(orderId);
+        return (T) alipayBusiness.queryOrderByOrderId(orderId);
     }
 
     /**
@@ -104,7 +104,7 @@ public class AlipayPayTemplate implements PayTemplate {
         model.setRefundAmount(param.getAlipayRefundTotal().toString());
         model.setOutRequestNo(param.getOrderRefundId());
         model.setRefundReason(param.getRefundDescription());
-        return (T) alipayService.refundOrder(model);
+        return (T) alipayBusiness.refundOrder(model);
     }
 
     /**
@@ -117,10 +117,10 @@ public class AlipayPayTemplate implements PayTemplate {
      */
     @Override
     public <T> T queryRefundOrder(String orderId, String orderRefundId, Class<T> clazz) {
-        return (T) alipayService.queryRefund(orderId, orderRefundId);
+        return (T) alipayBusiness.queryRefund(orderId, orderRefundId);
     }
 
     public boolean notifySignVerified(Map<String, String> paramsMap){
-        return alipayService.signVerified(paramsMap);
+        return alipayBusiness.signVerified(paramsMap);
     }
 }
