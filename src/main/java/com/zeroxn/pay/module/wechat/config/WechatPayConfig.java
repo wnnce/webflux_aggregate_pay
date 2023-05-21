@@ -59,9 +59,9 @@ public class WechatPayConfig {
     }
 
     @ConstructorBinding
-    public WechatPayConfig(@NotNull Boolean enable, @NotNull String apiV3Key, @NotNull String merchantId, @NotNull String appId,
+    public WechatPayConfig(Boolean enable, @NotNull String apiV3Key, @NotNull String merchantId, @NotNull String appId,
                            @DefaultValue("CNY") String currency, @DefaultValue("RSA") String signType, @NotNull String successNotifyUrl,
-                           @NotNull String refundNotifyUrl, @NotNull String merchantSerialNumber, @NotNull String privateKey) {
+                           String refundNotifyUrl, @NotNull String merchantSerialNumber, @NotNull String privateKey) {
         this.enable = enable;
         this.apiV3Key = apiV3Key;
         this.merchantId = merchantId;

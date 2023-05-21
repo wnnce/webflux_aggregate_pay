@@ -1,12 +1,15 @@
 package com.zeroxn.pay.web.wechat;
 
+import com.wechat.pay.java.core.notification.NotificationParser;
 import com.wechat.pay.java.service.payments.h5.model.PrepayResponse;
 import com.wechat.pay.java.service.payments.jsapi.model.PrepayWithRequestPaymentResponse;
 import com.wechat.pay.java.service.payments.model.Transaction;
 import com.wechat.pay.java.service.refund.model.Refund;
+import com.wechat.pay.java.service.refund.model.RefundNotification;
 import com.zeroxn.pay.core.entity.PayParams;
 import com.zeroxn.pay.core.enums.PayMethod;
 import com.zeroxn.pay.module.wechat.WechatPayTemplate;
+import com.zeroxn.pay.module.wechat.business.parser.WechatNotifyParser;
 import com.zeroxn.pay.module.wechat.exception.WechatPayBusinessException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,8 +26,10 @@ import org.springframework.stereotype.Service;
 public class WechatService {
     private static final Logger logger = LoggerFactory.getLogger(WechatService.class);
     private final WechatPayTemplate wechatTemplate;
-    public WechatService(WechatPayTemplate wechatTemplate){
+    private final WechatNotifyParser notifyParser;
+    public WechatService(WechatPayTemplate wechatTemplate, WechatNotifyParser notifyParser){
         this.wechatTemplate = wechatTemplate;
+        this.notifyParser = notifyParser;
     }
 
     /**
@@ -123,6 +128,37 @@ public class WechatService {
         logger.info("微信支付查询退款订单成功，退款单号：{}", refundId);
         return refund;
     }
+
+    /**
+     * 微信支付成异步通知处理，先解密通知然后将支付成功的订单添加到消息队列中
+     * @return 解密成功返回true 否则false
+     */
+    public boolean wechatSuccessNotify(String signature, String signType, String nonce, String timestamp, String serial,
+                                     String body){
+        Transaction transaction = notifyParser.successNotifyDecrypt(signature, signType, nonce, timestamp, serial, body);
+        if (transaction == null){
+            return false;
+        }
+        // 消息队列处理
+
+        return true;
+    }
+
+    /**
+     * 微信支付退款成功异步通知处理，也是解密通知然后添加到消息队列
+     * @return 解密成功返回true 否则false
+     */
+    public boolean wechatRefundNotify(String signature, String signType, String nonce, String timestamp, String serial,
+                                      String body){
+        RefundNotification refundNotification = notifyParser.refundNotifyDecrypt(signature, signType, nonce, timestamp, serial, body);
+        if(refundNotification == null){
+            return false;
+        }
+        // 消息队列处理
+        return true;
+    }
+
+
     private PayMethod methodForMat(Integer method){
         if (method == null || (method < 0 || method > 2)){
             throw new WechatPayBusinessException("支付方式参数错误");

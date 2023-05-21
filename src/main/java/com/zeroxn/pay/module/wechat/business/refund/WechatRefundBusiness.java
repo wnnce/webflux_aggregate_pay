@@ -36,7 +36,9 @@ public class WechatRefundBusiness {
         CreateRequest request = new CreateRequest();
         request.setOutTradeNo(param.getOrderId());
         request.setOutRefundNo(param.getOrderRefundId());
-        request.setNotifyUrl(wechatConfig.getRefundNotifyUrl());
+        if(wechatConfig.getRefundNotifyUrl() != null){
+            request.setNotifyUrl(wechatConfig.getRefundNotifyUrl());
+        }
         request.setAmount(amount);
         return service.create(request);
     }
