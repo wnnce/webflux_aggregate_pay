@@ -1,5 +1,6 @@
 package com.zeroxn.pay.web.wechat;
 
+import com.wechat.pay.java.core.exception.ServiceException;
 import com.wechat.pay.java.service.payments.h5.model.PrepayResponse;
 import com.wechat.pay.java.service.payments.jsapi.model.PrepayWithRequestPaymentResponse;
 import com.wechat.pay.java.service.payments.model.Transaction;
@@ -13,10 +14,13 @@ import com.zeroxn.pay.core.mq.PayMQTemplate;
 import com.zeroxn.pay.module.wechat.WechatPayTemplate;
 import com.zeroxn.pay.module.wechat.business.parser.WechatNotifyParser;
 import com.zeroxn.pay.module.wechat.exception.WechatPayBusinessException;
+import com.zeroxn.pay.module.wechat.exception.WechatPaySystemException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.stereotype.Service;
+
+import java.util.Map;
 
 /**
  * @Author: lisang
@@ -27,6 +31,22 @@ import org.springframework.stereotype.Service;
 @ConditionalOnBean(WechatPayTemplate.class)
 public class WechatService {
     private static final Logger logger = LoggerFactory.getLogger(WechatService.class);
+    private final Map<String, String> errorMap = Map.ofEntries(
+            Map.entry("PARAM_ERROR", "参数错误"),
+            Map.entry("OUT_TRADE_NO_USED", "订单号重复"),
+            Map.entry("ORDER_NOT_EXIST", "订单不存在"),
+            Map.entry("ORDER_CLOSED", "订单已被关闭"),
+            Map.entry("FREQUENCY_LIMITED", "请求过于频繁"),
+            Map.entry("INVALID_TRANSACTIONID", "订单号无效"),
+            Map.entry("INVALID_REQUEST", "请求无效"),
+            Map.entry("TRADE_ERROR", "交易错误"),
+            Map.entry("NOTENOUGH", "余额不足"),
+            Map.entry("ORDERNOTEXIST", "订单不存在"),
+            Map.entry("USER_ACCOUNT_ABNORMAL", "退款请求失败"),
+            Map.entry("NOT_ENOUGH", "余额不足"),
+            Map.entry("NO_AUTH", "没有退款权限"),
+            Map.entry("RESOURCE_NOT_EXISTS", "退款单查询失败")
+    );
     private final WechatPayTemplate wechatTemplate;
     private final WechatNotifyParser notifyParser;
     private final PayMQTemplate mqTemplate;
@@ -165,6 +185,19 @@ public class WechatService {
         // 消息队列处理
         mqTemplate.send(PayPlatform.WECHAT, PayResult.REFUND, refundId);
         return true;
+    }
+
+    public void serviceExceptionHandler(ServiceException ex){
+        int statusCode = ex.getHttpStatusCode();
+        String errorCode = ex.getErrorCode();
+        String errorMessage = ex.getErrorMessage();
+        WechatService.logger.error("微信支付接口调用异常，状态码：{}，错误码：{}，错误消息：{}", statusCode, errorCode, errorMessage);
+        if (errorMap.containsKey(errorCode)){
+            String message = errorMap.get(errorCode);
+            throw new WechatPayBusinessException(message);
+        }else {
+            throw new WechatPaySystemException("系统错误，请重试");
+        }
     }
 
 

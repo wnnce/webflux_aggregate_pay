@@ -5,7 +5,7 @@ package com.zeroxn.pay.core.exception;
  * @DateTime: 2023/4/27 10:15
  * @Description: 支付异常类
  */
-public class PayException extends RuntimeException{
+public abstract class PayException extends RuntimeException{
     public PayException(String message){
         super(message);
     }
