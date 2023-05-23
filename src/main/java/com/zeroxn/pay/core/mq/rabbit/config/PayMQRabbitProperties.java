@@ -1,4 +1,4 @@
-package com.zeroxn.pay.core.mq.config;
+package com.zeroxn.pay.core.mq.rabbit.config;
 
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
@@ -19,7 +19,7 @@ public class PayMQRabbitProperties {
     /**
      * 是否开启RabbitMQ消息队列 需要先引入依赖
      */
-    private final Boolean enable;
+    private final boolean enable;
     /**
      * DirectExchange交换机名称
      */
@@ -41,7 +41,7 @@ public class PayMQRabbitProperties {
      */
     private final String refundQueueKey;
     @ConstructorBinding
-    public PayMQRabbitProperties(Boolean enable, @DefaultValue("zeroxn.pay") String exchangeName, @DefaultValue("success") String successQueueName,
+    public PayMQRabbitProperties(boolean enable, @DefaultValue("zeroxn.pay") String exchangeName, @DefaultValue("success") String successQueueName,
                                  @DefaultValue("su") String successQueueKey, @DefaultValue("refund") String refundQueueName,
                                  @DefaultValue("re") String refundQueueKey){
         this.enable = enable;
@@ -52,7 +52,7 @@ public class PayMQRabbitProperties {
         this.refundQueueKey = refundQueueKey;
     }
 
-    public Boolean getEnable() {
+    public boolean isEnable() {
         return enable;
     }
 

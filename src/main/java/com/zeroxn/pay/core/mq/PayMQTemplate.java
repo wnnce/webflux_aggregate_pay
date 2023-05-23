@@ -1,4 +1,4 @@
-package com.zeroxn.pay.core.interfaces;
+package com.zeroxn.pay.core.mq;
 
 import com.zeroxn.pay.core.enums.PayPlatform;
 import com.zeroxn.pay.core.enums.PayResult;
@@ -10,5 +10,4 @@ import com.zeroxn.pay.core.enums.PayResult;
  */
 public interface PayMQTemplate {
     void send(PayPlatform platform, PayResult result, Object data);
-    String[] getNameAndKey(PayPlatform platform, PayResult result);
 }

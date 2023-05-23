@@ -1,7 +1,7 @@
-package com.zeroxn.pay.core.mq.rabbit;
+package com.zeroxn.pay.core.mq.rabbit.config;
 
-import com.zeroxn.pay.core.interfaces.PayMQTemplate;
-import com.zeroxn.pay.core.mq.config.PayMQRabbitProperties;
+import com.zeroxn.pay.core.mq.PayMQTemplate;
+import com.zeroxn.pay.core.mq.rabbit.PayMQRabbitTemplate;
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
 import org.springframework.amqp.core.DirectExchange;
@@ -64,7 +64,7 @@ public class PayMQRabbitAutoConfiguration {
     }
     @Bean
     @ConditionalOnMissingBean(PayMQTemplate.class)
-    public PayMQTemplate payMQTemplate(RabbitTemplate rabbitTemplate, PayMQRabbitProperties properties){
+    public PayMQTemplate payMQRabbitTemplate(RabbitTemplate rabbitTemplate, PayMQRabbitProperties properties){
         return new PayMQRabbitTemplate(rabbitTemplate, properties);
     }
 }

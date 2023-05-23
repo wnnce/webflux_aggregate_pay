@@ -1,6 +1,5 @@
 package com.zeroxn.pay.web.wechat;
 
-import com.wechat.pay.java.core.notification.NotificationParser;
 import com.wechat.pay.java.service.payments.h5.model.PrepayResponse;
 import com.wechat.pay.java.service.payments.jsapi.model.PrepayWithRequestPaymentResponse;
 import com.wechat.pay.java.service.payments.model.Transaction;
@@ -8,6 +7,9 @@ import com.wechat.pay.java.service.refund.model.Refund;
 import com.wechat.pay.java.service.refund.model.RefundNotification;
 import com.zeroxn.pay.core.entity.PayParams;
 import com.zeroxn.pay.core.enums.PayMethod;
+import com.zeroxn.pay.core.enums.PayPlatform;
+import com.zeroxn.pay.core.enums.PayResult;
+import com.zeroxn.pay.core.mq.PayMQTemplate;
 import com.zeroxn.pay.module.wechat.WechatPayTemplate;
 import com.zeroxn.pay.module.wechat.business.parser.WechatNotifyParser;
 import com.zeroxn.pay.module.wechat.exception.WechatPayBusinessException;
@@ -27,9 +29,11 @@ public class WechatService {
     private static final Logger logger = LoggerFactory.getLogger(WechatService.class);
     private final WechatPayTemplate wechatTemplate;
     private final WechatNotifyParser notifyParser;
-    public WechatService(WechatPayTemplate wechatTemplate, WechatNotifyParser notifyParser){
+    private final PayMQTemplate mqTemplate;
+    public WechatService(WechatPayTemplate wechatTemplate, WechatNotifyParser notifyParser, PayMQTemplate mqTemplate){
         this.wechatTemplate = wechatTemplate;
         this.notifyParser = notifyParser;
+        this.mqTemplate = mqTemplate;
     }
 
     /**
@@ -140,7 +144,7 @@ public class WechatService {
             return false;
         }
         // 消息队列处理
-
+        mqTemplate.send(PayPlatform.WECHAT, PayResult.SUCCESS, transaction);
         return true;
     }
 
@@ -155,6 +159,7 @@ public class WechatService {
             return false;
         }
         // 消息队列处理
+        mqTemplate.send(PayPlatform.WECHAT, PayResult.REFUND, refundNotification);
         return true;
     }
 

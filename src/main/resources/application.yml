@@ -17,11 +17,3 @@ pay:
     seller-id: "11"
   rabbitmq:
     enable: true
-
-spring:
-  rabbitmq:
-    virtual-host: /
-    host: 10.10.10.10
-    username: root
-    password: admin
-    port: 5672

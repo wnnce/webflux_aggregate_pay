@@ -4,7 +4,7 @@ Content-Type: application/json
 
 {
   "orderId": "88",
-  "total": -1,
+  "total": 10,
   "description": "订单描述",
   "quitUrl": "http://ihi.zw/fkksvm"
 }

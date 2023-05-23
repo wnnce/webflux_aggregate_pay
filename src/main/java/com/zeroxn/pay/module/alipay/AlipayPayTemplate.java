@@ -7,7 +7,7 @@ import com.alipay.api.domain.AlipayTradeWapPayModel;
 import com.zeroxn.pay.core.entity.PayParams;
 import com.zeroxn.pay.core.enums.PayMethod;
 import com.zeroxn.pay.module.alipay.exception.AlipayPayException;
-import com.zeroxn.pay.core.interfaces.PayTemplate;
+import com.zeroxn.pay.core.PayTemplate;
 import com.zeroxn.pay.module.alipay.business.AlipayPayBusiness;
 
 import java.util.Map;

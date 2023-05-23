@@ -4,6 +4,9 @@ import com.alipay.api.internal.util.StringUtils;
 import com.alipay.api.response.*;
 import com.zeroxn.pay.core.entity.PayParams;
 import com.zeroxn.pay.core.enums.PayMethod;
+import com.zeroxn.pay.core.enums.PayPlatform;
+import com.zeroxn.pay.core.enums.PayResult;
+import com.zeroxn.pay.core.mq.PayMQTemplate;
 import com.zeroxn.pay.module.alipay.exception.AlipayPayBusinessException;
 import com.zeroxn.pay.module.alipay.exception.AlipayPaySystemException;
 import com.zeroxn.pay.module.alipay.AlipayPayTemplate;
@@ -47,9 +50,11 @@ public class AlipayService {
     );
     private final AlipayPayTemplate payHandler;
     private final AlipayPayProperties alipayProperties;
-    public AlipayService(AlipayPayTemplate payHandler, AlipayPayProperties alipayProperties){
+    private final PayMQTemplate mqTemplate;
+    public AlipayService(AlipayPayTemplate payHandler, AlipayPayProperties alipayProperties, PayMQTemplate mqTemplate){
         this.payHandler = payHandler;
         this.alipayProperties = alipayProperties;
+        this.mqTemplate = mqTemplate;
     }
 
     /**
@@ -207,13 +212,12 @@ public class AlipayService {
             if (response != null && response.getTotalAmount().equals(paramsMap.get("total_amount"))){
                 if(alipayProperties.getAppId().equals(paramsMap.get("app_id"))){
                     // 将通知数据放入消息队列
-
-
+                    mqTemplate.send(PayPlatform.ALIPAY, PayResult.SUCCESS, paramsMap);
                     return "success";
                 }
             }
         }
-        return "field";
+        return "fail";
     }
 
     private void responseValidation(@NotNull String code, @NotNull String subCode, @NotNull String subMsg, String orderId){

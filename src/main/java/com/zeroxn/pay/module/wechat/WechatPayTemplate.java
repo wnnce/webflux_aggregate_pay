@@ -2,7 +2,7 @@ package com.zeroxn.pay.module.wechat;
 
 import com.zeroxn.pay.core.entity.PayParams;
 import com.zeroxn.pay.core.enums.PayMethod;
-import com.zeroxn.pay.core.interfaces.PayTemplate;
+import com.zeroxn.pay.core.PayTemplate;
 import com.zeroxn.pay.module.wechat.business.h5.WechatPayH5Business;
 import com.zeroxn.pay.module.wechat.business.jsapi.WechatPayJsapiBusiness;
 import com.zeroxn.pay.module.wechat.business.refund.WechatRefundBusiness;

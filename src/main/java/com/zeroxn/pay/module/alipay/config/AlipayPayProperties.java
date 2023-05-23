@@ -17,7 +17,7 @@ public class AlipayPayProperties {
     /**
      * 是否开启支付宝支付功能
      */
-    private Boolean enable;
+    private boolean enable;
     /**
      * 支付宝appid
      */
@@ -55,7 +55,7 @@ public class AlipayPayProperties {
      */
     private String notifyUrl;
     @ConstructorBinding
-    public AlipayPayProperties(Boolean enable, @NotNull String appId, @NotNull String privateKey, @NotNull String publicKey,
+    public AlipayPayProperties(boolean enable, @NotNull String appId, @NotNull String privateKey, @NotNull String publicKey,
                                @DefaultValue("JSON") String format, @DefaultValue("RSA2") String signType, @DefaultValue("UTF-8") String charSet,
                                @DefaultValue("https://openapi-sandbox.dl.alipaydev.com/gateway.do") String serverUrl,
                                String sellerId, String notifyUrl) {
