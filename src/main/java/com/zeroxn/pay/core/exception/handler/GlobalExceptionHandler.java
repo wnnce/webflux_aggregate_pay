@@ -7,6 +7,7 @@ import com.zeroxn.pay.module.alipay.exception.AlipayPayBusinessException;
 import com.zeroxn.pay.module.alipay.exception.AlipayPaySystemException;
 import com.zeroxn.pay.module.wechat.exception.WechatPayBusinessException;
 import com.zeroxn.pay.module.wechat.exception.WechatPaySystemException;
+import com.zeroxn.pay.module.wechat.utils.WechatUtils;
 import com.zeroxn.pay.web.wechat.WechatService;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.http.HttpStatus;
@@ -26,10 +27,6 @@ import java.util.List;
  */
 @RestControllerAdvice
 public class GlobalExceptionHandler {
-    private final WechatService wechatService;
-    public GlobalExceptionHandler(WechatService wechatService){
-        this.wechatService = wechatService;
-    }
     /**
      * 处理支付宝支付业务异常
      * @param ex 支付宝支付业务异常
@@ -92,7 +89,7 @@ public class GlobalExceptionHandler {
     }
     @ExceptionHandler(ServiceException.class)
     public void handlerServiceException(ServiceException ex){
-        wechatService.serviceExceptionHandler(ex);
+        WechatUtils.serviceExceptionHandler(ex);
     }
     @ExceptionHandler(Exception.class)
     public Mono<Result<String>> handlerException(Exception ex){
