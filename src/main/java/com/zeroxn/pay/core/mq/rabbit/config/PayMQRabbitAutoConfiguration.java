@@ -7,6 +7,8 @@ import org.springframework.amqp.core.BindingBuilder;
 import org.springframework.amqp.core.DirectExchange;
 import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
+import org.springframework.amqp.support.converter.MessageConverter;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.condition.*;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -31,6 +33,12 @@ public class PayMQRabbitAutoConfiguration {
     @Bean
     public DirectExchange payDirectExchange(){
         return new DirectExchange(properties.getExchangeName());
+    }
+
+    @Bean
+    @ConditionalOnProperty(value = "pay.rabbitmq.enable-jackson", havingValue = "true")
+    public MessageConverter messageConverter(){
+        return new Jackson2JsonMessageConverter();
     }
     @Bean
     @ConditionalOnProperty(value = "pay.wechat.enable", havingValue = "true")

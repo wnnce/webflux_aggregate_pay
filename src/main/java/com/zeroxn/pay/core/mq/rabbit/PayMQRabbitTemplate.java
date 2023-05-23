@@ -24,7 +24,7 @@ public class PayMQRabbitTemplate implements PayMQTemplate {
     }
 
     @Override
-    public void send(PayPlatform platform, PayResult result, Object data) {
+    public void send(PayPlatform platform, PayResult result, String data) {
         String queueKey = getQueueKey(platform, result);
         String exchangeName = properties.getExchangeName();
         rabbitTemplate.convertAndSend(exchangeName, queueKey, data);

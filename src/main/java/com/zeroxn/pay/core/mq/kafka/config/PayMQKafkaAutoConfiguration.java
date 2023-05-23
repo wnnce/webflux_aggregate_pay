@@ -38,7 +38,7 @@ public class PayMQKafkaAutoConfiguration {
     }
     @Bean
     @ConditionalOnMissingBean(PayMQTemplate.class)
-    public PayMQTemplate payMQKafkaTemplate(KafkaTemplate<String, Object> kafkaTemplate, PayMQKafkaProperties properties){
+    public PayMQTemplate payMQKafkaTemplate(KafkaTemplate<String, String> kafkaTemplate, PayMQKafkaProperties properties){
         return new PayMQKafkaTemplate(kafkaTemplate, properties);
     }
 }

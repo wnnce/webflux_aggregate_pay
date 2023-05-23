@@ -143,8 +143,10 @@ public class WechatService {
         if (transaction == null){
             return false;
         }
+        String orderId = transaction.getOutTradeNo();
+        WechatService.logger.info("接收到微信支付成功通知回调，订单号：{}", orderId);
         // 消息队列处理
-        mqTemplate.send(PayPlatform.WECHAT, PayResult.SUCCESS, transaction);
+        mqTemplate.send(PayPlatform.WECHAT, PayResult.SUCCESS, orderId);
         return true;
     }
 
@@ -158,8 +160,10 @@ public class WechatService {
         if(refundNotification == null){
             return false;
         }
+        String refundId = refundNotification.getOutRefundNo();
+        WechatService.logger.info("接收到微信退款成功通知回调，退款单号：{}", refundId);
         // 消息队列处理
-        mqTemplate.send(PayPlatform.WECHAT, PayResult.REFUND, refundNotification);
+        mqTemplate.send(PayPlatform.WECHAT, PayResult.REFUND, refundId);
         return true;
     }
 

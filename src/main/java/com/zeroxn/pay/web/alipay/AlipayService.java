@@ -211,8 +211,8 @@ public class AlipayService {
             AlipayTradeQueryResponse response = queryAlipayOrder(orderId);
             if (response != null && response.getTotalAmount().equals(paramsMap.get("total_amount"))){
                 if(alipayProperties.getAppId().equals(paramsMap.get("app_id"))){
-                    // 将通知数据放入消息队列
-                    mqTemplate.send(PayPlatform.ALIPAY, PayResult.SUCCESS, paramsMap);
+                    // 将通知数据中的订单ID放入消息队列
+                    mqTemplate.send(PayPlatform.ALIPAY, PayResult.SUCCESS, orderId);
                     return "success";
                 }
             }

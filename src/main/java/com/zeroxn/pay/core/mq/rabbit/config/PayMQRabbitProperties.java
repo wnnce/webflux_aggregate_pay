@@ -19,7 +19,8 @@ public class PayMQRabbitProperties {
     /**
      * 是否开启RabbitMQ消息队列 需要先引入依赖
      */
-    private final boolean enable;
+    private final Boolean enable;
+    private final Boolean enableJackson;
     /**
      * DirectExchange交换机名称
      */
@@ -41,10 +42,11 @@ public class PayMQRabbitProperties {
      */
     private final String refundQueueKey;
     @ConstructorBinding
-    public PayMQRabbitProperties(boolean enable, @DefaultValue("zeroxn.pay") String exchangeName, @DefaultValue("success") String successQueueName,
-                                 @DefaultValue("su") String successQueueKey, @DefaultValue("refund") String refundQueueName,
-                                 @DefaultValue("re") String refundQueueKey){
+    public PayMQRabbitProperties(Boolean enable,@DefaultValue("false") Boolean enableJackson, @DefaultValue("zeroxn.pay") String exchangeName,
+                                 @DefaultValue("success") String successQueueName, @DefaultValue("su") String successQueueKey,
+                                 @DefaultValue("refund") String refundQueueName, @DefaultValue("re") String refundQueueKey){
         this.enable = enable;
+        this.enableJackson = enableJackson;
         this.exchangeName = exchangeName;
         this.successQueueName = successQueueName;
         this.successQueueKey = successQueueKey;
@@ -52,10 +54,12 @@ public class PayMQRabbitProperties {
         this.refundQueueKey = refundQueueKey;
     }
 
-    public boolean isEnable() {
+    public boolean getEnable() {
         return enable;
     }
-
+    public Boolean getEnableJackson() {
+        return enableJackson;
+    }
     public String getExchangeName() {
         return exchangeName;
     }

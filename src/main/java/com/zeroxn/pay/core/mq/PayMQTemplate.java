@@ -9,5 +9,5 @@ import com.zeroxn.pay.core.enums.PayResult;
  * @Description: 消息队列接口
  */
 public interface PayMQTemplate {
-    void send(PayPlatform platform, PayResult result, Object data);
+    void send(PayPlatform platform, PayResult result, String data);
 }

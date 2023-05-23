@@ -17,15 +17,15 @@ import java.util.UUID;
  */
 public class PayMQKafkaTemplate implements PayMQTemplate {
     private static final Logger logger = LoggerFactory.getLogger(PayMQKafkaTemplate.class);
-    private final KafkaTemplate<String, Object> kafkaTemplate;
+    private final KafkaTemplate<String, String> kafkaTemplate;
     private final PayMQKafkaProperties properties;
-    public PayMQKafkaTemplate(KafkaTemplate<String, Object> kafkaTemplate, PayMQKafkaProperties properties) {
+    public PayMQKafkaTemplate(KafkaTemplate<String, String> kafkaTemplate, PayMQKafkaProperties properties) {
         this.kafkaTemplate = kafkaTemplate;
         this.properties = properties;
     }
 
     @Override
-    public void send(PayPlatform platform, PayResult result, Object data) {
+    public void send(PayPlatform platform, PayResult result, String data) {
         int partition = getPartition(platform, result);
         String topicName = properties.getTopicName();
         String uuid = UUID.randomUUID().toString();
@@ -46,12 +46,12 @@ public class PayMQKafkaTemplate implements PayMQTemplate {
     private int getPartition(PayPlatform platform, PayResult result){
         if(platform == PayPlatform.WECHAT){
             if (result == PayResult.SUCCESS){
-                return 1;
+                return 0;
             }else {
-                return 2;
+                return 1;
             }
         }else {
-            return 3;
+            return 2;
         }
     }
 }
