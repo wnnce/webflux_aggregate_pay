@@ -12,8 +12,8 @@ import org.springframework.kafka.core.KafkaTemplate;
  * @DateTime: 2023/5/21 下午7:26
  * @Description:
  */
-@ConfigurationProperties(prefix = "pay.kafka")
-@ConditionalOnProperty(value = "pay.kafka.enable", havingValue = "true")
+@ConfigurationProperties(prefix = "pay.mq.kafka")
+@ConditionalOnProperty(value = "pay.mq.kafka.enable", havingValue = "true")
 @ConditionalOnClass(KafkaTemplate.class)
 public class PayMQKafkaProperties {
     private final Boolean enable;

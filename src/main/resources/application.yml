@@ -1,5 +1,9 @@
 server:
   port: 8081
+spring:
+  mvc:
+    static-path-pattern: classpath:/static
+
 logging:
   pattern:
     dateformat: yyyy-MM-dd HH:mm:ss:SSS

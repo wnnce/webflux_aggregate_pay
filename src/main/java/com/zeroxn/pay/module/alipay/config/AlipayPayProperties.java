@@ -17,7 +17,7 @@ public class AlipayPayProperties {
     /**
      * 是否开启支付宝支付功能
      */
-    private boolean enable;
+    private Boolean enable;
     /**
      * 支付宝appid
      */
@@ -54,8 +54,9 @@ public class AlipayPayProperties {
      * 支付宝支付成功通知地址
      */
     private String notifyUrl;
+    public AlipayPayProperties(){}
     @ConstructorBinding
-    public AlipayPayProperties(boolean enable, @NotNull String appId, @NotNull String privateKey, @NotNull String publicKey,
+    public AlipayPayProperties(Boolean enable, @NotNull String appId, @NotNull String privateKey, @NotNull String publicKey,
                                @DefaultValue("JSON") String format, @DefaultValue("RSA2") String signType, @DefaultValue("UTF-8") String charSet,
                                @DefaultValue("https://openapi-sandbox.dl.alipaydev.com/gateway.do") String serverUrl,
                                String sellerId, String notifyUrl) {
@@ -75,79 +76,39 @@ public class AlipayPayProperties {
         return enable;
     }
 
-    public void setEnable(Boolean enable) {
-        this.enable = enable;
-    }
-
     public String getAppId() {
         return appId;
-    }
-
-    public void setAppId(String appId) {
-        this.appId = appId;
     }
 
     public String getPrivateKey() {
         return privateKey;
     }
 
-    public void setPrivateKey(String privateKey) {
-        this.privateKey = privateKey;
-    }
-
     public String getPublicKey() {
         return publicKey;
-    }
-
-    public void setPublicKey(String publicKey) {
-        this.publicKey = publicKey;
     }
 
     public String getFormat() {
         return format;
     }
 
-    public void setFormat(String format) {
-        this.format = format;
-    }
-
     public String getSignType() {
         return signType;
-    }
-
-    public void setSignType(String signType) {
-        this.signType = signType;
     }
 
     public String getCharSet() {
         return charSet;
     }
 
-    public void setCharSet(String charSet) {
-        this.charSet = charSet;
-    }
-
     public String getServerUrl() {
         return serverUrl;
-    }
-
-    public void setServerUrl(String serverUrl) {
-        this.serverUrl = serverUrl;
     }
 
     public String getSellerId() {
         return sellerId;
     }
 
-    public void setSellerId(String sellerId) {
-        this.sellerId = sellerId;
-    }
-
     public String getNotifyUrl() {
         return notifyUrl;
-    }
-
-    public void setNotifyUrl(String notifyUrl) {
-        this.notifyUrl = notifyUrl;
     }
 }

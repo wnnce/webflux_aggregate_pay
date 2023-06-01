@@ -17,7 +17,7 @@ public class WechatPayProperties {
     /**
      * 是否启用微信支付
      */
-    private boolean enable;
+    private Boolean enable;
     /**
      * 微信支付商家密钥
      */
@@ -55,11 +55,10 @@ public class WechatPayProperties {
      */
     private String privateKey;
 
-    public WechatPayProperties() {
-    }
+    public WechatPayProperties() {}
 
     @ConstructorBinding
-    public WechatPayProperties(boolean enable, @NotNull String apiV3Key, @NotNull String merchantId, @NotNull String appId,
+    public WechatPayProperties(Boolean enable, @NotNull String apiV3Key, @NotNull String merchantId, @NotNull String appId,
                                @DefaultValue("CNY") String currency, @DefaultValue("RSA") String signType, @NotNull String successNotifyUrl,
                                String refundNotifyUrl, @NotNull String merchantSerialNumber, @NotNull String privateKey) {
         this.enable = enable;

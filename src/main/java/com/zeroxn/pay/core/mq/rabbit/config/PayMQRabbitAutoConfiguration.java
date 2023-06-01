@@ -22,7 +22,7 @@ import org.springframework.context.annotation.Configuration;
  */
 @Configuration
 @AutoConfigureBefore(PayMQRabbitAutoConfiguration.class)
-@ConditionalOnProperty(value = "pay.rabbitmq.enable", havingValue = "true")
+@ConditionalOnProperty(value = "pay.mq.rabbitmq.enable", havingValue = "true")
 @ConditionalOnClass(RabbitTemplate.class)
 @EnableConfigurationProperties(PayMQRabbitProperties.class)
 public class PayMQRabbitAutoConfiguration {

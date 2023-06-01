@@ -12,8 +12,8 @@ import org.springframework.boot.context.properties.bind.DefaultValue;
  * @DateTime: 2023/5/21 下午7:26
  * @Description:
  */
-@ConfigurationProperties(prefix = "pay.rabbitmq")
-@ConditionalOnProperty(value = "pay.rabbitmq.enable", havingValue = "true")
+@ConfigurationProperties(prefix = "pay.mq.rabbitmq")
+@ConditionalOnProperty(value = "pay.mq.rabbitmq.enable", havingValue = "true")
 @ConditionalOnClass(RabbitTemplate.class)
 public class PayMQRabbitProperties {
     /**

@@ -20,7 +20,7 @@ import org.springframework.kafka.core.KafkaTemplate;
  */
 @Configuration
 @AutoConfigureBefore(PayMQKafkaAutoConfiguration.class)
-@ConditionalOnProperty(value = "pay.kafka.enable", havingValue = "true")
+@ConditionalOnProperty(value = "pay.mq.kafka.enable", havingValue = "true")
 @ConditionalOnClass(KafkaTemplate.class)
 @EnableConfigurationProperties(PayMQKafkaProperties.class)
 public class PayMQKafkaAutoConfiguration {
