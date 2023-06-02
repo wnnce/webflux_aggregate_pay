@@ -12,3 +12,4 @@ logging:
 springdoc:
   swagger-ui:
     path: /pay/swagger-ui.html
+

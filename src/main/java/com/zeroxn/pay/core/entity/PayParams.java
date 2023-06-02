@@ -7,11 +7,11 @@ package com.zeroxn.pay.core.entity;
  */
 public class PayParams {
     /**
-     * 订单id 商户系统内唯一 微信/支付宝通用
+     * 订单id 商户系统内唯一 通用
      */
     private final String orderId;
     /**
-     * 订单退款id 订单退款时需要 微信/支付宝通用
+     * 订单退款id 订单退款时需要 通用
      */
     private String orderRefundId;
     /**
@@ -70,6 +70,10 @@ public class PayParams {
      * 微信支付H5下单Android平台的包名
      */
     private String packageName;
+    /**
+     * WAP支付完成后跳转的地址 会带上支付成功的参数
+     */
+    private String frontUrl;
 
     public PayParams(BuilderWechatApplets builder){
         this.orderId = builder.orderId;
@@ -113,6 +117,12 @@ public class PayParams {
         this.total = builder.total;
         this.refundTotal = builder.refundTotal;
         this.refundDescription = builder.refundDescription;
+    }
+    public PayParams(BuilderUnionWap builder){
+        this.orderId = builder.orderId;
+        this.total = builder.total;
+        this.description = builder.description;
+        this.frontUrl = builder.frontUrl;
     }
     // 微信支付小程序下单参数
     public static class BuilderWechatApplets{
@@ -274,6 +284,32 @@ public class PayParams {
             return new PayParams(this);
         }
     }
+    // 云闪付手机下单参数
+    public static class BuilderUnionWap{
+        private String orderId;
+        private Integer total;
+        private String description;
+        private String frontUrl;
+        public BuilderUnionWap setOrderId(String orderId){
+            this.orderId = orderId;
+            return this;
+        }
+        public BuilderUnionWap setTotal(Integer total){
+            this.total = total;
+            return this;
+        }
+        public BuilderUnionWap setDescription(String description){
+            this.description = description;
+            return this;
+        }
+        public BuilderUnionWap setFrontUrl(String frontUrl){
+            this.frontUrl = frontUrl;
+            return this;
+        }
+        public PayParams build(){
+            return new PayParams(this);
+        }
+    }
     // 订单退款参数 通用
     public static class BuilderRefund{
         private String orderId;
@@ -321,6 +357,14 @@ public class PayParams {
      */
     public Double getAlipayTotal(){
         return this.total * 0.01;
+    }
+
+    /**
+     * 获取云闪付支付金融 分为单位
+     * @return 返回原始值即可
+     */
+    public Integer getUnionTotal(){
+        return this.total;
     }
 
     /**
@@ -398,15 +442,13 @@ public class PayParams {
         return packageName;
     }
 
-    /**
-     * 获取支付宝订单退款
-     * @return 返回退款金额 * 0.01
-     */
-
+    public String getFrontUrl() {
+        return frontUrl;
+    }
 
     @Override
     public String toString() {
-        return "PayParam{" +
+        return "PayParams{" +
                 "orderId='" + orderId + '\'' +
                 ", orderRefundId='" + orderRefundId + '\'' +
                 ", userId='" + userId + '\'' +
@@ -416,6 +458,14 @@ public class PayParams {
                 ", ipAddress='" + ipAddress + '\'' +
                 ", type='" + type + '\'' +
                 ", quitUrl='" + quitUrl + '\'' +
+                ", qrMode='" + qrMode + '\'' +
+                ", qrWidth=" + qrWidth +
+                ", refundDescription='" + refundDescription + '\'' +
+                ", appName='" + appName + '\'' +
+                ", appUrl='" + appUrl + '\'' +
+                ", bundleId='" + bundleId + '\'' +
+                ", packageName='" + packageName + '\'' +
+                ", backUrl='" + frontUrl + '\'' +
                 '}';
     }
 }
