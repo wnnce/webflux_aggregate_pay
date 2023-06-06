@@ -12,7 +12,7 @@ import org.springframework.boot.context.properties.bind.DefaultValue;
  * @Description: 云闪付配置类
  */
 @ConfigurationProperties(prefix = "pay.union")
-@ConditionalOnProperty(value = "pay.union", havingValue = "true")
+@ConditionalOnProperty(value = "pay.union.enable", havingValue = "true")
 public class UnionPayProperties {
     /**
      * 是否开启云闪付支付
@@ -23,25 +23,37 @@ public class UnionPayProperties {
      */
     private String charset;
     /**
-     * 用以签名的签名值
-     */
-    private String sign;
-    /**
-     * 签名方法 01：RSA、11：SHA-256、12：SM3 暂时只支持SHA-256 默认SHA-256
+     * 签名方法 01：RSA、11：SHA-256、12：SM3  默认RSA
      */
     private String signType;
+    /**
+     * 签名证书路径 支持 classpath:路径和绝对路径
+     */
+    private String signCertPath;
+    /**
+     * 签名证书密码
+     */
+    private String signCertPwd;
+    /**
+     * 签名证书类型 默认PKCS12
+     */
+    private String signCertType;
+    /**
+     * 敏感加密证书路径
+     */
+    private String encryptCertPath;
+    /**
+     * 中级证书路径
+     */
+    private String middleCertPath;
+    /**
+     * 根证书路径
+     */
+    private String rootCertPath;
     /**
      * 云闪付系统内的商户ID
      */
     private String merchantId;
-    /**
-     * 云闪付系统内商户证书ID
-     */
-    private String certId;
-    /**
-     * 云闪付系统商户的私钥
-     */
-    private String privateKey;
     /**
      * 交易的币种 默认为人民币CNY：156
      */
@@ -54,16 +66,20 @@ public class UnionPayProperties {
     public UnionPayProperties(){}
 
     @ConstructorBinding
-    public UnionPayProperties(Boolean enable, @DefaultValue("UTF-8") String charset, @NotNull String sign,
-                              @DefaultValue("11") String signType, @NotNull String merchantId, @NotNull String certId,
-                              @NotNull String privateKey, @DefaultValue("156") String currency, @NotNull String notifyUrl){
+    public UnionPayProperties(Boolean enable, @DefaultValue("UTF-8") String charset, @DefaultValue("01") String signType,
+                              @NotNull String signCertPath, @NotNull String signCertPwd, @DefaultValue("PKCS12") String signCertType,
+                              String encryptCertPath, String middleCertPath, String rootCertPath, @NotNull String merchantId,
+                              @DefaultValue("156") String currency, @NotNull String notifyUrl) throws Exception{
         this.enable = enable;
         this.charset = charset;
-        this.sign = sign;
         this.signType = signType;
+        this.signCertPath = signCertPath;
+        this.signCertPwd = signCertPwd;
+        this.signCertType = signCertType;
+        this.encryptCertPath = encryptCertPath;
+        this.middleCertPath = middleCertPath;
+        this.rootCertPath = rootCertPath;
         this.merchantId = merchantId;
-        this.certId = certId;
-        this.privateKey = privateKey;
         this.currency = currency;
         this.notifyUrl = notifyUrl;
     }
@@ -76,24 +92,36 @@ public class UnionPayProperties {
         return charset;
     }
 
-    public String getSign() {
-        return sign;
-    }
-
     public String getSignType() {
         return signType;
     }
 
+    public String getSignCertPath() {
+        return signCertPath;
+    }
+
+    public String getSignCertPwd() {
+        return signCertPwd;
+    }
+
+    public String getSignCertType() {
+        return signCertType;
+    }
+
+    public String getEncryptCertPath() {
+        return encryptCertPath;
+    }
+
+    public String getMiddleCertPath() {
+        return middleCertPath;
+    }
+
+    public String getRootCertPath() {
+        return rootCertPath;
+    }
+
     public String getMerchantId() {
         return merchantId;
-    }
-
-    public String getCertId() {
-        return certId;
-    }
-
-    public String getPrivateKey() {
-        return privateKey;
     }
 
     public String getCurrency() {

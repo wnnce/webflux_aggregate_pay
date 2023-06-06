@@ -8,6 +8,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.client.RestTemplate;
 
 /**
  * @Author: lisang
@@ -17,13 +18,21 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @AutoConfigureBefore(UnionPayAutoConfiguration.class)
 @EnableConfigurationProperties(UnionPayProperties.class)
-@ConditionalOnProperty(value = "pay.union", havingValue = "true")
+@ConditionalOnProperty(value = "pay.union.enable", havingValue = "true")
 public class UnionPayAutoConfiguration {
-
+    @Bean
+    public RestTemplate restTemplate() {
+        return new RestTemplate();
+    }
     @Bean
     @ConditionalOnClass(UnionPayProperties.class)
-    public UnionPayBusiness unionPayBusiness(UnionPayProperties unionPayProperties){
-        return new UnionPayBusiness(unionPayProperties);
+    public UnionPayCertManager unionPayCertManager(UnionPayProperties unionPayProperties) throws Exception{
+        return new UnionPayCertManager(unionPayProperties);
+    }
+    @Bean
+    @ConditionalOnClass(UnionPayProperties.class)
+    public UnionPayBusiness unionPayBusiness(UnionPayProperties unionPayProperties, RestTemplate restTemplate){
+        return new UnionPayBusiness(unionPayProperties, restTemplate);
     }
     @Bean
     @ConditionalOnClass(UnionPayBusiness.class)

@@ -28,15 +28,23 @@ public class UnionPayTemplate implements PayTemplate {
     @Override
     public <T> T confirmOrder(PayParams param, PayMethod method, Class<T> clazz) {
         Map<String, String> requestData = this.generateBaseRequestData();
-        requestData.put("orderId", param.getOrderId());
-        requestData.put("txnAmt", param.getUnionTotal().toString());
-        requestData.put("frontUrl", param.getFrontUrl());
-        requestData.put("orderDesc", param.getDescription());
+        Map<String, String> frontData = new HashMap<>(Map.ofEntries(
+                Map.entry("txnType", "02"),
+                Map.entry("txnSubType", "01"),
+                Map.entry("currencyCode", properties.getCurrency()),
+                Map.entry("backUrl", properties.getNotifyUrl()),
+                Map.entry("orderId", param.getOrderId()),
+                Map.entry("txnAmt", param.getUnionTotal().toString()),
+                Map.entry("frontUrl", param.getFrontUrl()),
+                Map.entry("orderDesc", param.getDescription())
+        ));
+        requestData.putAll(frontData);
         switch (method){
             case DESKTOP -> {
                 requestData.put("channelType", UnionConstant.DESKTOPCHANNELTYPE);
             }default -> {
                 requestData.put("channelType", UnionConstant.WAPCHANNELTYPE);
+                return (T) business.wapConfirmOrder(requestData);
             }
         }
         return null;
@@ -49,7 +57,14 @@ public class UnionPayTemplate implements PayTemplate {
 
     @Override
     public <T> T queryOrder(String orderId, PayMethod method, Class<T> clazz) {
-        return null;
+        Map<String, String> requestData = this.generateBaseRequestData();
+        Map<String, String> queryMap = new HashMap<>(Map.ofEntries(
+                Map.entry("txnType", "00"),
+                Map.entry("txnSubType", "00"),
+                Map.entry("orderId", orderId)
+        ));
+        requestData.putAll(queryMap);
+        return (T) business.queryOrder(requestData);
     }
 
     @Override
@@ -67,15 +82,10 @@ public class UnionPayTemplate implements PayTemplate {
                 Map.entry("version", UnionConstant.VERSION),
                 Map.entry("encoding", properties.getCharset()),
                 Map.entry("signMethod", properties.getSignType()),
-                Map.entry("txnType", UnionConstant.TXNTYPE),
-                Map.entry("txnSubType", UnionConstant.TXNSUBTYPE),
                 Map.entry("bizType", UnionConstant.BIZTYPE),
                 Map.entry("merId", properties.getMerchantId()),
                 Map.entry("accessType", UnionConstant.ACCESSTYPE),
-                Map.entry("currencyCode", properties.getCurrency()),
-                Map.entry("txnTime", LocalDateTime.now().format(DateTimeFormatter.ofPattern("YYYYMMDDhhmmss"))),
-                Map.entry("backUrl", properties.getNotifyUrl()),
-                Map.entry("certId", properties.getCertId())
+                Map.entry("txnTime", LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss")))
         ));
     }
 }

@@ -3,7 +3,12 @@ package com.zeroxn.pay.module.union.business;
 import com.zeroxn.pay.module.union.config.UnionPayProperties;
 import com.zeroxn.pay.module.union.constant.UnionConstant;
 import com.zeroxn.pay.module.union.utils.UnionUtil;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.*;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.RestTemplate;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
@@ -14,21 +19,31 @@ import java.util.Set;
  */
 public class UnionPayBusiness {
     private final UnionPayProperties properties;
-    public UnionPayBusiness(UnionPayProperties properties){
+    private final RestTemplate restTemplate;
+    public UnionPayBusiness(UnionPayProperties properties, RestTemplate restTemplate){
         this.properties = properties;
+        this.restTemplate = restTemplate;
     }
 
     public String wapConfirmOrder(Map<String, String> requestData){
-        Map<String, String> filterMap = UnionUtil.filterEmpty(requestData);
-        Map<String, String> formData = UnionUtil.sign(filterMap, properties.getPrivateKey(), properties.getCharset());
+        Map<String, String> formData = UnionUtil.sign(requestData, properties.getSignCertPath(), properties.getCharset());
         return createFormHtml(formData, properties.getCharset());
+    }
+    public String queryOrder(Map<String, String> requestData){
+        Map<String, String> signRequestData = UnionUtil.sign(requestData, properties.getSignCertPath(), properties.getCharset());
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+        MultiValueMap<String, String> multiValueMap = UnionUtil.mapToMultiValueMap(signRequestData);
+        HttpEntity<MultiValueMap<String, String>> entity = new HttpEntity<>(multiValueMap, headers);
+        ResponseEntity<String> responseEntity = restTemplate.postForEntity(UnionConstant.TESTQUERYURL, entity, String.class);
+        return responseEntity.getBody();
     }
 
     private String createFormHtml(Map<String, String> data, String charset){
         StringBuilder sf = new StringBuilder();
         sf.append("<html><head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=").append(charset)
                 .append("\"/></head><body>");
-        sf.append("<form id = \"pay_form\" action=\"").append(UnionConstant.TESTREQUESTURL).append("\" method=\"post\">");
+        sf.append("<form id = \"pay_form\" action=\"").append(UnionConstant.TESTFRONTURL).append("\" method=\"post\">");
         if (null != data && 0 != data.size()) {
             Set<Map.Entry<String, String>> set = data.entrySet();
             for (Map.Entry<String, String> ey : set) {

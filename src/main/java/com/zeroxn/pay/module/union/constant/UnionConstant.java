@@ -8,11 +8,13 @@ package com.zeroxn.pay.module.union.constant;
 public class UnionConstant {
     public static final String VERSION = "5.1.0";
     public static final String BIZTYPE = "000201";
-    public static final String TXNTYPE = "02";
-    public static final String TXNSUBTYPE = "01";
     public static final String ACCESSTYPE = "0";
     public static final String DESKTOPCHANNELTYPE = "07";
     public static final String WAPCHANNELTYPE = "08";
-    public static final String PRODREQUESTURL = "https://gateway.95516.com/gateway/api/frontTransReq.do";
-    public static final String TESTREQUESTURL = "https://gateway.test.95516.com/gateway/api/frontTransReq.do";
+    public static final String SIGNCERTTYPE = "PKCS12";
+    public static final String CERTTYPE = "X.509";
+    public static final String FRONTURL = "https://gateway.95516.com/gateway/api/frontTransReq.do";
+    public static final String TESTFRONTURL = "https://gateway.test.95516.com/gateway/api/frontTransReq.do";
+    public static final String QUERYURL = "https://gateway.95516.com/gateway/api/queryTrans.do";
+    public static final String TESTQUERYURL = "https://gateway.test.95516.com/gateway/api/queryTrans.do";
 }
