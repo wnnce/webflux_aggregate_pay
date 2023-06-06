@@ -3,7 +3,7 @@ package com.zeroxn.pay.module.union.constant;
 /**
  * @Author: lisang
  * @DateTime: 2023/6/1 下午8:33
- * @Description:
+ * @Description: 云闪付常量类
  */
 public class UnionConstant {
     public static final String VERSION = "5.1.0";
@@ -17,4 +17,6 @@ public class UnionConstant {
     public static final String TESTFRONTURL = "https://gateway.test.95516.com/gateway/api/frontTransReq.do";
     public static final String QUERYURL = "https://gateway.95516.com/gateway/api/queryTrans.do";
     public static final String TESTQUERYURL = "https://gateway.test.95516.com/gateway/api/queryTrans.do";
+    public static final String REFUNDURL = "https://gateway.95516.com/gateway/api/backTransReq.do";
+    public static final String TESTREFUNDURL = "https://101.231.204.80:5000/gateway/api/backTransReq.do";
 }

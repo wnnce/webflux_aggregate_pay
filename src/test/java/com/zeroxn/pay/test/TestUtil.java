@@ -38,7 +38,18 @@ public class TestUtil {
     public void testUnionQueryOrder(){
         String result = unionPayTemplate.queryOrder("236623432453453", null, String.class);
         Map<String, String> map = UnionUtil.stringToMap(result, "&", "=");
-        System.out.println(map.get("signPubKeyCert"));
-        System.out.println(map.get("respMsg"));
+        System.out.println(map);
+    }
+    @Test
+    public void testUnionRefundOrder(){
+        PayParams params = new PayParams.BuilderRefund()
+                .setOrderId("236623432453453")
+                .setOrderRefundId("632306061513128662778")
+                .setTotal(100)
+                .setRefundTotal(50)
+                .setRefundDescription("退款")
+                .build();
+        String result = unionPayTemplate.refundOrder(params, String.class);
+        System.out.println(result);
     }
 }

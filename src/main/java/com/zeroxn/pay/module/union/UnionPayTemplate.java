@@ -32,7 +32,7 @@ public class UnionPayTemplate implements PayTemplate {
                 Map.entry("txnType", "02"),
                 Map.entry("txnSubType", "01"),
                 Map.entry("currencyCode", properties.getCurrency()),
-                Map.entry("backUrl", properties.getNotifyUrl()),
+                Map.entry("backUrl", properties.getSuccessNotifyUrl()),
                 Map.entry("orderId", param.getOrderId()),
                 Map.entry("txnAmt", param.getUnionTotal().toString()),
                 Map.entry("frontUrl", param.getFrontUrl()),
@@ -69,7 +69,19 @@ public class UnionPayTemplate implements PayTemplate {
 
     @Override
     public <T> T refundOrder(PayParams param, Class<T> clazz) {
-        return null;
+        Map<String, String> requestData = this.generateBaseRequestData();
+        Map<String, String> refundMap = new HashMap<>(Map.ofEntries(
+                Map.entry("txnType", "04"),
+                Map.entry("txnSubType", "00"),
+                Map.entry("orderId", param.getOrderId()),
+                Map.entry("currencyCode", properties.getCurrency()),
+                Map.entry("txnAmt", param.getRefundTotal().toString()),
+                Map.entry("backUrl", properties.getRefundNotifyUrl()),
+                Map.entry("origQryId", param.getOrderRefundId()),
+                Map.entry("channelType", UnionConstant.DESKTOPCHANNELTYPE)
+        ));
+        requestData.putAll(refundMap);
+        return (T) business.refundOrder(requestData);
     }
 
     @Override

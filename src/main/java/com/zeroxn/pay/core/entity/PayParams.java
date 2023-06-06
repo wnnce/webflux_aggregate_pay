@@ -382,6 +382,14 @@ public class PayParams {
         return this.refundTotal * 0.01;
     }
 
+    /**
+     * 获取云闪付订单退款金额
+     * @return 返回退款金额
+     */
+    public Integer getUnionRefundTotal() {
+        return this.refundTotal;
+    }
+
     public String getOrderId() {
         return orderId;
     }

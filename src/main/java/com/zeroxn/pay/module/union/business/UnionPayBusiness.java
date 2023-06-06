@@ -3,12 +3,10 @@ package com.zeroxn.pay.module.union.business;
 import com.zeroxn.pay.module.union.config.UnionPayProperties;
 import com.zeroxn.pay.module.union.constant.UnionConstant;
 import com.zeroxn.pay.module.union.utils.UnionUtil;
-import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
@@ -30,15 +28,21 @@ public class UnionPayBusiness {
         return createFormHtml(formData, properties.getCharset());
     }
     public String queryOrder(Map<String, String> requestData){
+        ResponseEntity<String> responseEntity = sendPost(requestData, UnionConstant.TESTQUERYURL);
+        return responseEntity.getBody();
+    }
+    public String refundOrder(Map<String, String> requestData){
+        ResponseEntity<String> responseEntity = sendPost(requestData, UnionConstant.TESTREFUNDURL);
+        return responseEntity.getBody();
+    }
+    private ResponseEntity<String> sendPost(Map<String, String> requestData, String requestUrl){
         Map<String, String> signRequestData = UnionUtil.sign(requestData, properties.getSignCertPath(), properties.getCharset());
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
         MultiValueMap<String, String> multiValueMap = UnionUtil.mapToMultiValueMap(signRequestData);
         HttpEntity<MultiValueMap<String, String>> entity = new HttpEntity<>(multiValueMap, headers);
-        ResponseEntity<String> responseEntity = restTemplate.postForEntity(UnionConstant.TESTQUERYURL, entity, String.class);
-        return responseEntity.getBody();
+        return restTemplate.postForEntity(requestUrl, entity, String.class);
     }
-
     private String createFormHtml(Map<String, String> data, String charset){
         StringBuilder sf = new StringBuilder();
         sf.append("<html><head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=").append(charset)

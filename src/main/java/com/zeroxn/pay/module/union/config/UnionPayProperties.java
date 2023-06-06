@@ -61,7 +61,11 @@ public class UnionPayProperties {
     /**
      * 支付成功后云闪付的异步通知地址
      */
-    private String notifyUrl;
+    private String successNotifyUrl;
+    /**
+     * 退款成功后云闪付的异步通知地址
+     */
+    private String refundNotifyUrl;
 
     public UnionPayProperties(){}
 
@@ -69,7 +73,7 @@ public class UnionPayProperties {
     public UnionPayProperties(Boolean enable, @DefaultValue("UTF-8") String charset, @DefaultValue("01") String signType,
                               @NotNull String signCertPath, @NotNull String signCertPwd, @DefaultValue("PKCS12") String signCertType,
                               String encryptCertPath, String middleCertPath, String rootCertPath, @NotNull String merchantId,
-                              @DefaultValue("156") String currency, @NotNull String notifyUrl) throws Exception{
+                              @DefaultValue("156") String currency, @NotNull String successNotifyUrl, @NotNull String refundNotifyUrl) throws Exception{
         this.enable = enable;
         this.charset = charset;
         this.signType = signType;
@@ -81,7 +85,8 @@ public class UnionPayProperties {
         this.rootCertPath = rootCertPath;
         this.merchantId = merchantId;
         this.currency = currency;
-        this.notifyUrl = notifyUrl;
+        this.successNotifyUrl = successNotifyUrl;
+        this.refundNotifyUrl = refundNotifyUrl;
     }
 
     public Boolean getEnable() {
@@ -128,7 +133,11 @@ public class UnionPayProperties {
         return currency;
     }
 
-    public String getNotifyUrl() {
-        return notifyUrl;
+    public String getSuccessNotifyUrl() {
+        return successNotifyUrl;
+    }
+
+    public String getRefundNotifyUrl() {
+        return refundNotifyUrl;
     }
 }
