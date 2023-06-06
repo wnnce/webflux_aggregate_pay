@@ -15,7 +15,8 @@ pay:
   union:
     enable: true
     merchant-id: 777290058203758
-    notify-url: http://123.com
     sign-cert-path: classpath:cert/acp_test_sign.pfx
     sign-cert-pwd: '000000'
     sign-type: '01'
+    success-notify-url: http://xxx.123.com
+    refund-notify-url: http://xxx.213.com

@@ -13,4 +13,6 @@ public class ValidationGroups {
     public interface WechatH5Validation{}
     public interface WechatAppletsValidation{}
     public interface WechatRefundValidation{}
+    public interface UnionWapValidation{}
+    public interface UnionRefundValidation{}
 }
