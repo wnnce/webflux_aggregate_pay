@@ -1,8 +1,8 @@
 package com.zeroxn.pay.module.wechat.utils;
 
 import com.wechat.pay.java.core.exception.ServiceException;
-import com.zeroxn.pay.module.wechat.exception.WechatPayBusinessException;
-import com.zeroxn.pay.module.wechat.exception.WechatPaySystemException;
+import com.zeroxn.pay.core.exception.PayServiceException;
+import com.zeroxn.pay.core.exception.PaySystemException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -38,9 +38,9 @@ public class WechatUtils {
         WechatUtils.logger.error("微信支付接口调用异常，状态码：{}，错误码：{}，错误消息：{}", statusCode, errorCode, errorMessage);
         if (errorMap.containsKey(errorCode)){
             String message = errorMap.get(errorCode);
-            throw new WechatPayBusinessException(message);
+            throw new PayServiceException(message);
         }else {
-            throw new WechatPaySystemException("系统错误，请重试");
+            throw new PaySystemException("微信支付系统错误，请重试");
         }
     }
 }

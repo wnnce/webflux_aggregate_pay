@@ -6,9 +6,9 @@ import com.zeroxn.pay.core.entity.PayParams;
 import com.zeroxn.pay.core.enums.PayMethod;
 import com.zeroxn.pay.core.enums.PayPlatform;
 import com.zeroxn.pay.core.enums.PayResult;
+import com.zeroxn.pay.core.exception.PayServiceException;
+import com.zeroxn.pay.core.exception.PaySystemException;
 import com.zeroxn.pay.core.mq.PayMQTemplate;
-import com.zeroxn.pay.module.alipay.exception.AlipayPayBusinessException;
-import com.zeroxn.pay.module.alipay.exception.AlipayPaySystemException;
 import com.zeroxn.pay.module.alipay.AlipayPayTemplate;
 import com.zeroxn.pay.module.alipay.config.AlipayPayProperties;
 import org.jetbrains.annotations.NotNull;
@@ -163,10 +163,10 @@ public class AlipayService {
      */
     public AlipayTradeRefundResponse alipayOrderRefund(AlipayParamDTO paramDTO){
         if(paramDTO.getRefundTotal() > paramDTO.getTotal()){
-            throw new AlipayPayBusinessException("退款金额不能大于订单总金额");
+            throw new PayServiceException("j退款金额不能大于订单总金额");
         }
         if(paramDTO.getRefundTotal() < paramDTO.getTotal() && StringUtils.isEmpty(paramDTO.getRefundId())){
-            throw new AlipayPayBusinessException("部分退款必须传入退款ID");
+            throw new PayServiceException("支付宝部分退款必须传入退款ID");
         }
         PayParams params = new PayParams.BuilderRefund()
                 .setOrderId(paramDTO.getOrderId())
@@ -225,15 +225,15 @@ public class AlipayService {
             handlerResponse40004(subCode, subMsg, orderId);
         }
         logger.error("支付宝接口调用出现其他错误，错误码：{}，错误返回码：{}，错误消息：{}", code, subCode, subMsg);
-        throw new AlipayPaySystemException("系统错误，请重试");
+        throw new PaySystemException("支付宝系统错误，请重试");
     }
     private void handlerResponse40004(String subCode, String subMsg, String orderId){
         if (errorMap.containsKey(subCode)){
             String errorMessage = errorMap.get(subCode);
             logger.warn("支付宝交易业务异常，错误码：{}，错误消息：{}，订单号：{}", subCode, subMsg, orderId);
-            throw new AlipayPayBusinessException(errorMessage);
+            throw new PayServiceException(errorMessage);
         }
         logger.error("支付宝交易系统异常，错误码：{}，错误消息：{}，订单号：{}", subCode, subMsg, orderId);
-        throw new AlipayPaySystemException("系统错误，请重试");
+        throw new PaySystemException("支付宝系统错误，请重试");
     }
 }

@@ -6,7 +6,7 @@ import com.alipay.api.domain.*;
 import com.alipay.api.internal.util.AlipaySignature;
 import com.alipay.api.request.*;
 import com.alipay.api.response.*;
-import com.zeroxn.pay.module.alipay.exception.AlipayPaySystemException;
+import com.zeroxn.pay.core.exception.PaySystemException;
 import com.zeroxn.pay.module.alipay.config.AlipayPayProperties;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
@@ -42,7 +42,7 @@ public class AlipayPayBusiness {
             return alipayClient.execute(request);
         }catch (AlipayApiException ex){
             logger.error("支付宝小程序下单接口请求失败，错误消息：{}", ex.getMessage());
-            throw new AlipayPaySystemException("小程序下单失败");
+            throw new PaySystemException("支付宝小程序下单失败");
         }
     }
 
@@ -58,7 +58,7 @@ public class AlipayPayBusiness {
             return alipayClient.pageExecute(request);
         }catch (AlipayApiException ex){
             logger.error("支付宝手机网站下单接口请求失败，错误消息：{}", ex.getMessage());
-            throw new AlipayPaySystemException("手机下单失败");
+            throw new PaySystemException("支付宝手机下单失败");
         }
     }
 
@@ -75,7 +75,7 @@ public class AlipayPayBusiness {
             return alipayClient.pageExecute(request);
         }catch (AlipayApiException ex){
             logger.error("支付宝电脑网站下单接口请求失败，错误消息：{}", ex.getMessage());
-            throw new AlipayPaySystemException("网站下单失败");
+            throw new PaySystemException("支付宝网站下单失败");
         }
     }
 
@@ -93,7 +93,7 @@ public class AlipayPayBusiness {
             return alipayClient.execute(request);
         }catch (AlipayApiException ex){
             logger.error("支付宝查询订单接口请求失败，错误消息：{}", ex.getMessage());
-            throw new AlipayPaySystemException("订单查询失败");
+            throw new PaySystemException("支付宝订单查询失败");
         }
     }
 
@@ -111,7 +111,7 @@ public class AlipayPayBusiness {
             return alipayClient.execute(request);
         } catch (AlipayApiException ex) {
             logger.error("支付宝关闭订单接口请求失败，错误消息：{}", ex.getMessage());
-            throw new AlipayPaySystemException("订单关闭失败");
+            throw new PaySystemException("支付宝订单关闭失败");
         }
     }
 
@@ -126,7 +126,7 @@ public class AlipayPayBusiness {
             return alipayClient.execute(request);
         }catch (AlipayApiException ex){
             logger.error("支付宝订单退款接口请求失败，错误消息：{}", ex.getMessage());
-            throw new AlipayPaySystemException("订单退款失败");
+            throw new PaySystemException("支付宝订单退款失败");
         }
     }
 
@@ -145,7 +145,7 @@ public class AlipayPayBusiness {
             return alipayClient.execute(request);
         }catch (AlipayApiException ex){
             logger.error("支付宝退款订单查询失败，错误消息：{}", ex.getMessage());
-            throw new AlipayPaySystemException("退款订单查询失败");
+            throw new PaySystemException("支付宝退款订单查询失败");
         }
     }
     /**

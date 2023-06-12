@@ -3,10 +3,8 @@ package com.zeroxn.pay.core.exception.handler;
 import com.wechat.pay.java.core.exception.ServiceException;
 import com.zeroxn.pay.core.entity.Result;
 import com.zeroxn.pay.core.enums.ResultCode;
-import com.zeroxn.pay.module.alipay.exception.AlipayPayBusinessException;
-import com.zeroxn.pay.module.alipay.exception.AlipayPaySystemException;
-import com.zeroxn.pay.module.wechat.exception.WechatPayBusinessException;
-import com.zeroxn.pay.module.wechat.exception.WechatPaySystemException;
+import com.zeroxn.pay.core.exception.PayServiceException;
+import com.zeroxn.pay.core.exception.PaySystemException;
 import com.zeroxn.pay.module.wechat.utils.WechatUtils;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
@@ -30,52 +28,29 @@ import java.util.List;
 public class GlobalExceptionHandler {
     private static final Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);
     /**
-     * 处理支付宝支付业务异常
-     * @param ex 支付宝支付业务异常
+     * 处理支付业务异常
+     * @param ex 支付业务异常
      * @return 返回错误消息和400状态码
      */
-    @ExceptionHandler(AlipayPayBusinessException.class)
+    @ExceptionHandler(PayServiceException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public Mono<Result<String>> handlerAlipayPayBusinessException(@NotNull AlipayPayBusinessException ex){
+    public Mono<Result<String>> handlerAlipayPayBusinessException(@NotNull PayServiceException ex){
         String message = ex.getMessage();
         return Mono.just(Result.field(ResultCode.REQUEST_FIELD, message));
     }
 
     /**
-     * 处理支付宝支付系统异常
-     * @param ex 支付宝支付系统异常
+     * 处理支付系统异常
+     * @param ex 支付系统异常
      * @return 返回错误消息和500状态码
      */
-    @ExceptionHandler(AlipayPaySystemException.class)
+    @ExceptionHandler(PaySystemException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public Mono<Result<String>> handlerAlipayPaySystemException(@NotNull AlipayPaySystemException ex){
+    public Mono<Result<String>> handlerAlipayPaySystemException(@NotNull PaySystemException ex){
         String message = ex.getMessage();
         return Mono.just(Result.field(ResultCode.SYSTEM_FIELD, message));
     }
 
-    /**
-     * 处理微信支付业务异常
-     * @param ex 微信支付业务异常
-     * @return 返回异常消息和400状态码
-     */
-    @ExceptionHandler(WechatPayBusinessException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public Mono<Result<String>> handlerWechatPayBusinessException(WechatPayBusinessException ex){
-        String message = ex.getMessage();
-        return Mono.just(Result.field(ResultCode.REQUEST_FIELD, message));
-    }
-
-    /**
-     * 处理微信支付系统异常
-     * @param ex 微信支付系统异常
-     * @return 返回异常消息和500状态码
-     */
-    @ExceptionHandler(WechatPaySystemException.class)
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public Mono<Result<String>> handlerWechatPaySystemException(WechatPaySystemException ex){
-        String message = ex.getMessage();
-        return Mono.just(Result.field(ResultCode.SYSTEM_FIELD, message));
-    }
     /**
      * 处理validation参数校验错误
      * @param ex 参数校验错误异常

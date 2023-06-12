@@ -1,5 +1,6 @@
 package com.zeroxn.pay.module.union.config;
 
+import com.zeroxn.pay.module.union.exception.UnionPayException;
 import com.zeroxn.pay.module.union.utils.UnionCert;
 import com.zeroxn.pay.module.union.utils.UnionUtil;
 import org.slf4j.Logger;
@@ -34,7 +35,7 @@ public class UnionPayCertManager {
                 unionCert = UnionUtil.readerCertByCer(path);
             }else {
                 UnionPayCertManager.logger.error("证书路径格式错误，错误路径：{}", path);
-                throw new RuntimeException("证书格式格式错误");
+                throw new UnionPayException("云闪付初始化失败");
             }
             this.certMap.put(path, unionCert);
         }

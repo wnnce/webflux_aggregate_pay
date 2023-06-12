@@ -6,7 +6,7 @@ import com.alipay.api.domain.AlipayTradeRefundModel;
 import com.alipay.api.domain.AlipayTradeWapPayModel;
 import com.zeroxn.pay.core.entity.PayParams;
 import com.zeroxn.pay.core.enums.PayMethod;
-import com.zeroxn.pay.module.alipay.exception.AlipayPayException;
+import com.zeroxn.pay.core.exception.PaySystemException;
 import com.zeroxn.pay.core.PayTemplate;
 import com.zeroxn.pay.module.alipay.business.AlipayPayBusiness;
 
@@ -60,7 +60,7 @@ public class AlipayPayTemplate implements PayTemplate {
                 return (T) alipayBusiness.desktopConfirmOrder(model);
             }
         }
-        throw new AlipayPayException("未知异常", param.getOrderId());
+        throw new PaySystemException("不受支持的支付方式");
     }
 
 

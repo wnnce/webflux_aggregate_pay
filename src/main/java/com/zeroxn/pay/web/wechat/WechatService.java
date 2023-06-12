@@ -9,10 +9,10 @@ import com.zeroxn.pay.core.entity.PayParams;
 import com.zeroxn.pay.core.enums.PayMethod;
 import com.zeroxn.pay.core.enums.PayPlatform;
 import com.zeroxn.pay.core.enums.PayResult;
+import com.zeroxn.pay.core.exception.PayServiceException;
 import com.zeroxn.pay.core.mq.PayMQTemplate;
 import com.zeroxn.pay.module.wechat.WechatPayTemplate;
 import com.zeroxn.pay.module.wechat.business.parser.WechatNotifyParser;
-import com.zeroxn.pay.module.wechat.exception.WechatPayBusinessException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
@@ -108,7 +108,7 @@ public class WechatService {
      */
     public Refund wechatOrderRefund(WechatParamDTO paramDTO){
         if(paramDTO.getRefundTotal() > paramDTO.getTotal()){
-            throw new WechatPayBusinessException("订单退款金额不能大于订单总金额");
+            throw new PayServiceException("订单退款金额不能大于订单总金额");
         }
         PayParams params = new PayParams.BuilderRefund()
                 .setOrderId(paramDTO.getOrderId())
@@ -169,7 +169,7 @@ public class WechatService {
 
     private PayMethod methodForMat(Integer method){
         if (method == null || (method < 0 || method > 2)){
-            throw new WechatPayBusinessException("支付方式参数错误");
+            throw new PayServiceException("微信支付方式参数错误");
         }
         if (method == 1){
             return PayMethod.APPLETS;
