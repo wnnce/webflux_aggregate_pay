@@ -57,6 +57,12 @@ public class UnionService {
         map.remove("signPubKeyCert");
         return map;
     }
+
+    /**
+     * 云闪付订单退货
+     * @param paramDTO 订单退货参数
+     * @return 返回云闪付系统的响应结果
+     */
     public Map<String, String> unionOrderRefund(UnionParamDTO paramDTO) {
         if(paramDTO.getRefundTotal() > paramDTO.getTotal()){
             throw new PayServiceException("订单退款金额不能大于订单总金额");
@@ -71,6 +77,12 @@ public class UnionService {
         map.remove("signPubKeyCert");
         return map;
     }
+
+    /**
+     * 云闪付撤销订单
+     * @param orderId 需要撤销的订单ID
+     * @return 返回云闪付系统的响应结果
+     */
     public Map<String, String> unionOrderRevoke(String orderId){
         String result = payTemplate.closeOrder(orderId, null, String.class);
         Map<String, String> map = UnionUtil.stringToMap(result, "&", "=");

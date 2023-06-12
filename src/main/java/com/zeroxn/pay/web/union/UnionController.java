@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
@@ -52,5 +53,15 @@ public class UnionController {
     public Mono<Result<Map<String, String>>> unionOrderRefund(@RequestBody @Validated(ValidationGroups.UnionRefundValidation.class) UnionParamDTO paramDTO) {
         Map<String, String> map = unionService.unionOrderRefund(paramDTO);
         return Mono.just(Result.success(map));
+    }
+    @PostMapping("/notify/success")
+    @Operation(description = "云闪付支付成功通知接口")
+    public ResponseEntity<String> unionSuccessNotify(Map<String, String> paramsMap){
+        return null;
+    }
+    @PostMapping("/notify/refund")
+    @Operation(description = "云闪付退款成功通知接口")
+    public ResponseEntity<String> unionRefundNotify(Map<String, String> paramsMap){
+        return null;
     }
 }
