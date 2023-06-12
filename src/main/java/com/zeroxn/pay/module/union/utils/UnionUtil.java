@@ -1,5 +1,6 @@
 package com.zeroxn.pay.module.union.utils;
 
+import com.zeroxn.pay.core.exception.PaySystemException;
 import com.zeroxn.pay.module.union.config.UnionPayCertManager;
 import com.zeroxn.pay.module.union.constant.UnionConstant;
 import org.slf4j.Logger;
@@ -66,11 +67,11 @@ public class UnionUtil {
                 return signBySignKey(filterMap, certPath, charset);
             } else {
                 UnionUtil.logger.error("不支持的签名方式，签名方式：{}", signMethod);
-                throw new RuntimeException("不支持的签名方式");
+                throw new PaySystemException("云闪付不支持的签名方式");
             }
         }catch (Exception ex){
             UnionUtil.logger.error("请求数据签名失败，错误消息：{}", ex.getMessage());
-            throw  new RuntimeException();
+            throw new PaySystemException("云闪付参数签名失败");
         }
     }
 
@@ -135,7 +136,7 @@ public class UnionUtil {
             return builder.substring(0, builder.length() - 1);
         }catch (UnsupportedEncodingException ex){
             UnionUtil.logger.error("Map集合转字符串失败，错误消息：{}", ex.getMessage());
-            throw new RuntimeException("Map集合转字符串失败");
+            throw new PaySystemException("云闪付返回参数转换失败");
         }
     }
     public static Map<String, String> stringToMap(String str, String split, String separate){

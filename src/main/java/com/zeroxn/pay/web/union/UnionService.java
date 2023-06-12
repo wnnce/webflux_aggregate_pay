@@ -2,6 +2,7 @@ package com.zeroxn.pay.web.union;
 
 import com.zeroxn.pay.core.entity.PayParams;
 import com.zeroxn.pay.core.enums.PayMethod;
+import com.zeroxn.pay.core.exception.PayServiceException;
 import com.zeroxn.pay.module.union.UnionPayTemplate;
 import com.zeroxn.pay.module.union.utils.UnionUtil;
 import org.slf4j.Logger;
@@ -58,7 +59,7 @@ public class UnionService {
     }
     public Map<String, String> unionOrderRefund(UnionParamDTO paramDTO) {
         if(paramDTO.getRefundTotal() > paramDTO.getTotal()){
-            throw new RuntimeException("订单退款金额不能大于订单总金额");
+            throw new PayServiceException("订单退款金额不能大于订单总金额");
         }
         PayParams params = new PayParams.BuilderRefund()
                 .setOrderId(paramDTO.getOrderId())
