@@ -18,5 +18,5 @@ public class UnionConstant {
     public static final String QUERYURL = "https://gateway.95516.com/gateway/api/queryTrans.do";
     public static final String TESTQUERYURL = "https://gateway.test.95516.com/gateway/api/queryTrans.do";
     public static final String REFUNDURL = "https://gateway.95516.com/gateway/api/backTransReq.do";
-    public static final String TESTREFUNDURL = "https://101.231.204.80:5000/gateway/api/backTransReq.do";
+    public static final String TESTREFUNDURL = "https://gateway.test.95516.com/gateway/api/backTransReq.do";
 }

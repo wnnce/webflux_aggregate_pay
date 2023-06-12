@@ -3,9 +3,11 @@ package com.zeroxn.pay.module.union;
 import com.zeroxn.pay.core.PayTemplate;
 import com.zeroxn.pay.core.entity.PayParams;
 import com.zeroxn.pay.core.enums.PayMethod;
+import com.zeroxn.pay.core.exception.PayServiceException;
 import com.zeroxn.pay.module.union.business.UnionPayBusiness;
 import com.zeroxn.pay.module.union.config.UnionPayProperties;
 import com.zeroxn.pay.module.union.constant.UnionConstant;
+import com.zeroxn.pay.module.union.utils.UnionUtil;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -52,7 +54,26 @@ public class UnionPayTemplate implements PayTemplate {
 
     @Override
     public <T> T closeOrder(String orderId, PayMethod method, Class<T> clazz) {
-        return null;
+        String result = queryOrder(orderId, null, String.class);
+        Map<String, String> map = UnionUtil.stringToMap(result, "&", "=");
+        if(UnionUtil.isEmpty(map.get("queryId")) || !map.get("respMsg").contains("成功")){
+            System.out.println(map);
+            throw new PayServiceException("云闪付关闭订单失败，订单状态错误");
+        }
+        String txnAmt = map.get("txnAmt");
+        String queryId = map.get("queryId");
+        Map<String, String> requestData = generateBaseRequestData();
+        Map<String, String> closeMap = new HashMap<>(Map.ofEntries(
+                Map.entry("orderId", orderId),
+                Map.entry("txnType", "31"),
+                Map.entry("txnSubType", "00"),
+                Map.entry("txnAmt", txnAmt),
+                Map.entry("origQryId", queryId),
+                Map.entry("channelType", UnionConstant.WAPCHANNELTYPE),
+                Map.entry("backUrl", "http://www.specialUrl.com")
+        ));
+        requestData.putAll(closeMap);
+        return (T) business.wapRevokeOrder(requestData);
     }
 
     @Override

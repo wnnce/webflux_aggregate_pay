@@ -71,4 +71,10 @@ public class UnionService {
         map.remove("signPubKeyCert");
         return map;
     }
+    public Map<String, String> unionOrderRevoke(String orderId){
+        String result = payTemplate.closeOrder(orderId, null, String.class);
+        Map<String, String> map = UnionUtil.stringToMap(result, "&", "=");
+        map.remove("signPubKeyCert");
+        return map;
+    }
 }

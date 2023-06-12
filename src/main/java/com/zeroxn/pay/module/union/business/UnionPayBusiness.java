@@ -31,6 +31,10 @@ public class UnionPayBusiness {
         ResponseEntity<String> responseEntity = sendPost(requestData, UnionConstant.TESTQUERYURL);
         return responseEntity.getBody();
     }
+    public String wapRevokeOrder(Map<String, String> requestData){
+        ResponseEntity<String> responseEntity = sendPost(requestData, UnionConstant.TESTREFUNDURL);
+        return responseEntity.getBody();
+    }
     public String refundOrder(Map<String, String> requestData){
         ResponseEntity<String> responseEntity = sendPost(requestData, UnionConstant.TESTREFUNDURL);
         return responseEntity.getBody();

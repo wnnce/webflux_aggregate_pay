@@ -40,6 +40,13 @@ public class UnionController {
         Map<String, String> map = unionService.queryUnionOrder(orderId);
         return Mono.just(Result.success(map));
     }
+    @GetMapping("/revoke/{id}")
+    @Operation(description = "云闪付订单撤销接口")
+    @Parameter(name = "id", description = "商户系统内的订单ID", required = true)
+    public Mono<Result<Map<String, String>>> unionOrderRevoke(@PathVariable("id") String orderId){
+        Map<String, String> map = unionService.unionOrderRevoke(orderId);
+        return Mono.just(Result.success(map));
+    }
     @PostMapping("/refund")
     @Operation(description = "云闪付订单退款接口")
     public Mono<Result<Map<String, String>>> unionOrderRefund(@RequestBody @Validated(ValidationGroups.UnionRefundValidation.class) UnionParamDTO paramDTO) {
