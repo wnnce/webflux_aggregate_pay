@@ -35,14 +35,6 @@ public class UnionPayBusiness {
         ResponseEntity<String> responseEntity = sendPost(requestData, UnionConstant.TESTREFUNDURL);
         return responseEntity.getBody();
     }
-    private ResponseEntity<String> sendPost(Map<String, String> requestData, String requestUrl){
-        Map<String, String> signRequestData = UnionUtil.sign(requestData, properties.getSignCertPath(), properties.getCharset());
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-        MultiValueMap<String, String> multiValueMap = UnionUtil.mapToMultiValueMap(signRequestData);
-        HttpEntity<MultiValueMap<String, String>> entity = new HttpEntity<>(multiValueMap, headers);
-        return restTemplate.postForEntity(requestUrl, entity, String.class);
-    }
     private String createFormHtml(Map<String, String> data, String charset){
         StringBuilder sf = new StringBuilder();
         sf.append("<html><head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=").append(charset)
@@ -64,5 +56,13 @@ public class UnionPayBusiness {
         sf.append("</script>");
         sf.append("</html>");
         return sf.toString();
+    }
+    private ResponseEntity<String> sendPost(Map<String, String> requestData, String requestUrl){
+        Map<String, String> signRequestData = UnionUtil.sign(requestData, properties.getSignCertPath(), properties.getCharset());
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+        MultiValueMap<String, String> multiValueMap = UnionUtil.mapToMultiValueMap(signRequestData);
+        HttpEntity<MultiValueMap<String, String>> entity = new HttpEntity<>(multiValueMap, headers);
+        return restTemplate.postForEntity(requestUrl, entity, String.class);
     }
 }

@@ -42,7 +42,7 @@ public class UnionService {
         String result = payTemplate.confirmOrder(params, PayMethod.WAP, String.class);
         UnionService.logger.info("云闪付生成支付参数成功，订单号：{}", params.getOrderId());
         result = URLEncoder.encode(result, StandardCharsets.UTF_8);
-        return result;
+        return result.replaceAll("\\+", "%20");
     }
 
     /**
@@ -52,6 +52,20 @@ public class UnionService {
      */
     public Map<String, String> queryUnionOrder(String orderId){
         String result = payTemplate.queryOrder(orderId, null, String.class);
+        Map<String, String> map = UnionUtil.stringToMap(result, "&", "=");
+        map.remove("signPubKeyCert");
+        return map;
+    }
+    public Map<String, String> unionOrderRefund(UnionParamDTO paramDTO) {
+        if(paramDTO.getRefundTotal() > paramDTO.getTotal()){
+            throw new RuntimeException("订单退款金额不能大于订单总金额");
+        }
+        PayParams params = new PayParams.BuilderRefund()
+                .setOrderId(paramDTO.getOrderId())
+                .setRefundTotal(paramDTO.getRefundTotal())
+                .setOrderRefundId(paramDTO.getQueryId())
+                .build();
+        String result = payTemplate.refundOrder(params, String.class);
         Map<String, String> map = UnionUtil.stringToMap(result, "&", "=");
         map.remove("signPubKeyCert");
         return map;

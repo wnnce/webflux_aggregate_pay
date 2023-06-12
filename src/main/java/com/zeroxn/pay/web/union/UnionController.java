@@ -40,4 +40,10 @@ public class UnionController {
         Map<String, String> map = unionService.queryUnionOrder(orderId);
         return Mono.just(Result.success(map));
     }
+    @PostMapping("/refund")
+    @Operation(description = "云闪付订单退款接口")
+    public Mono<Result<Map<String, String>>> unionOrderRefund(@RequestBody @Validated(ValidationGroups.UnionRefundValidation.class) UnionParamDTO paramDTO) {
+        Map<String, String> map = unionService.unionOrderRefund(paramDTO);
+        return Mono.just(Result.success(map));
+    }
 }

@@ -26,7 +26,7 @@ public class UnionParamDTO {
     @Schema(description = "订单描述", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
     private String description;
     @NotBlank(message = "订单的QueryId不能为空", groups = ValidationGroups.UnionRefundValidation.class)
-    @Schema(description = "云闪付系统内交易订单的queryId，可从查询接口中获取", requiredMode = Schema.RequiredMode.REQUIRED)
+    @Schema(description = "云闪付系统内交易订单的queryId，可从查询接口中获取，订单退款时需要", requiredMode = Schema.RequiredMode.REQUIRED)
     private String queryId;
     @NotNull(message = "订单退款金额不能为空", groups = ValidationGroups.UnionRefundValidation.class)
     @Range(min = 0, message = "订单退款金额不能低于0", groups = ValidationGroups.UnionRefundValidation.class)

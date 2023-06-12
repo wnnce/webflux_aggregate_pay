@@ -9,6 +9,8 @@ import com.zeroxn.pay.module.wechat.exception.WechatPayBusinessException;
 import com.zeroxn.pay.module.wechat.exception.WechatPaySystemException;
 import com.zeroxn.pay.module.wechat.utils.WechatUtils;
 import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -26,6 +28,7 @@ import java.util.List;
  */
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+    private static final Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);
     /**
      * 处理支付宝支付业务异常
      * @param ex 支付宝支付业务异常
@@ -92,6 +95,7 @@ public class GlobalExceptionHandler {
     }
     @ExceptionHandler(Exception.class)
     public Mono<Result<String>> handlerException(Exception ex){
+        GlobalExceptionHandler.logger.error("系统错误，错误消息：{}", ex.getMessage());
         return Mono.just(Result.field(ResultCode.SYSTEM_FIELD, "系统错误"));
     }
 }
