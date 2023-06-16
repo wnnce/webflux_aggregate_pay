@@ -7,5 +7,6 @@ package com.zeroxn.pay.core.enums;
  */
 public enum PayPlatform {
     WECHAT,
-    ALIPAY
+    ALIPAY,
+    UNION
 }

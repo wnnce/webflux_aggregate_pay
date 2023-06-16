@@ -2,7 +2,10 @@ package com.zeroxn.pay.web.union;
 
 import com.zeroxn.pay.core.entity.PayParams;
 import com.zeroxn.pay.core.enums.PayMethod;
+import com.zeroxn.pay.core.enums.PayPlatform;
+import com.zeroxn.pay.core.enums.PayResult;
 import com.zeroxn.pay.core.exception.PayServiceException;
+import com.zeroxn.pay.core.mq.PayMQTemplate;
 import com.zeroxn.pay.module.union.UnionPayTemplate;
 import com.zeroxn.pay.module.union.utils.UnionUtil;
 import org.slf4j.Logger;
@@ -24,8 +27,10 @@ import java.util.Map;
 public class UnionService {
     private static final Logger logger = LoggerFactory.getLogger(UnionService.class);
     private final UnionPayTemplate payTemplate;
-    public UnionService(UnionPayTemplate payTemplate){
+    private final PayMQTemplate mqTemplate;
+    public UnionService(UnionPayTemplate payTemplate, PayMQTemplate mqTemplate){
         this.payTemplate = payTemplate;
+        this.mqTemplate = mqTemplate;
     }
 
     /**
@@ -88,5 +93,45 @@ public class UnionService {
         Map<String, String> map = UnionUtil.stringToMap(result, "&", "=");
         map.remove("signPubKeyCert");
         return map;
+    }
+
+    /**
+     * 处理云闪付异步通知
+     * @param paramsMap 通知的请求数据
+     * @return 验签成功并且
+     */
+    public boolean unionSuccessNotify(Map<String, String> paramsMap){
+        try{
+            boolean result = UnionUtil.validateSign(paramsMap);
+            if(result){
+                String orderId = paramsMap.get("orderId");
+                String resCode = paramsMap.get("respCode");
+                if("00".equals(resCode) || "A6".equals(resCode)){
+                    logger.info("校验异步通知参数成功，订单号：{}", orderId);
+                    mqTemplate.send(PayPlatform.UNION, PayResult.SUCCESS, orderId);
+                } else {
+                    logger.warn("异步通知验签成功，数据校验失败，订单号：{}，响应码：{}", orderId, resCode);
+                }
+                return true;
+            }
+        }catch (Exception ex){
+            logger.error("支付成功通知验签失败，错误消息：{}", ex.getMessage());
+        }
+        return false;
+    }
+    public boolean unionRefundNotify(Map<String, String> paramsMap){
+        try{
+            boolean result = UnionUtil.validateSign(paramsMap);
+            if(result){
+                String orderId = paramsMap.get("orderId");
+                String resCode = paramsMap.get("respCode");
+                //TODO 退款成功异步通知的应答码校验
+                logger.info("退款成功通知验签成功，订单ID：{}，应答码：{}", orderId, resCode);
+                mqTemplate.send(PayPlatform.UNION, PayResult.REFUND, orderId);
+            }
+        }catch (Exception ex){
+            logger.error("退款成功通知验签失败，错误消息：{}", ex.getMessage());
+        }
+        return false;
     }
 }

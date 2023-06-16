@@ -3,10 +3,12 @@ package com.zeroxn.pay.web.union;
 import com.zeroxn.pay.core.entity.Result;
 import com.zeroxn.pay.core.validation.ValidationGroups;
 import com.zeroxn.pay.module.union.UnionPayTemplate;
+import com.zeroxn.pay.module.union.utils.UnionUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -57,11 +59,26 @@ public class UnionController {
     @PostMapping("/notify/success")
     @Operation(description = "云闪付支付成功通知接口")
     public ResponseEntity<String> unionSuccessNotify(Map<String, String> paramsMap){
-        return null;
+        boolean result = unionService.unionSuccessNotify(paramsMap);
+        ResponseEntity<String> entity = null;
+        if (result){
+            entity = new ResponseEntity<>("OK", HttpStatus.OK);
+        }else {
+            String reqData = UnionUtil.mapToString(paramsMap, "UTF-8", true, false);
+            entity = new ResponseEntity<>(reqData, HttpStatus.BAD_REQUEST);
+        }
+        return entity;
     }
     @PostMapping("/notify/refund")
     @Operation(description = "云闪付退款成功通知接口")
     public ResponseEntity<String> unionRefundNotify(Map<String, String> paramsMap){
-        return null;
+        boolean result = unionService.unionRefundNotify(paramsMap);
+        ResponseEntity<String> entity = null;
+        if(result){
+            entity = new ResponseEntity<>(HttpStatus.OK);
+        }else {
+            entity = new ResponseEntity<>("fail", HttpStatus.BAD_REQUEST);
+        }
+        return entity;
     }
 }
