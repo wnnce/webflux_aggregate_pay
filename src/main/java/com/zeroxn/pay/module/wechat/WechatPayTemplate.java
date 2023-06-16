@@ -6,6 +6,7 @@ import com.zeroxn.pay.core.PayTemplate;
 import com.zeroxn.pay.module.wechat.business.h5.WechatPayH5Business;
 import com.zeroxn.pay.module.wechat.business.jsapi.WechatPayJsapiBusiness;
 import com.zeroxn.pay.module.wechat.business.refund.WechatRefundBusiness;
+import org.jetbrains.annotations.NotNull;
 
 
 /**
@@ -22,6 +23,12 @@ public class WechatPayTemplate implements PayTemplate {
         this.jsapiBusiness = jsapiBusiness;
         this.refundBusiness = refundBusiness;
     }
+
+    @Override
+    public String getPlatformName() {
+        return "wechat";
+    }
+
     /**
      * 下订单 下订单之前先查询当前订单号是否已经存在
      * @param param 封装下单参数

@@ -9,6 +9,7 @@ import com.zeroxn.pay.core.enums.PayMethod;
 import com.zeroxn.pay.core.exception.PaySystemException;
 import com.zeroxn.pay.core.PayTemplate;
 import com.zeroxn.pay.module.alipay.business.AlipayPayBusiness;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
 
@@ -22,6 +23,12 @@ public class AlipayPayTemplate implements PayTemplate {
     public AlipayPayTemplate(AlipayPayBusiness alipayService){
         this.alipayBusiness = alipayService;
     }
+
+    @Override
+    public String getPlatformName() {
+        return "alipay";
+    }
+
     /**
      * 支付宝下单 下单之前会先通过订单id查询订单 判断订单状态
      * @param param 封装下单参数

@@ -36,7 +36,7 @@ public class PayMQRabbitAutoConfiguration {
     public DirectExchange payDirectExchange(){
         return new DirectExchange(properties.getExchangeName());
     }
-
+    //TODO 待实现：通过获取PayTemplate接口的实现类来实现自动声明Queue和绑定关系 不再需要自己手动声明
     @Bean
     @ConditionalOnProperty(value = "pay.rabbitmq.enable-jackson", havingValue = "true")
     public MessageConverter messageConverter(){

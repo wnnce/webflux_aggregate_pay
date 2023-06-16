@@ -23,16 +23,19 @@ import org.springframework.kafka.core.KafkaTemplate;
 @ConditionalOnProperty(value = "pay.mq.kafka.enable", havingValue = "true")
 @ConditionalOnClass(KafkaTemplate.class)
 @EnableConfigurationProperties(PayMQKafkaProperties.class)
+@ConditionalOnMissingBean(PayMQTemplate.class)
 public class PayMQKafkaAutoConfiguration {
     private final PayMQKafkaProperties properties;
     public PayMQKafkaAutoConfiguration(PayMQKafkaProperties properties){
         this.properties = properties;
     }
+
+    //TODO 待实现：通过获取PayTemplate接口的实现类 来实现自动声明所有的Topic分区
     @Bean
     public NewTopic payTopic(){
         return TopicBuilder
                 .name(properties.getTopicName())
-                .partitions(3)
+                .partitions(5)
                 .replicas(1)
                 .build();
     }

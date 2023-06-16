@@ -8,6 +8,7 @@ import com.zeroxn.pay.module.union.business.UnionPayBusiness;
 import com.zeroxn.pay.module.union.config.UnionPayProperties;
 import com.zeroxn.pay.module.union.constant.UnionConstant;
 import com.zeroxn.pay.module.union.utils.UnionUtil;
+import org.jetbrains.annotations.NotNull;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -25,6 +26,12 @@ public class UnionPayTemplate implements PayTemplate {
     public UnionPayTemplate(UnionPayBusiness business, UnionPayProperties properties){
         this.properties = properties;
         this.business = business;
+    }
+
+    @NotNull
+    @Override
+    public String getPlatformName() {
+        return "union";
     }
 
     @Override

@@ -50,8 +50,14 @@ public class PayMQKafkaTemplate implements PayMQTemplate {
             }else {
                 return 1;
             }
+        }else if (platform == PayPlatform.UNION){
+            if (result == PayResult.SUCCESS){
+                return 2;
+            }else {
+                return 3;
+            }
         }else {
-            return 2;
+            return 4;
         }
     }
 }
