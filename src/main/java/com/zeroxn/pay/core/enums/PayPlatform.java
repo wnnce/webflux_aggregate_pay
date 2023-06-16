@@ -6,7 +6,14 @@ package com.zeroxn.pay.core.enums;
  * @Description: 支付平台枚举类 目前仅支持微信（WECHAT）和支付宝（ALIPAY）
  */
 public enum PayPlatform {
-    WECHAT,
-    ALIPAY,
-    UNION
+    WECHAT ("wechat"),
+    ALIPAY ("alipay"),
+    UNION ("union");
+    private final String value;
+    private PayPlatform(String value){
+        this.value = value;
+    }
+    public String getValue() {
+        return value;
+    }
 }

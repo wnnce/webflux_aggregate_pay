@@ -1,5 +1,6 @@
 package com.zeroxn.pay.core.mq.rabbit.config;
 
+import com.zeroxn.pay.core.enums.PayPlatform;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -63,22 +64,20 @@ public class PayMQRabbitProperties {
     public String getExchangeName() {
         return exchangeName;
     }
-    public String getWechatSuccessQueueName(){
-        return this.successQueueName + ".wechat";
+
+    public String getSuccessQueueName(PayPlatform platform) {
+        return this.successQueueName + "." + platform.getValue();
     }
-    public String getWechatSuccessQueueKey(){
-        return this.successQueueKey + "-wechat";
+
+    public String getSuccessQueueKey(PayPlatform platform) {
+        return this.successQueueKey + "-" + platform.getValue();
     }
-    public String getAlipaySuccessQueueName(){
-        return this.successQueueName + ".alipay";
+
+    public String getRefundQueueName(PayPlatform platform) {
+        return refundQueueName + "." + platform.getValue();
     }
-    public String getAlipaySuccessQueueKey(){
-        return this.successQueueKey + "-alipay";
-    }
-    public String getWechatRefundQueueName(){
-        return this.refundQueueName + ".wechat";
-    }
-    public String getWechatRefundQueueKey(){
-        return this.refundQueueKey + "-wechat";
+
+    public String getRefundQueueKey(PayPlatform platform) {
+        return refundQueueKey + "-" + platform.getValue();
     }
 }

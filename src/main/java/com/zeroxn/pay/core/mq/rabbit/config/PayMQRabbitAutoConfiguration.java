@@ -1,5 +1,6 @@
 package com.zeroxn.pay.core.mq.rabbit.config;
 
+import com.zeroxn.pay.core.enums.PayPlatform;
 import com.zeroxn.pay.core.mq.PayMQTemplate;
 import com.zeroxn.pay.core.mq.rabbit.PayMQRabbitTemplate;
 import org.springframework.amqp.core.Binding;
@@ -25,6 +26,7 @@ import org.springframework.context.annotation.Configuration;
 @ConditionalOnProperty(value = "pay.mq.rabbitmq.enable", havingValue = "true")
 @ConditionalOnClass(RabbitTemplate.class)
 @EnableConfigurationProperties(PayMQRabbitProperties.class)
+@ConditionalOnMissingBean(PayMQTemplate.class)
 public class PayMQRabbitAutoConfiguration {
     private final PayMQRabbitProperties properties;
     public PayMQRabbitAutoConfiguration(PayMQRabbitProperties properties){
@@ -43,35 +45,69 @@ public class PayMQRabbitAutoConfiguration {
     @Bean
     @ConditionalOnProperty(value = "pay.wechat.enable", havingValue = "true")
     public Queue wechatSuccessQueue(){
-        return new Queue(properties.getWechatRefundQueueName());
+        return new Queue(properties.getSuccessQueueName(PayPlatform.WECHAT));
     }
     @Bean
     @ConditionalOnProperty(value = "pay.wechat.enable", havingValue = "true")
     public Queue wechatRefundQueue(){
-        return new Queue(properties.getWechatSuccessQueueName());
+        return new Queue(properties.getRefundQueueName(PayPlatform.WECHAT));
     }
     @Bean
     @ConditionalOnProperty(value = "pay.alipay.enable", havingValue = "true")
     public Queue alipaySuccessQueue(){
-        return new Queue(properties.getAlipaySuccessQueueName());
+        return new Queue(properties.getSuccessQueueName(PayPlatform.ALIPAY));
+    }
+    @Bean
+    @ConditionalOnProperty(value = "pay.union.enable", havingValue = "true")
+    public Queue unionSuccessQueue(){
+        return new Queue(properties.getSuccessQueueName(PayPlatform.UNION));
+    }
+    @Bean
+    @ConditionalOnProperty(value = "pay.union.enable", havingValue = "true")
+    public Queue unionRefundQueue(){
+        return new Queue(properties.getRefundQueueName(PayPlatform.UNION));
     }
     @Bean
     @ConditionalOnBean(name = {"payDirectExchange", "wechatSuccessQueue"})
-    public Binding directBindingWechatSuccessQueue(Queue wechatSuccessQueue, DirectExchange directExchange){
-        return BindingBuilder.bind(wechatSuccessQueue).to(directExchange).with(properties.getWechatSuccessQueueKey());
+    public Binding directBindingWechatSuccessQueue(Queue wechatSuccessQueue, DirectExchange payDirectExchange){
+        return BindingBuilder
+                .bind(wechatSuccessQueue)
+                .to(payDirectExchange)
+                .with(properties.getSuccessQueueKey(PayPlatform.WECHAT));
     }
     @Bean
     @ConditionalOnBean(name = {"payDirectExchange", "wechatRefundQueue"})
-    public Binding directBindingWechatRefundQueue(Queue wechatRefundQueue, DirectExchange directExchange){
-        return BindingBuilder.bind(wechatRefundQueue).to(directExchange).with(properties.getWechatRefundQueueKey());
+    public Binding directBindingWechatRefundQueue(Queue wechatRefundQueue, DirectExchange payDirectExchange){
+        return BindingBuilder
+                .bind(wechatRefundQueue)
+                .to(payDirectExchange)
+                .with(properties.getRefundQueueKey(PayPlatform.WECHAT));
     }
     @Bean
     @ConditionalOnBean(name = {"payDirectExchange", "alipaySuccessQueue"})
-    public Binding directBindingAlipaySuccessQueue(Queue alipaySuccessQueue, DirectExchange directExchange){
-        return BindingBuilder.bind(alipaySuccessQueue).to(directExchange).with(properties.getAlipaySuccessQueueKey());
+    public Binding directBindingAlipaySuccessQueue(Queue alipaySuccessQueue, DirectExchange payDirectExchange){
+        return BindingBuilder
+                .bind(alipaySuccessQueue)
+                .to(payDirectExchange)
+                .with(properties.getSuccessQueueKey(PayPlatform.ALIPAY));
     }
     @Bean
-    @ConditionalOnMissingBean(PayMQTemplate.class)
+    @ConditionalOnBean(name = {"payDirectExchange", "unionSuccessQueue"})
+    public Binding directBindingUnionSuccessQueue(Queue unionSuccessQueue, DirectExchange payDirectExchange){
+        return BindingBuilder
+                .bind(unionSuccessQueue)
+                .to(payDirectExchange)
+                .with(properties.getSuccessQueueKey(PayPlatform.UNION));
+    }
+    @Bean
+    @ConditionalOnBean(name = {"payDirectExchange", "unionRefundQueue"})
+    public Binding directBindingUnionRefundQueue(Queue unionRefundQueue, DirectExchange payDirectExchange){
+        return BindingBuilder
+                .bind(unionRefundQueue)
+                .to(payDirectExchange)
+                .with(properties.getRefundQueueKey(PayPlatform.UNION));
+    }
+    @Bean
     public PayMQTemplate payMQRabbitTemplate(RabbitTemplate rabbitTemplate, PayMQRabbitProperties properties){
         return new PayMQRabbitTemplate(rabbitTemplate, properties);
     }
