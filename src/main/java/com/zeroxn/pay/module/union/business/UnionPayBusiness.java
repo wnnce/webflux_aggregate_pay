@@ -24,26 +24,26 @@ public class UnionPayBusiness {
     }
 
     public String wapConfirmOrder(Map<String, String> requestData){
-        Map<String, String> formData = UnionUtil.sign(requestData, properties.getSignCertPath(), properties.getCharset());
+        Map<String, String> formData = UnionUtil.sign(requestData);
         return createFormHtml(formData, properties.getCharset());
     }
     public String queryOrder(Map<String, String> requestData){
-        ResponseEntity<String> responseEntity = sendPost(requestData, UnionConstant.TESTQUERYURL);
+        ResponseEntity<String> responseEntity = sendPost(requestData, UnionConstant.TEST_QUERY_URL);
         return responseEntity.getBody();
     }
     public String wapRevokeOrder(Map<String, String> requestData){
-        ResponseEntity<String> responseEntity = sendPost(requestData, UnionConstant.TESTREFUNDURL);
+        ResponseEntity<String> responseEntity = sendPost(requestData, UnionConstant.TEST_REFUND_URL);
         return responseEntity.getBody();
     }
     public String refundOrder(Map<String, String> requestData){
-        ResponseEntity<String> responseEntity = sendPost(requestData, UnionConstant.TESTREFUNDURL);
+        ResponseEntity<String> responseEntity = sendPost(requestData, UnionConstant.TEST_REFUND_URL);
         return responseEntity.getBody();
     }
     private String createFormHtml(Map<String, String> data, String charset){
         StringBuilder sf = new StringBuilder();
         sf.append("<html><head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=").append(charset)
                 .append("\"/></head><body>");
-        sf.append("<form id = \"pay_form\" action=\"").append(UnionConstant.TESTFRONTURL).append("\" method=\"post\">");
+        sf.append("<form id = \"pay_form\" action=\"").append(UnionConstant.TEST_FRONT_URL).append("\" method=\"post\">");
         if (null != data && 0 != data.size()) {
             Set<Map.Entry<String, String>> set = data.entrySet();
             for (Map.Entry<String, String> ey : set) {
@@ -62,7 +62,7 @@ public class UnionPayBusiness {
         return sf.toString();
     }
     private ResponseEntity<String> sendPost(Map<String, String> requestData, String requestUrl){
-        Map<String, String> signRequestData = UnionUtil.sign(requestData, properties.getSignCertPath(), properties.getCharset());
+        Map<String, String> signRequestData = UnionUtil.sign(requestData);
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
         MultiValueMap<String, String> multiValueMap = UnionUtil.mapToMultiValueMap(signRequestData);

@@ -1,6 +1,10 @@
 package com.zeroxn.pay.module.union.config;
 
+import com.zeroxn.pay.module.union.constant.UnionConstant;
+import com.zeroxn.pay.module.union.utils.UnionUtil;
 import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.bind.ConstructorBinding;
@@ -14,6 +18,7 @@ import org.springframework.boot.context.properties.bind.DefaultValue;
 @ConfigurationProperties(prefix = "pay.union")
 @ConditionalOnProperty(value = "pay.union.enable", havingValue = "true")
 public class UnionPayProperties {
+    private static final Logger logger = LoggerFactory.getLogger(UnionPayProperties.class);
     /**
      * 是否开启云闪付支付
      */
@@ -26,6 +31,10 @@ public class UnionPayProperties {
      * 签名方法 01：RSA、11：SHA-256、12：SM3  默认RSA
      */
     private String signType;
+    /**
+     * 用于签名的加密字符串 SHA-256和SM3签名时必传
+     */
+    private String signKey;
     /**
      * 签名证书路径 支持 classpath:路径和绝对路径
      */
@@ -71,11 +80,12 @@ public class UnionPayProperties {
 
     @ConstructorBinding
     public UnionPayProperties(Boolean enable, @DefaultValue("UTF-8") String charset, @DefaultValue("01") String signType,
-                              @NotNull String signCertPath, @NotNull String signCertPwd, @DefaultValue("PKCS12") String signCertType,
+                              String signKey, String signCertPath,String signCertPwd, @DefaultValue("PKCS12") String signCertType,
                               String encryptCertPath, String middleCertPath, String rootCertPath, @NotNull String merchantId,
                               @DefaultValue("156") String currency, @NotNull String successNotifyUrl, @NotNull String refundNotifyUrl) throws Exception{
         this.enable = enable;
         this.charset = charset;
+        this.signKey = signKey;
         this.signType = signType;
         this.signCertPath = signCertPath;
         this.signCertPwd = signCertPwd;
@@ -87,8 +97,29 @@ public class UnionPayProperties {
         this.currency = currency;
         this.successNotifyUrl = successNotifyUrl;
         this.refundNotifyUrl = refundNotifyUrl;
+        // 验证数据是否被正确加载
+        this.initValidated();
     }
-
+    private void initValidated(){
+        if(UnionUtil.isEmpty(signType)){
+            logger.error("云闪付初始化失败，签名方式为空！");
+            throw new NullPointerException("数据签名方式不能为空");
+        }
+        if(UnionConstant.SIGN_METHOD_RSA.equals(signType)){
+            if(UnionUtil.isEmpty(signCertPath) || UnionUtil.isEmpty(signCertPwd)){
+                logger.error("云闪付初始化失败，签名方式为RSA时，签名证书路径和密码不能为空！");
+                throw new NullPointerException("签名证书路径和密码不能为空");
+            }
+        } else if (UnionConstant.SIGN_METHOD_SHA256.equals(signType) || UnionConstant.SIGN_METHOD_SM3.equals(signType)) {
+            if(UnionUtil.isEmpty(signKey)){
+                logger.error("云闪付初始化失败，签名方式为SHA-256或SM3时，密钥字符串不能为空！");
+                throw new NullPointerException("数据加密密钥字符串不能为空");
+            }
+        }else {
+            logger.error("云闪付初始化失败，不支持的加密方式");
+            throw new RuntimeException("云闪付加密方式有误");
+        }
+    }
     public Boolean getEnable() {
         return enable;
     }
@@ -99,6 +130,10 @@ public class UnionPayProperties {
 
     public String getSignType() {
         return signType;
+    }
+
+    public String getSignKey() {
+        return signKey;
     }
 
     public String getSignCertPath() {

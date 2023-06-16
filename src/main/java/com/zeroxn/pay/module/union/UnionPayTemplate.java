@@ -43,9 +43,9 @@ public class UnionPayTemplate implements PayTemplate {
         requestData.putAll(frontData);
         switch (method){
             case DESKTOP -> {
-                requestData.put("channelType", UnionConstant.DESKTOPCHANNELTYPE);
+                requestData.put("channelType", UnionConstant.DESKTOP_CHANNEL_TYPE);
             }default -> {
-                requestData.put("channelType", UnionConstant.WAPCHANNELTYPE);
+                requestData.put("channelType", UnionConstant.WAP_CHANNEL_TYPE);
                 return (T) business.wapConfirmOrder(requestData);
             }
         }
@@ -69,7 +69,7 @@ public class UnionPayTemplate implements PayTemplate {
                 Map.entry("txnSubType", "00"),
                 Map.entry("txnAmt", txnAmt),
                 Map.entry("origQryId", queryId),
-                Map.entry("channelType", UnionConstant.WAPCHANNELTYPE),
+                Map.entry("channelType", UnionConstant.WAP_CHANNEL_TYPE),
                 Map.entry("backUrl", "http://www.specialUrl.com")
         ));
         requestData.putAll(closeMap);
@@ -99,7 +99,7 @@ public class UnionPayTemplate implements PayTemplate {
                 Map.entry("txnAmt", param.getRefundTotal().toString()),
                 Map.entry("backUrl", properties.getRefundNotifyUrl()),
                 Map.entry("origQryId", param.getOrderRefundId()),
-                Map.entry("channelType", UnionConstant.DESKTOPCHANNELTYPE)
+                Map.entry("channelType", UnionConstant.DESKTOP_CHANNEL_TYPE)
         ));
         requestData.putAll(refundMap);
         return (T) business.refundOrder(requestData);
@@ -115,9 +115,9 @@ public class UnionPayTemplate implements PayTemplate {
                 Map.entry("version", UnionConstant.VERSION),
                 Map.entry("encoding", properties.getCharset()),
                 Map.entry("signMethod", properties.getSignType()),
-                Map.entry("bizType", UnionConstant.BIZTYPE),
+                Map.entry("bizType", UnionConstant.BIZ_TYPE),
                 Map.entry("merId", properties.getMerchantId()),
-                Map.entry("accessType", UnionConstant.ACCESSTYPE),
+                Map.entry("accessType", UnionConstant.ACCESS_TYPE),
                 Map.entry("txnTime", LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss")))
         ));
     }

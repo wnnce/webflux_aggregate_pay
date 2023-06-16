@@ -7,16 +7,19 @@ package com.zeroxn.pay.module.union.constant;
  */
 public class UnionConstant {
     public static final String VERSION = "5.1.0";
-    public static final String BIZTYPE = "000201";
-    public static final String ACCESSTYPE = "0";
-    public static final String DESKTOPCHANNELTYPE = "07";
-    public static final String WAPCHANNELTYPE = "08";
-    public static final String SIGNCERTTYPE = "PKCS12";
-    public static final String CERTTYPE = "X.509";
-    public static final String FRONTURL = "https://gateway.95516.com/gateway/api/frontTransReq.do";
-    public static final String TESTFRONTURL = "https://gateway.test.95516.com/gateway/api/frontTransReq.do";
-    public static final String QUERYURL = "https://gateway.95516.com/gateway/api/queryTrans.do";
-    public static final String TESTQUERYURL = "https://gateway.test.95516.com/gateway/api/queryTrans.do";
-    public static final String REFUNDURL = "https://gateway.95516.com/gateway/api/backTransReq.do";
-    public static final String TESTREFUNDURL = "https://gateway.test.95516.com/gateway/api/backTransReq.do";
+    public static final String BIZ_TYPE = "000201";
+    public static final String ACCESS_TYPE = "0";
+    public static final String DESKTOP_CHANNEL_TYPE = "07";
+    public static final String WAP_CHANNEL_TYPE = "08";
+    public static final String SIGN_CERT_TYPE = "PKCS12";
+    public static final String CERT_TYPE = "X.509";
+    public static final String SIGN_METHOD_RSA = "01";
+    public static final String SIGN_METHOD_SHA256 = "11";
+    public static final String SIGN_METHOD_SM3 = "12";
+    public static final String FRONT_URL = "https://gateway.95516.com/gateway/api/frontTransReq.do";
+    public static final String TEST_FRONT_URL = "https://gateway.test.95516.com/gateway/api/frontTransReq.do";
+    public static final String QUERY_URL = "https://gateway.95516.com/gateway/api/queryTrans.do";
+    public static final String TEST_QUERY_URL = "https://gateway.test.95516.com/gateway/api/queryTrans.do";
+    public static final String REFUND_URL = "https://gateway.95516.com/gateway/api/backTransReq.do";
+    public static final String TEST_REFUND_URL = "https://gateway.test.95516.com/gateway/api/backTransReq.do";
 }
