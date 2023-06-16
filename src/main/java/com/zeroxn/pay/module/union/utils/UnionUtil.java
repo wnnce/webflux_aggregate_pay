@@ -84,10 +84,10 @@ public class UnionUtil {
     /**
      * 云闪付后台通知验签
      * @param reqData 请求数据
-     * @param charset 编码方式
      * @return 成功返回true否则false
      */
-    public static boolean validateSign(Map<String, String> reqData, String charset) throws Exception {
+    public static boolean validateSign(Map<String, String> reqData) throws Exception {
+        String charset = reqData.get("encoding");
         if (isEmpty(charset)){
             charset = "UTF-8";
         }
