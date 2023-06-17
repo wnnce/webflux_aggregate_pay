@@ -10,7 +10,7 @@ public enum PayPlatform {
     ALIPAY ("alipay"),
     UNION ("union");
     private final String value;
-    private PayPlatform(String value){
+    PayPlatform(String value){
         this.value = value;
     }
     public String getValue() {

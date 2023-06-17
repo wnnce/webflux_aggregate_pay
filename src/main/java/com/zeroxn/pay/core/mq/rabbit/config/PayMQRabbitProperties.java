@@ -27,32 +27,22 @@ public class PayMQRabbitProperties {
      */
     private final String exchangeName;
     /**
-     * 支付成功推送消息的Queue名称，程序处理后的命名规则为 successQueueName + [.{支付平台}]，比如：success.alipay
+     * 支付成功推送消息的Queue名称，程序处理后的命名规则为 queueName + {支付平台} + {success/refund}，比如：xxx.alipay.success
      */
-    private final String successQueueName;
+    private final String queueName;
     /**
-     * 支付成功推送消息的Queue的KEY，程序处理后的命名规则为 successQueueName + [-{支付平台}]，比如：success-alipay
+     * 支付成功推送消息的Queue的KEY，程序处理后的命名规则为 queueKey + {支付平台} + {success/refund}，比如：xxx-queue-refund
      */
-    private final String successQueueKey;
-    /**
-     * 退款成功推送消息的Queue名称，命名规则同
-     */
-    private final String refundQueueName;
-    /**
-     * 退款成功推送消息的Queue的KEY
-     */
-    private final String refundQueueKey;
+    private final String queueKey;
     @ConstructorBinding
     public PayMQRabbitProperties(Boolean enable,@DefaultValue("false") Boolean enableJackson, @DefaultValue("zeroxn.pay") String exchangeName,
-                                 @DefaultValue("success") String successQueueName, @DefaultValue("su") String successQueueKey,
-                                 @DefaultValue("refund") String refundQueueName, @DefaultValue("re") String refundQueueKey){
+                                 @DefaultValue("pay") String queueName, @DefaultValue("key") String queueKey){
         this.enable = enable;
         this.enableJackson = enableJackson;
         this.exchangeName = exchangeName;
-        this.successQueueName = successQueueName;
-        this.successQueueKey = successQueueKey;
-        this.refundQueueName = refundQueueName;
-        this.refundQueueKey = refundQueueKey;
+        this.queueName = queueName;
+        this.queueKey = queueKey;
+
     }
 
     public boolean getEnable() {
@@ -64,20 +54,11 @@ public class PayMQRabbitProperties {
     public String getExchangeName() {
         return exchangeName;
     }
-
-    public String getSuccessQueueName(PayPlatform platform) {
-        return this.successQueueName + "." + platform.getValue();
+    public String getQueueName() {
+        return queueName;
     }
 
-    public String getSuccessQueueKey(PayPlatform platform) {
-        return this.successQueueKey + "-" + platform.getValue();
-    }
-
-    public String getRefundQueueName(PayPlatform platform) {
-        return refundQueueName + "." + platform.getValue();
-    }
-
-    public String getRefundQueueKey(PayPlatform platform) {
-        return refundQueueKey + "-" + platform.getValue();
+    public String getQueueKey() {
+        return queueKey;
     }
 }

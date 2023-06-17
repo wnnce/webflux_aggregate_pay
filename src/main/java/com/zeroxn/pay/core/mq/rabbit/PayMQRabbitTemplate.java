@@ -17,10 +17,13 @@ public class PayMQRabbitTemplate implements PayMQTemplate {
     private static final Logger logger = LoggerFactory.getLogger(PayMQRabbitTemplate.class);
     private final RabbitTemplate rabbitTemplate;
     private final PayMQRabbitProperties properties;
+    private final PayMQRabbitQueueManager queueManager;
 
-    public PayMQRabbitTemplate(RabbitTemplate rabbitTemplate, PayMQRabbitProperties properties) {
+    public PayMQRabbitTemplate(RabbitTemplate rabbitTemplate, PayMQRabbitProperties properties,
+                               PayMQRabbitQueueManager queueManager) {
         this.rabbitTemplate = rabbitTemplate;
         this.properties = properties;
+        this.queueManager = queueManager;
     }
 
     @Override
@@ -38,14 +41,6 @@ public class PayMQRabbitTemplate implements PayMQTemplate {
      * @return 返回路由需要的KEY
      */
     private String getQueueKey(PayPlatform platform, PayResult result) {
-        if (platform == PayPlatform.WECHAT){
-            if (result == PayResult.SUCCESS){
-                 return properties.getWechatSuccessQueueKey();
-            }else {
-                return properties.getWechatRefundQueueKey();
-            }
-        }else {
-            return properties.getAlipaySuccessQueueKey();
-        }
+        return queueManager.getQueueKey(platform, result);
     }
 }
