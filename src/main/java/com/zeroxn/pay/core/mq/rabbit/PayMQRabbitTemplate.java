@@ -16,20 +16,19 @@ import org.springframework.amqp.rabbit.core.RabbitTemplate;
 public class PayMQRabbitTemplate implements PayMQTemplate {
     private static final Logger logger = LoggerFactory.getLogger(PayMQRabbitTemplate.class);
     private final RabbitTemplate rabbitTemplate;
-    private final PayMQRabbitProperties properties;
+    private final String exchangeName;
     private final PayMQRabbitQueueManager queueManager;
 
-    public PayMQRabbitTemplate(RabbitTemplate rabbitTemplate, PayMQRabbitProperties properties,
+    public PayMQRabbitTemplate(RabbitTemplate rabbitTemplate, String exchangeName ,
                                PayMQRabbitQueueManager queueManager) {
         this.rabbitTemplate = rabbitTemplate;
-        this.properties = properties;
+        this.exchangeName = exchangeName;
         this.queueManager = queueManager;
     }
 
     @Override
     public void send(PayPlatform platform, PayResult result, String data) {
         String queueKey = getQueueKey(platform, result);
-        String exchangeName = properties.getExchangeName();
         rabbitTemplate.convertAndSend(exchangeName, queueKey, data);
         PayMQRabbitTemplate.logger.info("向RabbitMQ发送消息，路由名：{}，KEY：{}", exchangeName, queueKey);
     }

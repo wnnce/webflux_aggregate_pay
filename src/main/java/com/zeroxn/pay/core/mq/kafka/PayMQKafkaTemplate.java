@@ -18,16 +18,17 @@ import java.util.UUID;
 public class PayMQKafkaTemplate implements PayMQTemplate {
     private static final Logger logger = LoggerFactory.getLogger(PayMQKafkaTemplate.class);
     private final KafkaTemplate<String, String> kafkaTemplate;
-    private final PayMQKafkaProperties properties;
-    public PayMQKafkaTemplate(KafkaTemplate<String, String> kafkaTemplate, PayMQKafkaProperties properties) {
+    private final String topicName;
+    private final PayMQKafkaTopicManager topicManager;
+    public PayMQKafkaTemplate(KafkaTemplate<String, String> kafkaTemplate, String topicName, PayMQKafkaTopicManager topicManager) {
         this.kafkaTemplate = kafkaTemplate;
-        this.properties = properties;
+        this.topicName =topicName;
+        this.topicManager = topicManager;
     }
 
     @Override
     public void send(PayPlatform platform, PayResult result, String data) {
         int partition = getPartition(platform, result);
-        String topicName = properties.getTopicName();
         String uuid = UUID.randomUUID().toString();
         kafkaTemplate.send(topicName, partition, uuid, data).thenAccept(success -> {
             logger.info("Kafka消息发送成功，Topic：{}，Partition：{}，KEY：{}", topicName, partition, uuid);
@@ -44,20 +45,6 @@ public class PayMQKafkaTemplate implements PayMQTemplate {
      * @return Topic的Partition
      */
     private int getPartition(PayPlatform platform, PayResult result){
-        if(platform == PayPlatform.WECHAT){
-            if (result == PayResult.SUCCESS){
-                return 0;
-            }else {
-                return 1;
-            }
-        }else if (platform == PayPlatform.UNION){
-            if (result == PayResult.SUCCESS){
-                return 2;
-            }else {
-                return 3;
-            }
-        }else {
-            return 4;
-        }
+        return topicManager.getPartition(platform, result);
     }
 }

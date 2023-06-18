@@ -2,12 +2,17 @@ package com.zeroxn.pay.core.mq.kafka.config;
 
 import com.zeroxn.pay.core.mq.PayMQTemplate;
 import com.zeroxn.pay.core.mq.kafka.PayMQKafkaTemplate;
+import com.zeroxn.pay.core.mq.kafka.PayMQKafkaTopicManager;
+import com.zeroxn.pay.core.mq.kafka.runner.PayMQKafkaRunner;
+import org.apache.kafka.clients.admin.AdminClient;
 import org.apache.kafka.clients.admin.NewTopic;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.config.TopicBuilder;
@@ -30,17 +35,19 @@ public class PayMQKafkaAutoConfiguration {
         this.properties = properties;
     }
 
-    //TODO 待实现：通过获取PayTemplate接口的实现类 来实现自动声明所有的Topic分区
     @Bean
-    public NewTopic payTopic(){
-        return TopicBuilder
-                .name(properties.getTopicName())
-                .partitions(5)
-                .replicas(1)
-                .build();
+    public PayMQKafkaTopicManager payMQKafkaTopicManager(){
+        return new PayMQKafkaTopicManager();
     }
     @Bean
-    public PayMQTemplate payMQKafkaTemplate(KafkaTemplate<String, String> kafkaTemplate, PayMQKafkaProperties properties){
-        return new PayMQKafkaTemplate(kafkaTemplate, properties);
+    @ConditionalOnClass(PayMQKafkaTopicManager.class)
+    public PayMQKafkaRunner payMQKafkaRunner(ApplicationContext context, AdminClient adminClient,
+                                             PayMQKafkaTopicManager topicManager){
+        return new PayMQKafkaRunner(properties.getTopicName(), context, adminClient, topicManager);
+    }
+    @Bean
+    @ConditionalOnClass(PayMQKafkaTopicManager.class)
+    public PayMQTemplate payMQKafkaTemplate(KafkaTemplate<String, String> kafkaTemplate, PayMQKafkaTopicManager topicManager){
+        return new PayMQKafkaTemplate(kafkaTemplate, properties.getTopicName(), topicManager);
     }
 }

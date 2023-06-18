@@ -6,7 +6,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.core.AmqpAdmin;
 import org.springframework.amqp.core.Binding;
-import org.springframework.amqp.core.DirectExchange;
 import org.springframework.amqp.core.Queue;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
@@ -36,6 +35,7 @@ public class PayMQRabbitRunner implements ApplicationRunner {
     }
     @Override
     public void run(ApplicationArguments args) throws Exception {
+        logger.info("开始运行Rabbit的自动配置...");
         Map<String, PayTemplate> templateMap = context.getBeansOfType(PayTemplate.class);
         List<PayTemplate> templateList = new ArrayList<>(templateMap.values());
         logger.info("获取支付模板实现类成功，实现类数量：{}", templateList.size());
@@ -51,12 +51,13 @@ public class PayMQRabbitRunner implements ApplicationRunner {
             amqpAdmin.declareBinding(
                     new Binding(successName, Binding.DestinationType.QUEUE, exchangeName, successKey, null)
             );
-            logger.info("{}绑定Queue到Exchange成功，queueName：{}，bindingKey，：{}", name, successName, successKey);
+            logger.info("{}绑定Queue到Exchange成功，queueName：{}，bindingKey：{}", name, successName, successKey);
             amqpAdmin.declareBinding(
                     new Binding(refundName, Binding.DestinationType.QUEUE, exchangeName, refundKey, null)
             );
-            logger.info("{}绑定Queue到Exchange成功，queueName：{}，bindingKey，：{}", name, refundName, refundKey);
+            logger.info("{}绑定Queue到Exchange成功，queueName：{}，bindingKey：{}", name, refundName, refundKey);
         });
+        logger.info("Rabbit的自动配置运行结束...");
 
     }
 }

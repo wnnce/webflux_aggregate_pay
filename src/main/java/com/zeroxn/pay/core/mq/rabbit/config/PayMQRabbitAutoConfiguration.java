@@ -38,20 +38,20 @@ public class PayMQRabbitAutoConfiguration {
         return new DirectExchange(properties.getExchangeName());
     }
     @Bean
-    @ConditionalOnBean(PayMQRabbitProperties.class)
+    @ConditionalOnClass(PayMQRabbitProperties.class)
     public PayMQRabbitQueueManager payMQRabbitQueueManager(){
         return new PayMQRabbitQueueManager(properties.getQueueName(), properties.getQueueKey());
     }
     @Bean
-    @ConditionalOnBean(name = "payDirectExchange", value = PayMQRabbitQueueManager.class)
+    @ConditionalOnClass(PayMQRabbitQueueManager.class)
     public PayMQRabbitRunner payMQRabbitRunner(ApplicationContext context, AmqpAdmin amqpAdmin,
                                                PayMQRabbitQueueManager queueManager){
         return new PayMQRabbitRunner(context, properties.getExchangeName(), amqpAdmin, queueManager);
     }
     @Bean
-    @ConditionalOnBean(value = {PayMQRabbitQueueManager.class, PayMQRabbitRunner.class})
+    @ConditionalOnClass(value = {PayMQRabbitQueueManager.class, PayMQRabbitRunner.class})
     public PayMQTemplate payMQRabbitTemplate(RabbitTemplate rabbitTemplate, PayMQRabbitProperties properties,
                                              PayMQRabbitQueueManager queueManager){
-        return new PayMQRabbitTemplate(rabbitTemplate, properties, queueManager);
+        return new PayMQRabbitTemplate(rabbitTemplate, properties.getExchangeName(), queueManager);
     }
 }
