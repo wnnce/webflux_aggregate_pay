@@ -7,6 +7,7 @@ import com.zeroxn.pay.module.wechat.business.h5.WechatPayH5Business;
 import com.zeroxn.pay.module.wechat.business.jsapi.WechatPayJsapiBusiness;
 import com.zeroxn.pay.module.wechat.business.refund.WechatRefundBusiness;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.beans.factory.annotation.Qualifier;
 
 
 /**
@@ -14,6 +15,7 @@ import org.jetbrains.annotations.NotNull;
  * @DateTime: 2023/4/28 13:09
  * @Description: 微信支付交易请求处理 负责参数校验 调用下层Service方法和响应参数处理
  */
+@Qualifier("wechatPayTemplate")
 public class WechatPayTemplate implements PayTemplate {
     private final WechatPayH5Business h5Business;
     private final WechatPayJsapiBusiness jsapiBusiness;

@@ -3,7 +3,7 @@ package com.zeroxn.pay.web.union;
 import com.zeroxn.pay.core.entity.Result;
 import com.zeroxn.pay.core.validation.ValidationGroups;
 import com.zeroxn.pay.module.union.UnionPayTemplate;
-import com.zeroxn.pay.module.union.utils.UnionUtil;
+import com.zeroxn.pay.module.union.utils.UnionUtils;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -64,7 +64,7 @@ public class UnionController {
         if (result){
             entity = new ResponseEntity<>("OK", HttpStatus.OK);
         }else {
-            String reqData = UnionUtil.mapToString(paramsMap, "UTF-8", true, false);
+            String reqData = UnionUtils.mapToString(paramsMap, "UTF-8", true, false);
             entity = new ResponseEntity<>(reqData, HttpStatus.BAD_REQUEST);
         }
         return entity;

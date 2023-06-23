@@ -148,18 +148,4 @@ public class AlipayPayBusiness {
             throw new PaySystemException("支付宝退款订单查询失败");
         }
     }
-    /**
-     * 支付宝异步通知验签方法 异步通过处理参考：https://opendocs.alipay.com/open/270/105902?pathHash=d5cd617e&ref=api
-     * @param paramsMap 通知的所有参数
-     * @return true：成功 false：失败
-     */
-    public boolean signVerified(Map<String, String> paramsMap) {
-        try{
-            return AlipaySignature.rsaCheckV1(paramsMap, alipayProperties.getPublicKey(), alipayProperties.getCharSet(),
-                    alipayProperties.getSignType());
-        }catch (AlipayApiException ex){
-            logger.error("支付宝通知验签失败，错误消息：{}", ex.getMessage());
-            return false;
-        }
-    }
 }

@@ -1,5 +1,6 @@
 package com.zeroxn.pay.web.union;
 
+import com.zeroxn.pay.core.PayTemplate;
 import com.zeroxn.pay.core.entity.PayParams;
 import com.zeroxn.pay.core.enums.PayMethod;
 import com.zeroxn.pay.core.enums.PayPlatform;
@@ -7,9 +8,10 @@ import com.zeroxn.pay.core.enums.PayResult;
 import com.zeroxn.pay.core.exception.PayServiceException;
 import com.zeroxn.pay.core.mq.PayMQTemplate;
 import com.zeroxn.pay.module.union.UnionPayTemplate;
-import com.zeroxn.pay.module.union.utils.UnionUtil;
+import com.zeroxn.pay.module.union.utils.UnionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.stereotype.Service;
 
@@ -26,9 +28,9 @@ import java.util.Map;
 @ConditionalOnBean(UnionPayTemplate.class)
 public class UnionService {
     private static final Logger logger = LoggerFactory.getLogger(UnionService.class);
-    private final UnionPayTemplate payTemplate;
+    private final PayTemplate payTemplate;
     private final PayMQTemplate mqTemplate;
-    public UnionService(UnionPayTemplate payTemplate, PayMQTemplate mqTemplate){
+    public UnionService(@Qualifier("unionPayTemplate") PayTemplate payTemplate, PayMQTemplate mqTemplate){
         this.payTemplate = payTemplate;
         this.mqTemplate = mqTemplate;
     }
@@ -58,7 +60,7 @@ public class UnionService {
      */
     public Map<String, String> queryUnionOrder(String orderId){
         String result = payTemplate.queryOrder(orderId, null, String.class);
-        Map<String, String> map = UnionUtil.stringToMap(result, "&", "=");
+        Map<String, String> map = UnionUtils.stringToMap(result, "&", "=");
         map.remove("signPubKeyCert");
         return map;
     }
@@ -78,7 +80,7 @@ public class UnionService {
                 .setOrderRefundId(paramDTO.getQueryId())
                 .build();
         String result = payTemplate.refundOrder(params, String.class);
-        Map<String, String> map = UnionUtil.stringToMap(result, "&", "=");
+        Map<String, String> map = UnionUtils.stringToMap(result, "&", "=");
         map.remove("signPubKeyCert");
         return map;
     }
@@ -90,7 +92,7 @@ public class UnionService {
      */
     public Map<String, String> unionOrderRevoke(String orderId){
         String result = payTemplate.closeOrder(orderId, null, String.class);
-        Map<String, String> map = UnionUtil.stringToMap(result, "&", "=");
+        Map<String, String> map = UnionUtils.stringToMap(result, "&", "=");
         map.remove("signPubKeyCert");
         return map;
     }
@@ -102,7 +104,7 @@ public class UnionService {
      */
     public boolean unionSuccessNotify(Map<String, String> paramsMap){
         try{
-            boolean result = UnionUtil.validateSign(paramsMap);
+            boolean result = UnionUtils.validateSign(paramsMap);
             if(result){
                 String orderId = paramsMap.get("orderId");
                 String resCode = paramsMap.get("respCode");
@@ -121,7 +123,7 @@ public class UnionService {
     }
     public boolean unionRefundNotify(Map<String, String> paramsMap){
         try{
-            boolean result = UnionUtil.validateSign(paramsMap);
+            boolean result = UnionUtils.validateSign(paramsMap);
             if(result){
                 String orderId = paramsMap.get("orderId");
                 String resCode = paramsMap.get("respCode");

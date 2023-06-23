@@ -2,6 +2,7 @@ package com.zeroxn.pay.module.wechat.config;
 
 import com.wechat.pay.java.core.Config;
 import com.wechat.pay.java.core.RSAAutoCertificateConfig;
+import com.zeroxn.pay.core.PayTemplate;
 import com.zeroxn.pay.module.wechat.WechatPayTemplate;
 import com.zeroxn.pay.module.wechat.business.h5.WechatPayH5Business;
 import com.zeroxn.pay.module.wechat.business.jsapi.WechatPayJsapiBusiness;
@@ -54,7 +55,7 @@ public class WechatPayAutoConfiguration {
     }
     @Bean
     @ConditionalOnClass(value = {WechatPayH5Business.class, WechatPayJsapiBusiness.class, WechatRefundBusiness.class})
-    public WechatPayTemplate wechatPayTemplate(WechatPayH5Business h5Service, WechatPayJsapiBusiness jsapiService, WechatRefundBusiness refundService){
+    public PayTemplate wechatPayTemplate(WechatPayH5Business h5Service, WechatPayJsapiBusiness jsapiService, WechatRefundBusiness refundService){
         return new WechatPayTemplate(h5Service, jsapiService, refundService);
     }
 

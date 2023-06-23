@@ -7,8 +7,9 @@ import com.zeroxn.pay.core.exception.PayServiceException;
 import com.zeroxn.pay.module.union.business.UnionPayBusiness;
 import com.zeroxn.pay.module.union.config.UnionPayProperties;
 import com.zeroxn.pay.module.union.constant.UnionConstant;
-import com.zeroxn.pay.module.union.utils.UnionUtil;
+import com.zeroxn.pay.module.union.utils.UnionUtils;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.beans.factory.annotation.Qualifier;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -20,6 +21,7 @@ import java.util.Map;
  * @DateTime: 2023/6/1 下午7:42
  * @Description:
  */
+@Qualifier("unionPayTemplate")
 public class UnionPayTemplate implements PayTemplate {
     private final UnionPayProperties properties;
     private final UnionPayBusiness business;
@@ -62,8 +64,8 @@ public class UnionPayTemplate implements PayTemplate {
     @Override
     public <T> T closeOrder(String orderId, PayMethod method, Class<T> clazz) {
         String result = queryOrder(orderId, null, String.class);
-        Map<String, String> map = UnionUtil.stringToMap(result, "&", "=");
-        if(UnionUtil.isEmpty(map.get("queryId")) || !map.get("respMsg").contains("成功")){
+        Map<String, String> map = UnionUtils.stringToMap(result, "&", "=");
+        if(UnionUtils.isEmpty(map.get("queryId")) || !map.get("respMsg").contains("成功")){
             System.out.println(map);
             throw new PayServiceException("云闪付关闭订单失败，订单状态错误");
         }

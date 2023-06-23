@@ -5,6 +5,7 @@ import com.wechat.pay.java.service.payments.jsapi.model.PrepayWithRequestPayment
 import com.wechat.pay.java.service.payments.model.Transaction;
 import com.wechat.pay.java.service.refund.model.Refund;
 import com.wechat.pay.java.service.refund.model.RefundNotification;
+import com.zeroxn.pay.core.PayTemplate;
 import com.zeroxn.pay.core.entity.PayParams;
 import com.zeroxn.pay.core.enums.PayMethod;
 import com.zeroxn.pay.core.enums.PayPlatform;
@@ -15,6 +16,7 @@ import com.zeroxn.pay.module.wechat.WechatPayTemplate;
 import com.zeroxn.pay.module.wechat.business.parser.WechatNotifyParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.stereotype.Service;
 
@@ -27,11 +29,11 @@ import org.springframework.stereotype.Service;
 @ConditionalOnBean(WechatPayTemplate.class)
 public class WechatService {
     private static final Logger logger = LoggerFactory.getLogger(WechatService.class);
-    private final WechatPayTemplate wechatTemplate;
+    private final PayTemplate payTemplate;
     private final WechatNotifyParser notifyParser;
     private final PayMQTemplate mqTemplate;
-    public WechatService(WechatPayTemplate wechatTemplate, WechatNotifyParser notifyParser, PayMQTemplate mqTemplate){
-        this.wechatTemplate = wechatTemplate;
+    public WechatService(@Qualifier("wechatPayTemplate") PayTemplate payTemplate, WechatNotifyParser notifyParser, PayMQTemplate mqTemplate){
+        this.payTemplate = payTemplate;
         this.notifyParser = notifyParser;
         this.mqTemplate = mqTemplate;
     }
@@ -53,7 +55,7 @@ public class WechatService {
                 .setBundleId(paramDTO.getBundleId())
                 .setPackageName(paramDTO.getPackageName())
                 .build();
-        PrepayResponse response = wechatTemplate.confirmOrder(params, PayMethod.WAP, PrepayResponse.class);
+        PrepayResponse response = payTemplate.confirmOrder(params, PayMethod.WAP, PrepayResponse.class);
         logger.info("微信支付H5下单成功，订单号：{}", params.getOrderId());
         return response.getH5Url();
     }
@@ -70,7 +72,7 @@ public class WechatService {
                 .setOpenId(paramDTO.getUserId())
                 .setDescription(paramDTO.getDescription())
                 .build();
-        PrepayWithRequestPaymentResponse response = wechatTemplate.confirmOrder(params, PayMethod.APPLETS, PrepayWithRequestPaymentResponse.class);
+        PrepayWithRequestPaymentResponse response = payTemplate.confirmOrder(params, PayMethod.APPLETS, PrepayWithRequestPaymentResponse.class);
         logger.info("微信支付Jsapi下单成功，订单号：{}", params.getOrderId());
         return response;
     }
@@ -83,7 +85,7 @@ public class WechatService {
      */
     public Transaction queryWechatOrder(Integer method, String orderId){
         PayMethod payMethod = methodForMat(method);
-        Transaction transaction = wechatTemplate.queryOrder(orderId, payMethod, Transaction.class);
+        Transaction transaction = payTemplate.queryOrder(orderId, payMethod, Transaction.class);
         logger.info("微信支付订单查询成功，订单号：{}", orderId);
         return transaction;
     }
@@ -96,7 +98,7 @@ public class WechatService {
      */
     public String wechatOrderClose(Integer method, String orderId){
         PayMethod payMethod = methodForMat(method);
-        wechatTemplate.closeOrder(orderId, payMethod, null);
+        payTemplate.closeOrder(orderId, payMethod, null);
         logger.info("微信支付关闭订单成功，订单号：{}", orderId);
         return orderId;
     }
@@ -117,7 +119,7 @@ public class WechatService {
                 .setRefundTotal(paramDTO.getRefundTotal())
                 .setRefundDescription(paramDTO.getReason())
                 .build();
-        Refund refund = wechatTemplate.refundOrder(params, Refund.class);
+        Refund refund = payTemplate.refundOrder(params, Refund.class);
         logger.info("微信支付订单退款成功，订单号：{}，退款金额：{}", params.getOrderId(), params.getRefundTotal());
         return refund;
     }
@@ -128,7 +130,7 @@ public class WechatService {
      * @return 返回退款订单详情
      */
     public Refund queryWechatRefundOrder(String refundId){
-        Refund refund = wechatTemplate.queryRefundOrder(null, refundId, Refund.class);
+        Refund refund = payTemplate.queryRefundOrder(null, refundId, Refund.class);
         logger.info("微信支付查询退款订单成功，退款单号：{}", refundId);
         return refund;
     }

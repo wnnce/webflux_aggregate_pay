@@ -2,6 +2,7 @@ package com.zeroxn.pay.web.alipay;
 
 import com.alipay.api.internal.util.StringUtils;
 import com.alipay.api.response.*;
+import com.zeroxn.pay.core.PayTemplate;
 import com.zeroxn.pay.core.entity.PayParams;
 import com.zeroxn.pay.core.enums.PayMethod;
 import com.zeroxn.pay.core.enums.PayPlatform;
@@ -11,9 +12,11 @@ import com.zeroxn.pay.core.exception.PaySystemException;
 import com.zeroxn.pay.core.mq.PayMQTemplate;
 import com.zeroxn.pay.module.alipay.AlipayPayTemplate;
 import com.zeroxn.pay.module.alipay.config.AlipayPayProperties;
+import com.zeroxn.pay.module.alipay.utils.AlipayUtils;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.stereotype.Service;
 
@@ -48,10 +51,10 @@ public class AlipayService {
             Map.entry("ACQ.REFUND_AMT_NOT_EQUAL_TOTAL", "退款金额超限"),
             Map.entry("ACQ.ONLINE_TRADE_VOUCHER_NOT_ALLOW_REFUND", "交易不支持退款")
     );
-    private final AlipayPayTemplate payTemplate;
+    private final PayTemplate payTemplate;
     private final AlipayPayProperties alipayProperties;
     private final PayMQTemplate mqTemplate;
-    public AlipayService(AlipayPayTemplate payTemplate, AlipayPayProperties alipayProperties, PayMQTemplate mqTemplate){
+    public AlipayService(@Qualifier("alipayPayTemplate") PayTemplate payTemplate, AlipayPayProperties alipayProperties, PayMQTemplate mqTemplate){
         this.payTemplate = payTemplate;
         this.alipayProperties = alipayProperties;
         this.mqTemplate = mqTemplate;
@@ -206,7 +209,7 @@ public class AlipayService {
      * @return 返回 success 或者 field
      */
     public String alipayNotifyVerified(Map<String, String> paramsMap){
-        if(payTemplate.notifySignVerified(paramsMap)){
+        if(AlipayUtils.signVerified(paramsMap, alipayProperties.getPublicKey(), alipayProperties.getCharSet(), alipayProperties.getSignType())){
             String orderId = paramsMap.get("out_trade_no");
             AlipayTradeQueryResponse response = queryAlipayOrder(orderId);
             if (response != null && response.getTotalAmount().equals(paramsMap.get("total_amount"))){

@@ -1,5 +1,6 @@
 package com.zeroxn.pay.module.union.config;
 
+import com.zeroxn.pay.core.PayTemplate;
 import com.zeroxn.pay.module.union.UnionPayTemplate;
 import com.zeroxn.pay.module.union.business.UnionPayBusiness;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
@@ -36,7 +37,7 @@ public class UnionPayAutoConfiguration {
     }
     @Bean
     @ConditionalOnClass(UnionPayBusiness.class)
-    public UnionPayTemplate unionPayTemplate(UnionPayBusiness unionPayBusiness, UnionPayProperties unionPayProperties){
+    public PayTemplate unionPayTemplate(UnionPayBusiness unionPayBusiness, UnionPayProperties unionPayProperties){
         return new UnionPayTemplate(unionPayBusiness, unionPayProperties);
     }
 }

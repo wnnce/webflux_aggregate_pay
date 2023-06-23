@@ -4,6 +4,7 @@ import com.alipay.api.AlipayApiException;
 import com.alipay.api.AlipayClient;
 import com.alipay.api.AlipayConfig;
 import com.alipay.api.DefaultAlipayClient;
+import com.zeroxn.pay.core.PayTemplate;
 import com.zeroxn.pay.module.alipay.AlipayPayTemplate;
 import com.zeroxn.pay.module.alipay.business.AlipayPayBusiness;
 import org.jetbrains.annotations.NotNull;
@@ -44,7 +45,7 @@ public class AlipayPayAutoConfiguration {
     }
     @Bean
     @ConditionalOnClass(AlipayPayBusiness.class)
-    public AlipayPayTemplate alipayPayTemplate(AlipayPayBusiness alipayPayBusiness){
+    public PayTemplate alipayPayTemplate(AlipayPayBusiness alipayPayBusiness){
         return new AlipayPayTemplate(alipayPayBusiness);
     }
 }

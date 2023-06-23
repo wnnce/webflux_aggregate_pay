@@ -10,6 +10,7 @@ import com.zeroxn.pay.core.exception.PaySystemException;
 import com.zeroxn.pay.core.PayTemplate;
 import com.zeroxn.pay.module.alipay.business.AlipayPayBusiness;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.beans.factory.annotation.Qualifier;
 
 import java.util.Map;
 
@@ -18,6 +19,7 @@ import java.util.Map;
  * @DateTime: 2023/4/28 08:47
  * @Description: 支付宝交易请求处理 负责参数校验 调用Service层方法和响应参数处理
  */
+@Qualifier("alipayPayTemplate")
 public class AlipayPayTemplate implements PayTemplate {
     private final AlipayPayBusiness alipayBusiness;
     public AlipayPayTemplate(AlipayPayBusiness alipayService){
@@ -122,9 +124,5 @@ public class AlipayPayTemplate implements PayTemplate {
     @Override
     public <T> T queryRefundOrder(String orderId, String orderRefundId, Class<T> clazz) {
         return (T) alipayBusiness.queryRefund(orderId, orderRefundId);
-    }
-
-    public boolean notifySignVerified(Map<String, String> paramsMap){
-        return alipayBusiness.signVerified(paramsMap);
     }
 }

@@ -2,7 +2,7 @@ package com.zeroxn.pay.module.union.business;
 
 import com.zeroxn.pay.module.union.config.UnionPayProperties;
 import com.zeroxn.pay.module.union.constant.UnionConstant;
-import com.zeroxn.pay.module.union.utils.UnionUtil;
+import com.zeroxn.pay.module.union.utils.UnionUtils;
 import org.springframework.http.*;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
@@ -24,7 +24,7 @@ public class UnionPayBusiness {
     }
 
     public String wapConfirmOrder(Map<String, String> requestData){
-        Map<String, String> formData = UnionUtil.sign(requestData);
+        Map<String, String> formData = UnionUtils.sign(requestData);
         return createFormHtml(formData, properties.getCharset());
     }
     public String queryOrder(Map<String, String> requestData){
@@ -62,10 +62,10 @@ public class UnionPayBusiness {
         return sf.toString();
     }
     private ResponseEntity<String> sendPost(Map<String, String> requestData, String requestUrl){
-        Map<String, String> signRequestData = UnionUtil.sign(requestData);
+        Map<String, String> signRequestData = UnionUtils.sign(requestData);
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-        MultiValueMap<String, String> multiValueMap = UnionUtil.mapToMultiValueMap(signRequestData);
+        MultiValueMap<String, String> multiValueMap = UnionUtils.mapToMultiValueMap(signRequestData);
         HttpEntity<MultiValueMap<String, String>> entity = new HttpEntity<>(multiValueMap, headers);
         return restTemplate.postForEntity(requestUrl, entity, String.class);
     }

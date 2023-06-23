@@ -1,7 +1,7 @@
 package com.zeroxn.pay.module.union.config;
 
 import com.zeroxn.pay.module.union.constant.UnionConstant;
-import com.zeroxn.pay.module.union.utils.UnionUtil;
+import com.zeroxn.pay.module.union.utils.UnionUtils;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -101,17 +101,17 @@ public class UnionPayProperties {
         this.initValidated();
     }
     private void initValidated(){
-        if(UnionUtil.isEmpty(signType)){
+        if(UnionUtils.isEmpty(signType)){
             logger.error("云闪付初始化失败，签名方式为空！");
             throw new NullPointerException("数据签名方式不能为空");
         }
         if(UnionConstant.SIGN_METHOD_RSA.equals(signType)){
-            if(UnionUtil.isEmpty(signCertPath) || UnionUtil.isEmpty(signCertPwd)){
+            if(UnionUtils.isEmpty(signCertPath) || UnionUtils.isEmpty(signCertPwd)){
                 logger.error("云闪付初始化失败，签名方式为RSA时，签名证书路径和密码不能为空！");
                 throw new NullPointerException("签名证书路径和密码不能为空");
             }
         } else if (UnionConstant.SIGN_METHOD_SHA256.equals(signType) || UnionConstant.SIGN_METHOD_SM3.equals(signType)) {
-            if(UnionUtil.isEmpty(signKey)){
+            if(UnionUtils.isEmpty(signKey)){
                 logger.error("云闪付初始化失败，签名方式为SHA-256或SM3时，密钥字符串不能为空！");
                 throw new NullPointerException("数据加密密钥字符串不能为空");
             }

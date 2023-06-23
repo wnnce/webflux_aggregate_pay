@@ -2,7 +2,7 @@ package com.zeroxn.pay.module.union.config;
 
 import com.zeroxn.pay.core.exception.PaySystemException;
 import com.zeroxn.pay.module.union.utils.UnionCert;
-import com.zeroxn.pay.module.union.utils.UnionUtil;
+import com.zeroxn.pay.module.union.utils.UnionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,14 +25,14 @@ public class UnionPayCertManager {
     }
     private void init(String certPassword, String ...certPath) throws Exception{
         for (String path : certPath){
-            if(UnionUtil.isEmpty(path)){
+            if(UnionUtils.isEmpty(path)){
                 continue;
             }
             UnionCert unionCert = null;
             if (path.endsWith(".pfx")){
-                unionCert = UnionUtil.readerCertByPfx(path, certPassword);
+                unionCert = UnionUtils.readerCertByPfx(path, certPassword);
             } else if (path.endsWith(".cer")) {
-                unionCert = UnionUtil.readerCertByCer(path);
+                unionCert = UnionUtils.readerCertByCer(path);
             }else {
                 UnionPayCertManager.logger.error("证书路径格式错误，错误路径：{}", path);
                 throw new PaySystemException("云闪付初始化失败");

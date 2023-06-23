@@ -30,13 +30,13 @@ import java.util.*;
  */
 @Component
 @ConditionalOnClass(UnionPayCertManager.class)
-public class UnionUtil {
-    private static final Logger logger = LoggerFactory.getLogger(UnionUtil.class);
+public class UnionUtils {
+    private static final Logger logger = LoggerFactory.getLogger(UnionUtils.class);
     private static UnionPayCertManager certManager;
     private static UnionPayProperties properties;
     @Autowired
     public void setUnionPayCertManager(UnionPayCertManager certManager){
-        UnionUtil.certManager = certManager;
+        UnionUtils.certManager = certManager;
     }
     /**
      * 过滤Map中的空Value键值对
@@ -76,7 +76,7 @@ public class UnionUtil {
                 return signBySm3(filterMap, signKey, charset);
             }
         }catch (Exception ex){
-            UnionUtil.logger.error("请求数据签名失败，错误消息：{}", ex.getMessage());
+            UnionUtils.logger.error("请求数据签名失败，错误消息：{}", ex.getMessage());
             throw new PaySystemException("云闪付参数签名失败");
         }
     }
@@ -140,12 +140,12 @@ public class UnionUtil {
      * @throws Exception
      */
     private static Map<String, String> signByRsa(Map<String, String> data, String certPath, String charset) throws Exception {
-        String certId = UnionUtil.certManager.getCertId(certPath);
+        String certId = UnionUtils.certManager.getCertId(certPath);
         data.put("certId", certId);
         String reqStr = mapToString(data, charset, true, false);
         byte[] bytes = sha256(reqStr.getBytes(charset));
         String sha256Hex = bytesToHexString(bytes).toLowerCase();
-        String signature = Base64.getEncoder().encodeToString(signatureSHA256(UnionUtil.certManager.getPrivateKey(certPath), sha256Hex.getBytes()));
+        String signature = Base64.getEncoder().encodeToString(signatureSHA256(UnionUtils.certManager.getPrivateKey(certPath), sha256Hex.getBytes()));
         data.put("signature", signature);
         return data;
     }
@@ -196,14 +196,14 @@ public class UnionUtil {
                 Collections.sort(keyList);
             for (String key : keyList) {
                 String value = data.get(key);
-                if(isEncode && !UnionUtil.isEmpty(value)){
+                if(isEncode && !UnionUtils.isEmpty(value)){
                     value = URLEncoder.encode(value, charset);
                 }
                 builder.append(key).append("=").append(value).append("&");
             }
             return builder.substring(0, builder.length() - 1);
         }catch (UnsupportedEncodingException ex){
-            UnionUtil.logger.error("Map集合转字符串失败，错误消息：{}", ex.getMessage());
+            UnionUtils.logger.error("Map集合转字符串失败，错误消息：{}", ex.getMessage());
             throw new PaySystemException("云闪付返回参数转换失败");
         }
     }

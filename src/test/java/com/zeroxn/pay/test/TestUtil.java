@@ -3,14 +3,12 @@ package com.zeroxn.pay.test;
 import com.zeroxn.pay.core.entity.PayParams;
 import com.zeroxn.pay.core.enums.PayMethod;
 import com.zeroxn.pay.module.union.UnionPayTemplate;
-import com.zeroxn.pay.module.union.utils.UnionUtil;
+import com.zeroxn.pay.module.union.utils.UnionUtils;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.core.ParameterizedTypeReference;
 
 import java.io.UnsupportedEncodingException;
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -37,7 +35,7 @@ public class TestUtil {
     @Test
     public void testUnionQueryOrder(){
         String result = unionPayTemplate.queryOrder("236623432453453", null, String.class);
-        Map<String, String> map = UnionUtil.stringToMap(result, "&", "=");
+        Map<String, String> map = UnionUtils.stringToMap(result, "&", "=");
         System.out.println(map);
     }
     @Test
