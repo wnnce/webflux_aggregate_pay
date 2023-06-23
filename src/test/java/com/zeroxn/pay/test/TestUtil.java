@@ -1,11 +1,13 @@
 package com.zeroxn.pay.test;
 
+import com.zeroxn.pay.core.PayTemplate;
 import com.zeroxn.pay.core.entity.PayParams;
 import com.zeroxn.pay.core.enums.PayMethod;
 import com.zeroxn.pay.module.union.UnionPayTemplate;
 import com.zeroxn.pay.module.union.utils.UnionUtils;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.io.UnsupportedEncodingException;
@@ -19,7 +21,8 @@ import java.util.Map;
 @SpringBootTest
 public class TestUtil {
     @Autowired
-    private UnionPayTemplate unionPayTemplate;
+    @Qualifier("unionPayTemplate")
+    private PayTemplate payTemplate;
 
     @Test
     public void testMapFormatString() throws UnsupportedEncodingException {
@@ -29,12 +32,12 @@ public class TestUtil {
                 .setDescription("测试")
                 .setFrontUrl("http://xx")
                 .build();
-        String result = unionPayTemplate.confirmOrder(params, PayMethod.WAP, String.class);
+        String result = payTemplate.confirmOrder(params, PayMethod.WAP, String.class);
         System.out.println(result);
     }
     @Test
     public void testUnionQueryOrder(){
-        String result = unionPayTemplate.queryOrder("236623432453453", null, String.class);
+        String result = payTemplate.queryOrder("236623432453453", null, String.class);
         Map<String, String> map = UnionUtils.stringToMap(result, "&", "=");
         System.out.println(map);
     }
@@ -47,7 +50,7 @@ public class TestUtil {
                 .setRefundTotal(50)
                 .setRefundDescription("退款")
                 .build();
-        String result = unionPayTemplate.refundOrder(params, String.class);
+        String result = payTemplate.refundOrder(params, String.class);
         System.out.println(result);
     }
 }
