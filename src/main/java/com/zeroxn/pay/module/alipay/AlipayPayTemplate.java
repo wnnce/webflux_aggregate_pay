@@ -6,10 +6,10 @@ import com.alipay.api.domain.AlipayTradeRefundModel;
 import com.alipay.api.domain.AlipayTradeWapPayModel;
 import com.zeroxn.pay.core.entity.PayParams;
 import com.zeroxn.pay.core.enums.PayMethod;
+import com.zeroxn.pay.core.enums.PayPlatform;
 import com.zeroxn.pay.core.exception.PaySystemException;
 import com.zeroxn.pay.core.PayTemplate;
 import com.zeroxn.pay.module.alipay.business.AlipayPayBusiness;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Qualifier;
 
 import java.util.Map;
@@ -28,7 +28,7 @@ public class AlipayPayTemplate implements PayTemplate {
 
     @Override
     public String getPlatformName() {
-        return "alipay";
+        return PayPlatform.ALIPAY.getValue();
     }
 
     /**

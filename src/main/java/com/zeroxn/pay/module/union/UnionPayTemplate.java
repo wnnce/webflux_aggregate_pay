@@ -3,6 +3,7 @@ package com.zeroxn.pay.module.union;
 import com.zeroxn.pay.core.PayTemplate;
 import com.zeroxn.pay.core.entity.PayParams;
 import com.zeroxn.pay.core.enums.PayMethod;
+import com.zeroxn.pay.core.enums.PayPlatform;
 import com.zeroxn.pay.core.exception.PayServiceException;
 import com.zeroxn.pay.module.union.business.UnionPayBusiness;
 import com.zeroxn.pay.module.union.config.UnionPayProperties;
@@ -33,7 +34,7 @@ public class UnionPayTemplate implements PayTemplate {
     @NotNull
     @Override
     public String getPlatformName() {
-        return "union";
+        return PayPlatform.UNION.getValue();
     }
 
     @Override

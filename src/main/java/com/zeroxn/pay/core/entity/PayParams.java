@@ -15,7 +15,7 @@ public class PayParams {
      */
     private String orderRefundId;
     /**
-     * 用户id 微信下单参数叫做 openId 支付宝下单参数叫做 buyer_id
+     * 商户系统内用户的唯一id 微信下单参数叫做 openId 支付宝下单参数叫做 buyer_id
      */
     private String userId;
     /**

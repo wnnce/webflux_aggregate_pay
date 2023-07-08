@@ -3,10 +3,10 @@ package com.zeroxn.pay.module.wechat;
 import com.zeroxn.pay.core.entity.PayParams;
 import com.zeroxn.pay.core.enums.PayMethod;
 import com.zeroxn.pay.core.PayTemplate;
+import com.zeroxn.pay.core.enums.PayPlatform;
 import com.zeroxn.pay.module.wechat.business.h5.WechatPayH5Business;
 import com.zeroxn.pay.module.wechat.business.jsapi.WechatPayJsapiBusiness;
 import com.zeroxn.pay.module.wechat.business.refund.WechatRefundBusiness;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Qualifier;
 
 
@@ -28,7 +28,7 @@ public class WechatPayTemplate implements PayTemplate {
 
     @Override
     public String getPlatformName() {
-        return "wechat";
+        return PayPlatform.WECHAT.getValue();
     }
 
     /**
