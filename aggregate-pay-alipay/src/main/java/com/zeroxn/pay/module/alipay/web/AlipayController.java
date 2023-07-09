@@ -60,7 +60,7 @@ public class AlipayController {
         return Mono.just(Result.success(response));
     }
 
-    @PostMapping("/close/{id}")
+    @PutMapping("/close/{id}")
     @Operation(summary = "支付宝订单关闭接口")
     @Parameter(name = "id", description = "商户系统内的订单ID", required = true)
     public Mono<Result<String>> closeAlipayOrder(@PathVariable("id") String orderId){

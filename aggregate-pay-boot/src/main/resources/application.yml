@@ -1,0 +1,32 @@
+server:
+  port: 8081
+spring:
+  mvc:
+    static-path-pattern: classpath:/static
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: root
+    password: admin
+    virtual-host: /
+logging:
+  pattern:
+    dateformat: yyyy-MM-dd HH:mm:ss:SSS
+  level:
+    root: info
+springdoc:
+  swagger-ui:
+    path: /pay/swagger-ui.html
+  packages-to-scan: com.zeroxn.pay.module
+pay:
+  union:
+    enable: true
+    merchant-id: 777290058203758
+    sign-cert-path: classpath:certs/acp_test_sign.pfx
+    sign-cert-pwd: '000000'
+    sign-type: '01'
+    success-notify-url: http://xxx.123.com
+    refund-notify-url: http://xxx.213.com
+  mq:
+    rabbitmq:
+      enable: true

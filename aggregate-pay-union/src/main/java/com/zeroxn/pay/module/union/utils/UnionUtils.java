@@ -4,6 +4,7 @@ import com.zeroxn.pay.core.exception.PaySystemException;
 import com.zeroxn.pay.module.union.config.UnionPayCertManager;
 import com.zeroxn.pay.module.union.config.UnionPayProperties;
 import com.zeroxn.pay.module.union.constant.UnionConstant;
+import org.bouncycastle.crypto.digests.SM3Digest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

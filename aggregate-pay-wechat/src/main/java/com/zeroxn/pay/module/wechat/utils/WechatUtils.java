@@ -31,6 +31,7 @@ public class WechatUtils {
             Map.entry("NO_AUTH", "没有退款权限"),
             Map.entry("RESOURCE_NOT_EXISTS", "退款单查询失败")
     );
+
     public static void serviceExceptionHandler(ServiceException ex){
         int statusCode = ex.getHttpStatusCode();
         String errorCode = ex.getErrorCode();

@@ -105,7 +105,7 @@ public class WechatController {
      * @param refundId 商户系统内的订单退款ID
      * @return 返回退款订单详情
      */
-    @PostMapping("/refund/{id}")
+    @GetMapping ("/refund/{id}")
     @Operation(summary = "微信支付查询退款订单接口")
     @Parameter(name = "id", description = "商户系统内的订单退款单号", required = true)
     public Mono<Result<Refund>> queryWechatRefundOrder(@PathVariable("id") String refundId){

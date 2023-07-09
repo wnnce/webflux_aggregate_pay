@@ -24,7 +24,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/pay/union")
 @Tag(name = "云闪付支付接口")
-@ConditionalOnBean(UnionPayTemplate.class)
+@ConditionalOnBean(name = "unionPayTemplate")
 public class UnionController {
     private final UnionService unionService;
     public UnionController(UnionService unionService){
@@ -43,7 +43,7 @@ public class UnionController {
         Map<String, String> map = unionService.queryUnionOrder(orderId);
         return Mono.just(Result.success(map));
     }
-    @GetMapping("/revoke/{id}")
+    @PutMapping("/revoke/{id}")
     @Operation(description = "云闪付订单撤销接口")
     @Parameter(name = "id", description = "商户系统内的订单ID", required = true)
     public Mono<Result<Map<String, String>>> unionOrderRevoke(@PathVariable("id") String orderId){

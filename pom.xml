@@ -20,7 +20,7 @@
         <module>aggregate-pay-jdpay</module>
         <module>aggregate-pay-core</module>
         <module>aggregate-pay-test</module>
-        <module>aggregate-pay-amqp</module>
+        <module>aggregate-pay-boot</module>
     </modules>
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
@@ -44,6 +44,7 @@
                 <groupId>org.springdoc</groupId>
                 <artifactId>springdoc-openapi-starter-common</artifactId>
                 <version>${spring-doc.version}</version>
+                <scope>provided</scope>
             </dependency>
             <dependency>
                 <groupId>com.alipay.sdk</groupId>
@@ -60,28 +61,12 @@
                 <artifactId>bcprov-jdk15on</artifactId>
                 <version>${bcprox-jdk15on.version}</version>
             </dependency>
+            <dependency>
+                <groupId>org.jetbrains</groupId>
+                <artifactId>annotations</artifactId>
+                <version>${jetbrains.version}</version>
+                <scope>compile</scope>
+            </dependency>
         </dependencies>
     </dependencyManagement>
-    <dependencies>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-webflux</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-validation</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-configuration-processor</artifactId>
-            <optional>true</optional>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.jetbrains</groupId>
-            <artifactId>annotations</artifactId>
-            <version>${jetbrains.version}</version>
-            <scope>compile</scope>
-        </dependency>
-    </dependencies>
 </project>

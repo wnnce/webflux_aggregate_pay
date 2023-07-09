@@ -1,11 +1,9 @@
 package com.zeroxn.pay.core.exception.handler;
 
-import com.wechat.pay.java.core.exception.ServiceException;
 import com.zeroxn.pay.core.entity.Result;
 import com.zeroxn.pay.core.enums.ResultCode;
 import com.zeroxn.pay.core.exception.PayServiceException;
 import com.zeroxn.pay.core.exception.PaySystemException;
-import com.zeroxn.pay.module.wechat.utils.WechatUtils;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -63,10 +61,6 @@ public class GlobalExceptionHandler {
         String[] messages = allErrors.stream().map(ObjectError::getDefaultMessage).toArray(String[]::new);
         String errorMessage = String.join(",", messages);
         return Mono.just(Result.field(ResultCode.REQUEST_FIELD, errorMessage));
-    }
-    @ExceptionHandler(ServiceException.class)
-    public void handlerServiceException(ServiceException ex){
-        WechatUtils.serviceExceptionHandler(ex);
     }
     @ExceptionHandler(Exception.class)
     public Mono<Result<String>> handlerException(Exception ex){
