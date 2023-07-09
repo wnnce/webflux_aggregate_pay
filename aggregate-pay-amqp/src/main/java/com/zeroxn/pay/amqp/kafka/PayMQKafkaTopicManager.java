@@ -1,4 +1,4 @@
-package com.zeroxn.pay.core.mq.kafka;
+package com.zeroxn.pay.amqp.kafka;
 
 import com.zeroxn.pay.core.enums.PayPlatform;
 import com.zeroxn.pay.core.enums.PayResult;

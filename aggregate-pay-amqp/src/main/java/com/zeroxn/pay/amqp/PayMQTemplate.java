@@ -1,4 +1,4 @@
-package com.zeroxn.pay.core.mq;
+package com.zeroxn.pay.amqp;
 
 import com.zeroxn.pay.core.enums.PayPlatform;
 import com.zeroxn.pay.core.enums.PayResult;

@@ -20,6 +20,7 @@
         <module>aggregate-pay-jdpay</module>
         <module>aggregate-pay-core</module>
         <module>aggregate-pay-test</module>
+        <module>aggregate-pay-amqp</module>
     </modules>
     <properties>
         <maven.compiler.source>17</maven.compiler.source>

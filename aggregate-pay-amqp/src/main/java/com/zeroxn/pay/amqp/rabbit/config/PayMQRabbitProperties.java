@@ -1,4 +1,4 @@
-package com.zeroxn.pay.core.mq.rabbit.config;
+package com.zeroxn.pay.amqp.rabbit.config;
 
 import com.zeroxn.pay.core.enums.PayPlatform;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;

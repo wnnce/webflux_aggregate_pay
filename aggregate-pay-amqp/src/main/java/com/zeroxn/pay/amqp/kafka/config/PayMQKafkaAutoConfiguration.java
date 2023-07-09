@@ -1,13 +1,12 @@
-package com.zeroxn.pay.core.mq.kafka.config;
+package com.zeroxn.pay.amqp.kafka.config;
 
-import com.zeroxn.pay.core.mq.PayMQTemplate;
-import com.zeroxn.pay.core.mq.kafka.PayMQKafkaTemplate;
-import com.zeroxn.pay.core.mq.kafka.PayMQKafkaTopicManager;
-import com.zeroxn.pay.core.mq.kafka.runner.PayMQKafkaRunner;
+import com.zeroxn.pay.amqp.PayMQTemplate;
+import com.zeroxn.pay.amqp.kafka.PayMQKafkaTemplate;
+import com.zeroxn.pay.amqp.kafka.PayMQKafkaTopicManager;
+import com.zeroxn.pay.amqp.kafka.runner.PayMQKafkaRunner;
 import org.apache.kafka.clients.admin.AdminClient;
 import org.apache.kafka.clients.admin.NewTopic;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;

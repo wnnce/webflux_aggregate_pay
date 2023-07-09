@@ -1,7 +1,7 @@
-package com.zeroxn.pay.core.mq.kafka.runner;
+package com.zeroxn.pay.amqp.kafka.runner;
 
 import com.zeroxn.pay.core.PayTemplate;
-import com.zeroxn.pay.core.mq.kafka.PayMQKafkaTopicManager;
+import com.zeroxn.pay.amqp.kafka.PayMQKafkaTopicManager;
 import org.apache.kafka.clients.admin.AdminClient;
 import org.apache.kafka.clients.admin.NewTopic;
 import org.slf4j.Logger;

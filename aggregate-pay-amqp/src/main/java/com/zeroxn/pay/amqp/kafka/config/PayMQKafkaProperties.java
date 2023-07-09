@@ -1,4 +1,4 @@
-package com.zeroxn.pay.core.mq.kafka.config;
+package com.zeroxn.pay.amqp.kafka.config;
 
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;

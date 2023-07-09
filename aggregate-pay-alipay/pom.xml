@@ -24,6 +24,11 @@
             <version>1.0.0</version>
         </dependency>
         <dependency>
+            <groupId>com.zeroxn.pay</groupId>
+            <artifactId>aggregate-pay-amqp</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+        <dependency>
             <groupId>com.alipay.sdk</groupId>
             <artifactId>alipay-sdk-java</artifactId>
         </dependency>

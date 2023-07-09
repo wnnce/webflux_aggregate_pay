@@ -1,7 +1,7 @@
-package com.zeroxn.pay.core.mq.rabbit.runner;
+package com.zeroxn.pay.amqp.rabbit.runner;
 
 import com.zeroxn.pay.core.PayTemplate;
-import com.zeroxn.pay.core.mq.rabbit.PayMQRabbitQueueManager;
+import com.zeroxn.pay.amqp.rabbit.PayMQRabbitQueueManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.core.AmqpAdmin;

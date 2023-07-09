@@ -9,7 +9,7 @@ import com.zeroxn.pay.core.enums.PayPlatform;
 import com.zeroxn.pay.core.enums.PayResult;
 import com.zeroxn.pay.core.exception.PayServiceException;
 import com.zeroxn.pay.core.exception.PaySystemException;
-import com.zeroxn.pay.core.mq.PayMQTemplate;
+import com.zeroxn.pay.amqp.PayMQTemplate;
 import com.zeroxn.pay.module.alipay.AlipayPayTemplate;
 import com.zeroxn.pay.module.alipay.config.AlipayPayProperties;
 import com.zeroxn.pay.module.alipay.utils.AlipayUtils;

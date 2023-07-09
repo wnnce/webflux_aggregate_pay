@@ -6,7 +6,7 @@ import com.zeroxn.pay.core.enums.PayMethod;
 import com.zeroxn.pay.core.enums.PayPlatform;
 import com.zeroxn.pay.core.enums.PayResult;
 import com.zeroxn.pay.core.exception.PayServiceException;
-import com.zeroxn.pay.core.mq.PayMQTemplate;
+import com.zeroxn.pay.amqp.PayMQTemplate;
 import com.zeroxn.pay.module.union.UnionPayTemplate;
 import com.zeroxn.pay.module.union.utils.UnionUtils;
 import org.slf4j.Logger;

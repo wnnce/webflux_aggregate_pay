@@ -1,10 +1,10 @@
-package com.zeroxn.pay.core.mq.rabbit.config;
+package com.zeroxn.pay.amqp.rabbit.config;
 
 import com.zeroxn.pay.core.enums.PayPlatform;
-import com.zeroxn.pay.core.mq.PayMQTemplate;
-import com.zeroxn.pay.core.mq.rabbit.PayMQRabbitQueueManager;
-import com.zeroxn.pay.core.mq.rabbit.PayMQRabbitTemplate;
-import com.zeroxn.pay.core.mq.rabbit.runner.PayMQRabbitRunner;
+import com.zeroxn.pay.amqp.PayMQTemplate;
+import com.zeroxn.pay.amqp.rabbit.PayMQRabbitQueueManager;
+import com.zeroxn.pay.amqp.rabbit.PayMQRabbitTemplate;
+import com.zeroxn.pay.amqp.rabbit.runner.PayMQRabbitRunner;
 import org.springframework.amqp.core.*;
 import org.springframework.amqp.rabbit.core.RabbitAdmin;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
