@@ -1,9 +1,11 @@
 package com.zeroxn.pay.module.paypal.scheduled;
 
-import com.zeroxn.pay.module.paypal.async.PaypalAsyncTask;
+import com.zeroxn.pay.module.paypal.business.PaypalBusiness;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Scheduled;
+
+import java.util.concurrent.CompletableFuture;
 
 /**
  * @Author: lisang
@@ -12,13 +14,13 @@ import org.springframework.scheduling.annotation.Scheduled;
  */
 public class TokenInterval {
     private static final Logger logger = LoggerFactory.getLogger(TokenInterval.class);
-    private final PaypalAsyncTask asyncTask;
-    public TokenInterval(PaypalAsyncTask asyncTask) {
-        this.asyncTask = asyncTask;
+    private final PaypalBusiness paypalBusiness;
+    public TokenInterval(PaypalBusiness paypalBusiness) {
+        this.paypalBusiness = paypalBusiness;
     }
     @Scheduled(cron = "0 */4 * * *")
     public void execute() {
         logger.info("开始定时获取PaypalToken....");
-        asyncTask.initAuthorizationToken();
+        CompletableFuture.runAsync(paypalBusiness::initAuthorizationToken);
     }
 }

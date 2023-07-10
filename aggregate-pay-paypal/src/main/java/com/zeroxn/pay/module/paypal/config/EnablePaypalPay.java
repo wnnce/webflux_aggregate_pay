@@ -14,7 +14,6 @@ import java.lang.annotation.*;
 @Target({ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-@EnableAsync
 @EnableScheduling
 @Import(PaypalAutoConfiguration.class)
 public @interface EnablePaypalPay {

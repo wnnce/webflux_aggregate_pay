@@ -26,7 +26,7 @@ public class PaypalBusiness {
     }
 
     @Async
-    public void getAuthorizationToken() {
+    public void initAuthorizationToken() {
         HttpHeaders headers = new HttpHeaders();
         headers.setBasicAuth(properties.getClientId(), properties.getSecret());
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
