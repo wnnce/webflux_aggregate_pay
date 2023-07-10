@@ -5,9 +5,11 @@ import com.alipay.api.AlipayClient;
 import com.alipay.api.AlipayConfig;
 import com.alipay.api.DefaultAlipayClient;
 import com.zeroxn.pay.core.PayTemplate;
+import com.zeroxn.pay.core.config.PayAutoConfiguration;
 import com.zeroxn.pay.module.alipay.AlipayPayTemplate;
 import com.zeroxn.pay.module.alipay.business.AlipayPayBusiness;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -20,12 +22,13 @@ import org.springframework.context.annotation.Configuration;
  * @DateTime: 2023/5/18 下午8:10
  * @Description: 支付宝支付自动配置类
  */
-
-@Configuration
-@AutoConfigureBefore(AlipayPayAutoConfiguration.class)
-@ConditionalOnProperty(value = "pay.alipay.enable", havingValue = "true")
+@AutoConfigureBefore(PayAutoConfiguration.class)
 @EnableConfigurationProperties(AlipayPayProperties.class)
 public class AlipayPayAutoConfiguration {
+    @Bean
+    public AlipayModuleConfig alipayModuleConfig() {
+        return new AlipayModuleConfig();
+    }
     @Bean
     @ConditionalOnClass(AlipayPayProperties.class)
     public AlipayClient alipayClient(@NotNull AlipayPayProperties alipayPayProperties) throws AlipayApiException {
@@ -39,12 +42,10 @@ public class AlipayPayAutoConfiguration {
         return new DefaultAlipayClient(config);
     }
     @Bean
-    @ConditionalOnClass(AlipayClient.class)
     public AlipayPayBusiness alipayPayBusiness(AlipayClient alipayClient, AlipayPayProperties alipayPayProperties){
         return new AlipayPayBusiness(alipayClient, alipayPayProperties);
     }
     @Bean
-    @ConditionalOnClass(AlipayPayBusiness.class)
     public PayTemplate alipayPayTemplate(AlipayPayBusiness alipayPayBusiness){
         return new AlipayPayTemplate(alipayPayBusiness);
     }

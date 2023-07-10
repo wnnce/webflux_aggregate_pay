@@ -12,12 +12,7 @@ import org.springframework.boot.context.properties.bind.DefaultValue;
  * @Description: 支付宝支付配置类 其他bean都依赖这个bean pay.enable.true属性为true才会自动注入 否则其他bean都不会注入
  */
 @ConfigurationProperties(prefix = "pay.alipay")
-@ConditionalOnProperty(value = "pay.alipay.enable", havingValue = "true")
 public class AlipayPayProperties {
-    /**
-     * 是否开启支付宝支付功能
-     */
-    private Boolean enable;
     /**
      * 支付宝appid
      */
@@ -56,11 +51,10 @@ public class AlipayPayProperties {
     private String notifyUrl;
     public AlipayPayProperties(){}
     @ConstructorBinding
-    public AlipayPayProperties(Boolean enable, @NotNull String appId, @NotNull String privateKey, @NotNull String publicKey,
+    public AlipayPayProperties(@NotNull String appId, @NotNull String privateKey, @NotNull String publicKey,
                                @DefaultValue("JSON") String format, @DefaultValue("RSA2") String signType, @DefaultValue("UTF-8") String charSet,
                                @DefaultValue("https://openapi-sandbox.dl.alipaydev.com/gateway.do") String serverUrl,
                                String sellerId, String notifyUrl) {
-        this.enable = enable;
         this.appId = appId;
         this.privateKey = privateKey;
         this.publicKey = publicKey;
@@ -72,9 +66,6 @@ public class AlipayPayProperties {
         this.notifyUrl = notifyUrl;
     }
 
-    public Boolean getEnable() {
-        return enable;
-    }
 
     public String getAppId() {
         return appId;

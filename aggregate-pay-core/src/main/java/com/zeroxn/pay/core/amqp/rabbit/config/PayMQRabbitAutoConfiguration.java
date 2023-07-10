@@ -4,11 +4,15 @@ import com.zeroxn.pay.core.amqp.PayMQTemplate;
 import com.zeroxn.pay.core.amqp.rabbit.PayMQRabbitQueueManager;
 import com.zeroxn.pay.core.amqp.rabbit.PayMQRabbitTemplate;
 import com.zeroxn.pay.core.amqp.rabbit.runner.PayMQRabbitRunner;
+import com.zeroxn.pay.core.config.ModuleRegistry;
+import com.zeroxn.pay.core.config.PayAutoConfiguration;
 import org.springframework.amqp.core.*;
 import org.springframework.amqp.rabbit.core.RabbitAdmin;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.amqp.support.converter.MessageConverter;
+import org.springframework.boot.autoconfigure.AutoConfiguration;
+import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.condition.*;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -22,7 +26,7 @@ import org.springframework.context.annotation.Configuration;
  * @Description: RabbitMQ自动配置交换机和消息队列
  */
 @Configuration
-@AutoConfigureBefore(PayMQRabbitAutoConfiguration.class)
+@AutoConfigureAfter(PayAutoConfiguration.class)
 @ConditionalOnProperty(value = "pay.mq.rabbitmq.enable", havingValue = "true")
 @ConditionalOnClass(RabbitTemplate.class)
 @EnableConfigurationProperties(PayMQRabbitProperties.class)
@@ -43,9 +47,9 @@ public class PayMQRabbitAutoConfiguration {
     }
     @Bean
     @ConditionalOnClass(PayMQRabbitQueueManager.class)
-    public PayMQRabbitRunner payMQRabbitRunner(ApplicationContext context, AmqpAdmin amqpAdmin,
+    public PayMQRabbitRunner payMQRabbitRunner(ModuleRegistry moduleRegistry, AmqpAdmin amqpAdmin,
                                                PayMQRabbitQueueManager queueManager){
-        return new PayMQRabbitRunner(context, properties.getExchangeName(), amqpAdmin, queueManager);
+        return new PayMQRabbitRunner(moduleRegistry, properties.getExchangeName(), amqpAdmin, queueManager);
     }
     @Bean
     @ConditionalOnClass(value = {PayMQRabbitQueueManager.class, PayMQRabbitRunner.class})

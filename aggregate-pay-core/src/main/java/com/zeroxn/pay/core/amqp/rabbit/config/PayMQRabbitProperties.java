@@ -20,6 +20,9 @@ public class PayMQRabbitProperties {
      * 是否开启RabbitMQ消息队列 需要先引入依赖
      */
     private final Boolean enable;
+    /**
+     * 是否开启JackSon支持
+     */
     private final Boolean enableJackson;
     /**
      * DirectExchange交换机名称

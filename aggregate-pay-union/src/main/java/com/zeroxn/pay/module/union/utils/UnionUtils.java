@@ -8,6 +8,7 @@ import org.bouncycastle.crypto.digests.SM3Digest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.stereotype.Component;
 import org.springframework.util.LinkedMultiValueMap;
@@ -30,7 +31,7 @@ import java.util.stream.Collectors;
  * @Description:
  */
 @Component
-@ConditionalOnClass(UnionPayCertManager.class)
+@ConditionalOnBean(UnionPayCertManager.class)
 public class UnionUtils {
     private static final Logger logger = LoggerFactory.getLogger(UnionUtils.class);
     private static UnionPayCertManager certManager;

@@ -20,7 +20,6 @@ springdoc:
   packages-to-scan: com.zeroxn.pay.module
 pay:
   union:
-    enable: true
     merchant-id: 777290058203758
     sign-cert-path: classpath:certs/acp_test_sign.pfx
     sign-cert-pwd: '000000'

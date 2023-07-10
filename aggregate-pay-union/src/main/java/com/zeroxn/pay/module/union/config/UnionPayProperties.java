@@ -5,7 +5,6 @@ import com.zeroxn.pay.module.union.utils.UnionUtils;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.bind.ConstructorBinding;
 import org.springframework.boot.context.properties.bind.DefaultValue;
@@ -16,13 +15,8 @@ import org.springframework.boot.context.properties.bind.DefaultValue;
  * @Description: 云闪付配置类
  */
 @ConfigurationProperties(prefix = "pay.union")
-@ConditionalOnProperty(value = "pay.union.enable", havingValue = "true")
 public class UnionPayProperties {
     private static final Logger logger = LoggerFactory.getLogger(UnionPayProperties.class);
-    /**
-     * 是否开启云闪付支付
-     */
-    private Boolean enable;
     /**
      * 编码方式 支持UTF-8和GBK 默认UTF-8
      */
@@ -79,11 +73,10 @@ public class UnionPayProperties {
     public UnionPayProperties(){}
 
     @ConstructorBinding
-    public UnionPayProperties(Boolean enable, @DefaultValue("UTF-8") String charset, @DefaultValue("01") String signType,
+    public UnionPayProperties(@DefaultValue("UTF-8") String charset, @DefaultValue("01") String signType,
                               String signKey, String signCertPath,String signCertPwd, @DefaultValue("PKCS12") String signCertType,
                               String encryptCertPath, String middleCertPath, String rootCertPath, @NotNull String merchantId,
                               @DefaultValue("156") String currency, @NotNull String successNotifyUrl, @NotNull String refundNotifyUrl) throws Exception{
-        this.enable = enable;
         this.charset = charset;
         this.signKey = signKey;
         this.signType = signType;
@@ -119,9 +112,6 @@ public class UnionPayProperties {
             logger.error("云闪付初始化失败，不支持的加密方式");
             throw new RuntimeException("云闪付加密方式有误");
         }
-    }
-    public Boolean getEnable() {
-        return enable;
     }
 
     public String getCharset() {

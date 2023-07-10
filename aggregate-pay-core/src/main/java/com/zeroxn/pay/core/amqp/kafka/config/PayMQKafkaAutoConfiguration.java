@@ -6,6 +6,7 @@ import com.zeroxn.pay.core.amqp.kafka.PayMQKafkaTopicManager;
 import com.zeroxn.pay.core.amqp.kafka.runner.PayMQKafkaRunner;
 import org.apache.kafka.clients.admin.AdminClient;
 import org.apache.kafka.clients.admin.NewTopic;
+import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -22,8 +23,7 @@ import org.springframework.kafka.core.KafkaTemplate;
  * @DateTime: 2023/5/22 下午9:57
  * @Description:
  */
-@Configuration
-@AutoConfigureBefore(PayMQKafkaAutoConfiguration.class)
+@AutoConfiguration
 @ConditionalOnProperty(value = "pay.mq.kafka.enable", havingValue = "true")
 @ConditionalOnClass(KafkaTemplate.class)
 @EnableConfigurationProperties(PayMQKafkaProperties.class)
