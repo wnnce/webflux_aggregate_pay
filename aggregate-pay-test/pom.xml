@@ -20,13 +20,7 @@
     <dependencies>
         <dependency>
             <groupId>com.zeroxn.pay</groupId>
-            <artifactId>aggregate-pay-core</artifactId>
-            <version>1.0.0</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.zeroxn.pay</groupId>
-            <artifactId>aggregate-pay-union</artifactId>
+            <artifactId>aggregate-pay-boot</artifactId>
             <version>1.0.0</version>
         </dependency>
         <dependency>

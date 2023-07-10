@@ -1,5 +1,6 @@
 package com.zeroxn.pay.module.paypal.config;
 
+import org.jetbrains.annotations.NotNull;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.bind.ConstructorBinding;
@@ -11,9 +12,7 @@ import org.springframework.boot.context.properties.bind.DefaultValue;
  * @Description: Paypal支付参数类
  */
 @ConfigurationProperties("pay.paypal")
-@ConditionalOnProperty(value = "pay.paypal.enable", havingValue = "true")
 public class PaypalProperties {
-    private final Boolean enable;
     /**
      * 商户账号ID
      */
@@ -31,12 +30,37 @@ public class PaypalProperties {
      */
     private final String notifyUrl;
 
+    private String token;
+
     @ConstructorBinding
-    public PaypalProperties(Boolean enable, String clientId, String secret, @DefaultValue("CNY") String currency, String notifyUrl) {
-        this.enable = enable;
+    public PaypalProperties(@NotNull String clientId,@NotNull String secret, @DefaultValue("CNY") String currency, String notifyUrl) {
         this.clientId = clientId;
         this.secret = secret;
         this.currency = currency;
         this.notifyUrl = notifyUrl;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
+
+    public String getClientId() {
+        return clientId;
+    }
+
+    public String getSecret() {
+        return secret;
+    }
+
+    public String getCurrency() {
+        return currency;
+    }
+
+    public String getNotifyUrl() {
+        return notifyUrl;
     }
 }

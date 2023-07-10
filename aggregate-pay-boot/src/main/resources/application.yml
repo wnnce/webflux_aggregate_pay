@@ -26,6 +26,10 @@ pay:
     sign-type: '01'
     success-notify-url: http://xxx.123.com
     refund-notify-url: http://xxx.213.com
+  paypal:
+    client-id: 'AepSvAFACXR9Hn47x0y3k1djxEZcyddsu38-1lljCc46QL7qDPnzumLVHd0jGQP6j4nusHJn-vilViKN'
+    secret: 'EOlieRfkze-IeEEbT1tvYsVXUXncs0UYHoXeKIW4fUOrL3Mjmw5a-bpWj7nhHW93f624U6QXnO2YZ9uC'
+    notify-url: 'https://baidu.com'
   mq:
     rabbitmq:
       enable: true
