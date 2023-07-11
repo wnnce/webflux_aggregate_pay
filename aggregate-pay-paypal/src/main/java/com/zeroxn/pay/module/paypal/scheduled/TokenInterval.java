@@ -18,7 +18,7 @@ public class TokenInterval {
     public TokenInterval(PaypalBusiness paypalBusiness) {
         this.paypalBusiness = paypalBusiness;
     }
-    @Scheduled(cron = "0 */4 * * *")
+    @Scheduled(cron = "0 0 */4 * * *")
     public void execute() {
         logger.info("开始定时获取PaypalToken....");
         CompletableFuture.runAsync(paypalBusiness::initAuthorizationToken);
