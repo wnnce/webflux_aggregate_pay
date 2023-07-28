@@ -31,12 +31,6 @@ public class UnionPayTemplate implements PayTemplate {
         this.business = business;
     }
 
-    @NotNull
-    @Override
-    public String getPlatformName() {
-        return PayPlatform.UNION.getValue();
-    }
-
     @Override
     public <T> T confirmOrder(PayParams param, PayMethod method, Class<T> clazz) {
         Map<String, String> requestData = this.generateBaseRequestData();

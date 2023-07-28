@@ -5,7 +5,7 @@ import org.springframework.util.Assert;
 /**
  * @Author: lisang
  * @DateTime: 2023/7/9 下午11:07
- * @Description:
+ * @Description: 支付模块注册器
  */
 public class ModuleRegistration {
     private final String moduleName;

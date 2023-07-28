@@ -26,10 +26,6 @@ public class WechatPayTemplate implements PayTemplate {
         this.refundBusiness = refundBusiness;
     }
 
-    @Override
-    public String getPlatformName() {
-        return PayPlatform.WECHAT.getValue();
-    }
 
     /**
      * 下订单 下订单之前先查询当前订单号是否已经存在

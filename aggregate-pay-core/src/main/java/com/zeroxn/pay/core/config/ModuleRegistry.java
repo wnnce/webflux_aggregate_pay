@@ -15,10 +15,18 @@ public class ModuleRegistry {
 
     }
 
+    /**
+     * 添加模块
+     * @param moduleName 模块名称
+     */
     public void addModule(String moduleName) {
         registrationList.add(new ModuleRegistration(moduleName));
     }
 
+    /**
+     * 获取模块列表
+     * @return 返回模块名称列表
+     */
     public List<String> getModuleNames() {
         return registrationList.stream().map(ModuleRegistration::getModuleName).toList();
     }

@@ -17,7 +17,6 @@ logging:
 springdoc:
   swagger-ui:
     path: /pay/swagger-ui.html
-  packages-to-scan: com.zeroxn.pay.module
 pay:
   union:
     merchant-id: 777290058203758

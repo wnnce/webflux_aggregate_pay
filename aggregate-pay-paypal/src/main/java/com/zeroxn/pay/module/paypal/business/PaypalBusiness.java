@@ -25,7 +25,6 @@ public class PaypalBusiness {
         this.restTemplate = restTemplate;
     }
 
-    @Async
     public void initAuthorizationToken() {
         HttpHeaders headers = new HttpHeaders();
         headers.setBasicAuth(properties.getClientId(), properties.getSecret());

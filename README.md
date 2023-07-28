@@ -1,78 +1,99 @@
 # 一个基于`Spring-Webflux`的聚合支付模块
 
-从一个聚合支付的工具代码迁移而来，准备做成独立的模块。通过请求对应的接口来调用对应的支付平台的功能，支付成功或退款成功的通知通过消息队列实现。
+基于`Spring-Flux`的聚合支付模块，可以作为独立的支付模块使用，实现了支付平台使用的模块化和插拔式。目前支持微信支付、支付宝、云闪付，后面预计将支持（"Paypal、京东支付"）
 
-**暂停更新 预计添加京东支付和云闪付**
+## 快速开始
 
-## 如何使用
+项目分为启动模块、核心模块、支付平台模块三部分
 
-1. 补全`com.zeroxn.pay.module`包内所有子包`XXXXConstant`常量类中的参数
+- 启动模块：项目整体的启动、编写配置文件
+- 核心模块：项目核心配置类、消息队列、项目异常和异常处理、枚举和参数验证
+- 支付平台模块：各支付平台的具体实现
 
-2. 新建`ApiAdapter`对象，使用`PayParam`类中的构造器构造请求参数对象，**只要是构造器需要的参数都是必须的**
+消息队列有`RabbitMQ`和`Kafka`两种实现，需要搭建好消息队列并在配置文件中启用，如果同时启用两个那么会以`RabbitMQ`优先
 
-3. 调用`ApiAdapter`对象中的对应方法，某些方法可能需要传入泛型。
+项目启动后可以通过[http://localhost:8081/pay/swagger-ui.html](http://localhost:8081/pay/swagger-ui.html)查看项目的接口文档，接口文档使用`Sping-doc`实现
+
+1. `Clone`该项目
+
+```bash
+git clone https://github.com/wnnce/webflux_aggregate_pay.git
+```
+
+2. 使用`Idea`打开项目，拉取`maven`依赖
+
+3. 配置`RabbitMQ`或`Kafka`环境
+
+4. 在项目启动类添加`Enablexxx`注解，开启某个支付平台的自动配置
 
    ```java
-   // 下单方法的泛型
-   // AlipayTradeCreateResponse.class 支付宝小程序支付
-   // AlipayTradeWapPayResponse.class 支付宝WAP手机网站支付
-   // AlipayTradePagePayResponse.class 支付宝电脑端网站下单
-   // PrepayResponse.class 微信H5下单
-   // PrepayWithRequestPaymentResponse.class 微信小程序下单
-   
-   // 查询订单方法的泛型
-   // AlipayTradeQueryResponse.class 查询支付宝订单
-   // Transaction.class 查询微信订单
-   
-   // 退款订单的泛型
-   // Refund.class 微信支付退款
-   // AlipayTradeRefundResponse.class 支付宝退款
-   
-   // 查询退款订单的泛型
-   // Refund.class 查询微信支付退款订单
-   // AlipayTradeFastpayRefundQueryResponse.class 查询支付宝支付退款订单
+   @SpringBootApplication
+   // 开启云闪付支付
+   @EnableUnionPay
+   public class PayApplication {
+       public static void main(String[] args) {
+           SpringApplication.run(PayApplication.class);
+       }
+   }
    ```
 
-4. `XXXXHandler`类中的错误处理可能需要按照业务逻辑更改
+5. 修改配置文件
 
-## 异步通知解密
+   ```yaml
+   pay:
+     # 云闪付的配置项
+     union:
+       merchant-id: 777290058203758
+       sign-cert-path: classpath:certs/acp_test_sign.pfx
+       sign-cert-pwd: '000000'
+       sign-type: '01'
+       success-notify-url: http://xxx.123.com
+       refund-notify-url: http://xxx.213.com
+     mq:
+     	# 使用RabbitMQ作为消息队列的实现
+       rabbitmq:
+         enable: true
+   ```
 
-### 微信异步通知
+6. 启动项目并查看接口文档
 
-需要在`Controller`层新建两个接口用来接收微信支付成功和退款成功的异步回调通知，通知解密方法封装在了`WechatPayUtils`类中
+## 添加支付平台
 
-[官方文档](https://pay.weixin.qq.com/wiki/doc/apiv3/apis/chapter3_1_5.shtml)
+如果需要添加其它的支付平台，核心模块中定义了支付的顶级接口`PayTemplate`和支付模块配置接口`PayModuleConfigurer`，实现`PayTemplate`接口用于实现该平台的具体支付逻辑，然后再实现`PayModuleConfigurer`接口中的方法，用于向核心包注册当前模块。最后在完成`Web`接口和接口文档注释即可
 
 ```java
-// 一个请求示例
-
-/**
-  * 接收支付成功后微信服务器发送的回调通知
-  * @param requestBody 请求体
-  * @param signTure 请求头
-  * @param nonce 请求头 随机字符串
-  * @param timestamp 请求头 时间戳
-  * @param serial 请求头 解密需要的参数
-  * @param signType 请求头 加密方式
-  */
-//@PostMapping("/notify/success")
-public void paySuccessNotify(@RequestBody String requestBody, 
-                             @RequestHeader("Wechatpay-Signature") String signTure,
-                             @RequestHeader("Wechatpay-Nonce") String nonce,
-                             @RequestHeader("Wechatpay-Timestamp") String timestamp,
-                             @RequestHeader("Wechatpay-Serial") String serial,
-                             @RequestHeader("Wechatpay-Signature-Type") String signType){
-    // 得到通知对象
-    Transaction transaction = WeChatPayUtils.successNotifyDecrypt(signTure, signType, 
-                                                                  nonce, timestamp, serial, requestBody);
-    payService.orderPaySuccess(transaction);
+// 顶级支付模板接口
+public interface PayTemplate {
+    <T> T confirmOrder(PayParams param, PayMethod method, Class<T> clazz);
+    <T> T closeOrder(String orderId, PayMethod method, Class<T> clazz);
+    <T> T queryOrder(String orderId, PayMethod method, Class<T> clazz);
+    <T> T refundOrder(PayParams param, Class<T> clazz);
+    <T> T queryRefundOrder(String orderId, String orderRefundId, Class<T> clazz);
 }
 ```
 
-### 支付宝异步通知
+```java
+// 实现PayModuleConfigurer接口 向核心模块注册当前接口 后续会添加更多配置
+public class WechatModuleConfig implements PayModuleConfigurer {
+    @Override
+    public void addModule(ModuleRegistry registry) {
+        registry.addModule("wechat");
+    }
+}
+```
 
-[官方文档](https://opendocs.alipay.com/open/270/105902?pathHash=d5cd617e&ref=api)，只封装了通知内容验签的方法，封装在`AlipayUtils`类中
+```java
+// 开启模块注解的实现 当Spring扫描到这个注解后 就会通过引入的自动配置类来实现支付平台的自动配置
+@Target({ElementType.TYPE})
+@Retention(RetentionPolicy.RUNTIME)
+@Documented
+@ConditionalOnClass(Config.class)
+// 引入微信支付自动配置类
+@Import(WechatPayAutoConfiguration.class)
+public @interface EnableWechatPay {
+}
+```
 
 ## 最后
 
-测试支付方法所需的参数没法获取，所以无法测试。
+项目是从一个多平台支付的工具代码迁移过来的，最初的愿景是实现一个基于`Spring-flux`的聚合支付模块，暂时先实现基础的支付功能。（随缘开发，暑假做项目）

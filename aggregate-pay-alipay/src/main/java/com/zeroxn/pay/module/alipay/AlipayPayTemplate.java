@@ -26,11 +26,6 @@ public class AlipayPayTemplate implements PayTemplate {
         this.alipayBusiness = alipayService;
     }
 
-    @Override
-    public String getPlatformName() {
-        return PayPlatform.ALIPAY.getValue();
-    }
-
     /**
      * 支付宝下单 下单之前会先通过订单id查询订单 判断订单状态
      * @param param 封装下单参数
