@@ -4,7 +4,7 @@ spring:
   mvc:
     static-path-pattern: classpath:/static
   rabbitmq:
-    host: localhost
+    host: 10.10.10.10
     port: 5672
     username: root
     password: admin
@@ -29,6 +29,7 @@ pay:
     client-id: 'AepSvAFACXR9Hn47x0y3k1djxEZcyddsu38-1lljCc46QL7qDPnzumLVHd0jGQP6j4nusHJn-vilViKN'
     secret: 'EOlieRfkze-IeEEbT1tvYsVXUXncs0UYHoXeKIW4fUOrL3Mjmw5a-bpWj7nhHW93f624U6QXnO2YZ9uC'
     notify-url: 'https://baidu.com'
+    currency: USD
   mq:
     rabbitmq:
       enable: true

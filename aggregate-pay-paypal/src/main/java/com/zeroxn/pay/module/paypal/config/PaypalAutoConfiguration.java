@@ -21,6 +21,10 @@ import java.util.concurrent.CompletableFuture;
 public class PaypalAutoConfiguration {
 
     @Bean
+    public PaypalModuleConfig paypalModuleConfig() {
+        return new PaypalModuleConfig();
+    }
+    @Bean
     @ConditionalOnMissingBean(RestTemplate.class)
     public RestTemplate restTemplate() {
         return new RestTemplate();

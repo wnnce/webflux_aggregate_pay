@@ -30,7 +30,7 @@ public class PaypalProperties {
      */
     private final String notifyUrl;
 
-    private String token;
+    private String token = "A21AAJgxrcGnpSgI-peNk8dY61rHeD6vHFGJeYjkkfAEeuBRMPIUt1m51WbOr4cDnqBGRigY0otwPyzaYROvNPBEC8lE8Ufsg";
 
     @ConstructorBinding
     public PaypalProperties(@NotNull String clientId,@NotNull String secret, @DefaultValue("CNY") String currency, String notifyUrl) {
