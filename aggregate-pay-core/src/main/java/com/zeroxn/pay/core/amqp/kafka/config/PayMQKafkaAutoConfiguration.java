@@ -4,6 +4,7 @@ import com.zeroxn.pay.core.amqp.PayMQTemplate;
 import com.zeroxn.pay.core.amqp.kafka.PayMQKafkaTemplate;
 import com.zeroxn.pay.core.amqp.kafka.PayMQKafkaTopicManager;
 import com.zeroxn.pay.core.amqp.kafka.runner.PayMQKafkaRunner;
+import com.zeroxn.pay.core.config.ModuleRegistry;
 import org.apache.kafka.clients.admin.AdminClient;
 import org.apache.kafka.clients.admin.NewTopic;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
@@ -40,9 +41,9 @@ public class PayMQKafkaAutoConfiguration {
     }
     @Bean
     @ConditionalOnClass(PayMQKafkaTopicManager.class)
-    public PayMQKafkaRunner payMQKafkaRunner(ApplicationContext context, AdminClient adminClient,
+    public PayMQKafkaRunner payMQKafkaRunner(ModuleRegistry moduleRegistry, AdminClient adminClient,
                                              PayMQKafkaTopicManager topicManager){
-        return new PayMQKafkaRunner(properties.getTopicName(), context, adminClient, topicManager);
+        return new PayMQKafkaRunner(properties.getTopicName(), moduleRegistry, adminClient, topicManager);
     }
     @Bean
     @ConditionalOnClass(PayMQKafkaTopicManager.class)

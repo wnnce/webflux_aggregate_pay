@@ -2,6 +2,7 @@ package com.zeroxn.pay.core.amqp.kafka.runner;
 
 import com.zeroxn.pay.core.PayTemplate;
 import com.zeroxn.pay.core.amqp.kafka.PayMQKafkaTopicManager;
+import com.zeroxn.pay.core.config.ModuleRegistry;
 import org.apache.kafka.clients.admin.AdminClient;
 import org.apache.kafka.clients.admin.NewTopic;
 import org.slf4j.Logger;
@@ -23,12 +24,12 @@ import java.util.Map;
  */
 public class PayMQKafkaRunner implements ApplicationRunner {
     private static final Logger logger = LoggerFactory.getLogger(PayMQKafkaRunner.class);
-    private final ApplicationContext context;
+    private final ModuleRegistry moduleRegistry;
     private final PayMQKafkaTopicManager topicManager;
     private final AdminClient adminClient;
     private final String topicName;
-    public PayMQKafkaRunner(String topicName, ApplicationContext context, AdminClient adminClient, PayMQKafkaTopicManager topicManager){
-        this.context = context;
+    public PayMQKafkaRunner(String topicName, ModuleRegistry moduleRegistry, AdminClient adminClient, PayMQKafkaTopicManager topicManager){
+        this.moduleRegistry = moduleRegistry;
         this.adminClient = adminClient;
         this.topicManager = topicManager;
         this.topicName = topicName;
@@ -36,12 +37,9 @@ public class PayMQKafkaRunner implements ApplicationRunner {
     @Override
     public void run(ApplicationArguments args) throws Exception {
         logger.info("开始运行Kafka的自动配置...");
-        Map<String, PayTemplate> templateMap = context.getBeansOfType(PayTemplate.class);
-        List<PayTemplate> templateList = new ArrayList<>(templateMap.values());
-        logger.info("获取支付模板实现类成功，实现类数量：{}", templateList.size());
-        templateList.forEach(template -> {
-            topicManager.add(template.getPlatformName());
-        });
+        List<String> moduleNames = moduleRegistry.getModuleNames();
+        logger.info("获取支付模块成功，模块数量：{}", moduleNames.size());
+        moduleNames.forEach(topicManager::add);
         int partitionSize = topicManager.getPartitionSize();
         NewTopic newTopic = TopicBuilder
                 .name(topicName)
