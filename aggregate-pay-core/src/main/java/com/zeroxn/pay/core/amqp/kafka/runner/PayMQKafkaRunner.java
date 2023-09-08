@@ -1,6 +1,5 @@
 package com.zeroxn.pay.core.amqp.kafka.runner;
 
-import com.zeroxn.pay.core.PayTemplate;
 import com.zeroxn.pay.core.amqp.kafka.PayMQKafkaTopicManager;
 import com.zeroxn.pay.core.config.ModuleRegistry;
 import org.apache.kafka.clients.admin.AdminClient;
@@ -9,13 +8,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
-import org.springframework.context.ApplicationContext;
 import org.springframework.kafka.config.TopicBuilder;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @Author: lisang

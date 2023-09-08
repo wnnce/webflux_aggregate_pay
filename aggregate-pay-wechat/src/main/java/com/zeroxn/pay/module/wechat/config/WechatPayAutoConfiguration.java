@@ -9,13 +9,10 @@ import com.zeroxn.pay.module.wechat.business.h5.WechatPayH5Business;
 import com.zeroxn.pay.module.wechat.business.jsapi.WechatPayJsapiBusiness;
 import com.zeroxn.pay.module.wechat.business.parser.WechatNotifyParser;
 import com.zeroxn.pay.module.wechat.business.refund.WechatRefundBusiness;
-import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
-import org.springframework.stereotype.Component;
 
 /**
  * @Author: lisang

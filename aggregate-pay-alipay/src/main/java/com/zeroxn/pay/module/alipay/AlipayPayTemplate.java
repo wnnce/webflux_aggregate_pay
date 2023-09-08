@@ -4,15 +4,12 @@ import com.alipay.api.domain.AlipayTradeCreateModel;
 import com.alipay.api.domain.AlipayTradePagePayModel;
 import com.alipay.api.domain.AlipayTradeRefundModel;
 import com.alipay.api.domain.AlipayTradeWapPayModel;
+import com.zeroxn.pay.core.PayTemplate;
 import com.zeroxn.pay.core.entity.PayParams;
 import com.zeroxn.pay.core.enums.PayMethod;
-import com.zeroxn.pay.core.enums.PayPlatform;
 import com.zeroxn.pay.core.exception.PaySystemException;
-import com.zeroxn.pay.core.PayTemplate;
 import com.zeroxn.pay.module.alipay.business.AlipayPayBusiness;
 import org.springframework.beans.factory.annotation.Qualifier;
-
-import java.util.Map;
 
 /**
  * @Author: lisang

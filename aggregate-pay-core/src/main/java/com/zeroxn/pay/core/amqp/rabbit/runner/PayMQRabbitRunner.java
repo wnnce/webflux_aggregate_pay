@@ -1,6 +1,5 @@
 package com.zeroxn.pay.core.amqp.rabbit.runner;
 
-import com.zeroxn.pay.core.PayTemplate;
 import com.zeroxn.pay.core.amqp.rabbit.PayMQRabbitQueueManager;
 import com.zeroxn.pay.core.config.ModuleRegistry;
 import org.slf4j.Logger;
@@ -10,13 +9,9 @@ import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.Queue;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
-import org.springframework.context.ApplicationContext;
 import org.springframework.util.CollectionUtils;
 
-import java.sql.Connection;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @Author: lisang

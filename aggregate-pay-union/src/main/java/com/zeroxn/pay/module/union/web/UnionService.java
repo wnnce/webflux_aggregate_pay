@@ -1,12 +1,12 @@
 package com.zeroxn.pay.module.union.web;
 
 import com.zeroxn.pay.core.PayTemplate;
+import com.zeroxn.pay.core.amqp.PayMQTemplate;
 import com.zeroxn.pay.core.entity.PayParams;
 import com.zeroxn.pay.core.enums.PayMethod;
 import com.zeroxn.pay.core.enums.PayPlatform;
 import com.zeroxn.pay.core.enums.PayResult;
 import com.zeroxn.pay.core.exception.PayServiceException;
-import com.zeroxn.pay.core.amqp.PayMQTemplate;
 import com.zeroxn.pay.module.union.utils.UnionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

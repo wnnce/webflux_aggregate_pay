@@ -1,7 +1,6 @@
 package com.zeroxn.pay.module.paypal.config;
 
 import org.springframework.context.annotation.Import;
-import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
 import java.lang.annotation.*;

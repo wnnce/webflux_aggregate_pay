@@ -3,7 +3,6 @@ package com.zeroxn.pay.module.alipay.business;
 import com.alipay.api.AlipayApiException;
 import com.alipay.api.AlipayClient;
 import com.alipay.api.domain.*;
-import com.alipay.api.internal.util.AlipaySignature;
 import com.alipay.api.request.*;
 import com.alipay.api.response.*;
 import com.zeroxn.pay.core.exception.PaySystemException;
@@ -11,8 +10,6 @@ import com.zeroxn.pay.module.alipay.config.AlipayPayProperties;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.Map;
 
 /**
  * @Author: lisang

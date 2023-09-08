@@ -1,13 +1,9 @@
 package com.zeroxn.pay.module.paypal.business;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.util.JSONPObject;
 import com.zeroxn.pay.core.exception.PayServiceException;
 import com.zeroxn.pay.module.paypal.config.PaypalProperties;
 import com.zeroxn.pay.module.paypal.constant.PaypalConstant;
 import com.zeroxn.pay.module.paypal.modle.AuthResult;
-import org.apache.kafka.common.protocol.types.Field;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.ParameterizedTypeReference;

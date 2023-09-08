@@ -1,6 +1,5 @@
 package com.zeroxn.pay.module.paypal.config;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.zeroxn.pay.core.config.PayAutoConfiguration;
 import com.zeroxn.pay.module.paypal.business.PaypalBusiness;
 import com.zeroxn.pay.module.paypal.scheduled.TokenInterval;

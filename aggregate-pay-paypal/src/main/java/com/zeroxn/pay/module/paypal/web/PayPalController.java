@@ -1,14 +1,9 @@
 package com.zeroxn.pay.module.paypal.web;
 
 import com.zeroxn.pay.core.entity.Result;
-import com.zeroxn.pay.module.paypal.business.PaypalBusiness;
-import com.zeroxn.pay.module.paypal.config.PaypalAutoConfiguration;
-import io.swagger.v3.core.util.Json;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
-import org.springframework.boot.configurationprocessor.json.JSONObject;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;

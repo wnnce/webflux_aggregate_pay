@@ -1,8 +1,8 @@
 package com.zeroxn.pay.core.amqp.kafka;
 
+import com.zeroxn.pay.core.amqp.PayMQTemplate;
 import com.zeroxn.pay.core.enums.PayPlatform;
 import com.zeroxn.pay.core.enums.PayResult;
-import com.zeroxn.pay.core.amqp.PayMQTemplate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.kafka.core.KafkaTemplate;

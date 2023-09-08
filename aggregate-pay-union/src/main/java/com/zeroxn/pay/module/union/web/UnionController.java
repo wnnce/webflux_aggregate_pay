@@ -2,7 +2,6 @@ package com.zeroxn.pay.module.union.web;
 
 import com.zeroxn.pay.core.entity.Result;
 import com.zeroxn.pay.core.validation.ValidationGroups;
-import com.zeroxn.pay.module.union.UnionPayTemplate;
 import com.zeroxn.pay.module.union.utils.UnionUtils;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
