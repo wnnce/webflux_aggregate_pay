@@ -1,4 +1,4 @@
-package com.zeroxn.pay.module.paypal.dto;
+package com.zeroxn.pay.module.paypal.modle;
 
 /**
  * @Author: lisang
