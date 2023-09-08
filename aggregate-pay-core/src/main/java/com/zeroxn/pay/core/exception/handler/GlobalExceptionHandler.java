@@ -65,6 +65,6 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
     public Mono<Result<String>> handlerException(Exception ex){
         GlobalExceptionHandler.logger.error("系统错误，错误消息：{}", ex.getMessage());
-        return Mono.just(Result.field(ResultCode.SYSTEM_FIELD, "系统错误"));
+        return Mono.just(Result.field(ResultCode.SYSTEM_FIELD, "系统错误", ex.getMessage()));
     }
 }

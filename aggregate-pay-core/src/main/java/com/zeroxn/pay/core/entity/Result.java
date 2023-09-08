@@ -51,6 +51,18 @@ public class Result<T> {
         return new Result<>(code.getCode(), message, System.currentTimeMillis());
     }
 
+    /**
+     * 操作失败的响应方法
+     * @param code 错误码
+     * @param message 错误消息
+     * @param data 错误详情
+     * @return 响应体
+     * @param <T> 泛型
+     */
+    public static <T> Result<T> field(ResultCode code, String message, T data){
+        return new Result<>(code.getCode(), message, System.currentTimeMillis(), data);
+    }
+
     public int getCode() {
         return code;
     }
