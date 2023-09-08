@@ -1,5 +1,6 @@
 package com.zeroxn.pay.module.paypal.config;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.zeroxn.pay.core.config.PayAutoConfiguration;
 import com.zeroxn.pay.module.paypal.business.PaypalBusiness;
 import com.zeroxn.pay.module.paypal.scheduled.TokenInterval;
@@ -34,7 +35,7 @@ public class PaypalAutoConfiguration {
         PaypalBusiness paypalBusiness = new PaypalBusiness(properties, restTemplate);
         // 使用异步线程获取Token
         CompletableFuture.runAsync(paypalBusiness::initAuthorizationToken);
-        return new PaypalBusiness(properties, restTemplate);
+        return paypalBusiness;
     }
     @Bean
     public TokenInterval tokenInterval(PaypalBusiness paypalBusiness) {
