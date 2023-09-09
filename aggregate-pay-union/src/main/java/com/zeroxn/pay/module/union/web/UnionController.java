@@ -2,11 +2,12 @@ package com.zeroxn.pay.module.union.web;
 
 import com.zeroxn.pay.core.entity.Result;
 import com.zeroxn.pay.core.validation.ValidationGroups;
+import com.zeroxn.pay.module.union.config.ConditionalOnUnion;
 import com.zeroxn.pay.module.union.utils.UnionUtils;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
+import org.springframework.context.annotation.Conditional;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -23,7 +24,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/pay/union")
 @Tag(name = "云闪付支付接口")
-@ConditionalOnBean(name = "unionPayTemplate")
+@Conditional(ConditionalOnUnion.class)
 public class UnionController {
     private final UnionService unionService;
     public UnionController(UnionService unionService){

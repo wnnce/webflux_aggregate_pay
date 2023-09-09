@@ -7,11 +7,12 @@ import com.zeroxn.pay.core.enums.PayMethod;
 import com.zeroxn.pay.core.enums.PayPlatform;
 import com.zeroxn.pay.core.enums.PayResult;
 import com.zeroxn.pay.core.exception.PayServiceException;
+import com.zeroxn.pay.module.union.config.ConditionalOnUnion;
 import com.zeroxn.pay.module.union.utils.UnionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
+import org.springframework.context.annotation.Conditional;
 import org.springframework.stereotype.Service;
 
 import java.net.URLEncoder;
@@ -24,7 +25,7 @@ import java.util.Map;
  * @Description: 云闪付支付Service层
  */
 @Service
-@ConditionalOnBean(name = "unionPayTemplate")
+@Conditional(ConditionalOnUnion.class)
 public class UnionService {
     private static final Logger logger = LoggerFactory.getLogger(UnionService.class);
     private final PayTemplate payTemplate;

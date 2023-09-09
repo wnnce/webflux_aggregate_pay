@@ -10,14 +10,14 @@ import com.zeroxn.pay.core.enums.PayPlatform;
 import com.zeroxn.pay.core.enums.PayResult;
 import com.zeroxn.pay.core.exception.PayServiceException;
 import com.zeroxn.pay.core.exception.PaySystemException;
-import com.zeroxn.pay.module.alipay.AlipayPayTemplate;
 import com.zeroxn.pay.module.alipay.config.AlipayPayProperties;
+import com.zeroxn.pay.module.alipay.config.ConditionalOnAlipay;
 import com.zeroxn.pay.module.alipay.utils.AlipayUtils;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
+import org.springframework.context.annotation.Conditional;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
@@ -28,7 +28,7 @@ import java.util.Map;
  * @Description:
  */
 @Service
-@ConditionalOnBean(AlipayPayTemplate.class)
+@Conditional(ConditionalOnAlipay.class)
 public class AlipayService {
     private final Logger logger = LoggerFactory.getLogger(AlipayService.class);
     /**

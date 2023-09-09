@@ -1,8 +1,10 @@
 package com.zeroxn.pay.module.paypal.web;
 
 import com.zeroxn.pay.module.paypal.business.PaypalBusiness;
+import com.zeroxn.pay.module.paypal.config.ConditionalOnPayPal;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.Conditional;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +16,7 @@ import java.util.Map;
  * @Description: PayPal支付Service层
  */
 @Service
+@Conditional(ConditionalOnPayPal.class)
 public class PayPalService {
     private static final Logger logger = LoggerFactory.getLogger(PayPalService.class);
     private final PaypalBusiness paypalBusiness;

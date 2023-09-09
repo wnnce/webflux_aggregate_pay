@@ -5,11 +5,11 @@ import com.alipay.api.response.AlipayTradeQueryResponse;
 import com.alipay.api.response.AlipayTradeRefundResponse;
 import com.zeroxn.pay.core.entity.Result;
 import com.zeroxn.pay.core.validation.ValidationGroups;
-import com.zeroxn.pay.module.alipay.AlipayPayTemplate;
+import com.zeroxn.pay.module.alipay.config.ConditionalOnAlipay;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
+import org.springframework.context.annotation.Conditional;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
@@ -24,7 +24,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/pay/alipay")
 @Tag(name = "支付宝支付接口")
-@ConditionalOnBean(AlipayPayTemplate.class)
+@Conditional(ConditionalOnAlipay.class)
 public class AlipayController {
     private final AlipayService alipayService;
     public AlipayController(AlipayService alipayService){

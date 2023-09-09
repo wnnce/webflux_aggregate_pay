@@ -8,7 +8,8 @@ package com.zeroxn.pay.core.enums;
 public enum PayPlatform {
     WECHAT ("wechat"),
     ALIPAY ("alipay"),
-    UNION ("union");
+    UNION ("union"),
+    PAYPAL ("paypal");
     private final String value;
     PayPlatform(String value){
         this.value = value;

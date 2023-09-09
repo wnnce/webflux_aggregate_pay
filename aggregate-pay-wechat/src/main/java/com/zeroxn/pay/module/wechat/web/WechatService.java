@@ -12,12 +12,12 @@ import com.zeroxn.pay.core.enums.PayMethod;
 import com.zeroxn.pay.core.enums.PayPlatform;
 import com.zeroxn.pay.core.enums.PayResult;
 import com.zeroxn.pay.core.exception.PayServiceException;
-import com.zeroxn.pay.module.wechat.WechatPayTemplate;
 import com.zeroxn.pay.module.wechat.business.parser.WechatNotifyParser;
+import com.zeroxn.pay.module.wechat.config.ConditionalOnWechat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
+import org.springframework.context.annotation.Conditional;
 import org.springframework.stereotype.Service;
 
 /**
@@ -26,7 +26,7 @@ import org.springframework.stereotype.Service;
  * @Description: 微信支付Service层
  */
 @Service
-@ConditionalOnBean(WechatPayTemplate.class)
+@Conditional(ConditionalOnWechat.class)
 public class WechatService {
     private static final Logger logger = LoggerFactory.getLogger(WechatService.class);
     private final PayTemplate payTemplate;

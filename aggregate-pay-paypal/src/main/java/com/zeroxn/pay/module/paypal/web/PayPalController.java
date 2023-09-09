@@ -1,9 +1,11 @@
 package com.zeroxn.pay.module.paypal.web;
 
 import com.zeroxn.pay.core.entity.Result;
+import com.zeroxn.pay.module.paypal.config.ConditionalOnPayPal;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.context.annotation.Conditional;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
@@ -16,6 +18,7 @@ import reactor.core.publisher.Mono;
 @RestController
 @RequestMapping("/pay/paypal")
 @Tag(name = "PayPal支付接口")
+@Conditional(ConditionalOnPayPal.class)
 public class PayPalController {
 
     private final PayPalService payPalService;

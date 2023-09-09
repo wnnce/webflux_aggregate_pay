@@ -1,6 +1,6 @@
 package com.zeroxn.pay;
 
-import com.zeroxn.pay.module.paypal.config.EnablePaypalPay;
+import com.zeroxn.pay.module.union.config.EnableUnionPay;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -11,7 +11,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  */
 
 @SpringBootApplication
-@EnablePaypalPay
+@EnableUnionPay
 public class PayApplication {
     public static void main(String[] args) {
         SpringApplication.run(PayApplication.class);
