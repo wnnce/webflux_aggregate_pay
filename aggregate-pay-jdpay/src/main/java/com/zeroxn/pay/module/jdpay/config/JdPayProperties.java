@@ -1,10 +1,14 @@
 package com.zeroxn.pay.module.jdpay.config;
 
+import com.zeroxn.pay.module.jdpay.utils.JdPayUtils;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.bind.ConstructorBinding;
 import org.springframework.boot.context.properties.bind.DefaultValue;
+
+import java.security.PrivateKey;
+import java.security.PublicKey;
 
 /**
  * @Author: lisang
@@ -12,12 +16,7 @@ import org.springframework.boot.context.properties.bind.DefaultValue;
  * @Description: 京东支付配置类
  */
 @ConfigurationProperties(prefix = "pay.jd")
-@ConditionalOnProperty(value = "pay.jd.enable", havingValue = "true")
 public class JdPayProperties {
-    /**
-     * 是否开启京东支付支持
-     */
-    private Boolean enable;
     /**
      * 京东支付版本号 默认 v2.0
      */
@@ -35,24 +34,46 @@ public class JdPayProperties {
      */
     private String currency;
     /**
+     * 京东支付生成的DES密钥
+     */
+    private String desKey;
+    /**
+     * 京东支付公钥字符串
+     */
+    private String publicKey;
+    /**
+     * 京东支付私钥字符串
+     */
+    private String privateKey;
+    /**
      * 支付完成后的异步通知地址
      */
     private String notifyUrl;
+
+    /**
+     * 从公钥字符串解析得来的公钥证书
+     */
+    private PublicKey pubKey;
+    /**
+     * 从私钥字符串解析得来的私钥证书
+     */
+    private PrivateKey priKey;
     public JdPayProperties(){}
     @ConstructorBinding
     public JdPayProperties(Boolean enable, @DefaultValue("v2.0") String version, @NotNull String sign, @NotNull String merchantId,
-                           @DefaultValue("CNY") String currency, @NotNull String notifyUrl){
+                           @DefaultValue("CNY") String currency, @NotNull String desKey, @NotNull String privateKey,
+                           @NotNull String publicKey, @NotNull String notifyUrl) throws Exception{
 
-        this.enable = enable;
         this.version = version;
         this.sign = sign;
         this.merchantId = merchantId;
         this.currency = currency;
+        this.desKey = desKey;
+        this.publicKey = publicKey;
+        this.privateKey = privateKey;
         this.notifyUrl = notifyUrl;
-    }
-
-    public Boolean getEnable() {
-        return enable;
+        this.pubKey = JdPayUtils.readKeyFromString(this.publicKey, PublicKey.class);
+        this.priKey = JdPayUtils.readKeyFromString(this.privateKey, PrivateKey.class);
     }
 
     public String getVersion() {
@@ -71,6 +92,25 @@ public class JdPayProperties {
         return currency;
     }
 
+    public String getDesKey() {
+        return desKey;
+    }
+
+    public String getPublicKeyString() {
+        return publicKey;
+    }
+
+    public String getPrivateKeyString() {
+        return privateKey;
+    }
+
+    public PublicKey getPublicKey() {
+        return pubKey;
+    }
+
+    public PrivateKey getPrivateKey() {
+        return priKey;
+    }
     public String getNotifyUrl() {
         return notifyUrl;
     }

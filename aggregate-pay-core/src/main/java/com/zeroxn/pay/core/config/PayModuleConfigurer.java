@@ -1,6 +1,5 @@
 package com.zeroxn.pay.core.config;
 
-import com.zeroxn.pay.core.register.CertRegistry;
 import com.zeroxn.pay.core.register.ModuleRegistry;
 
 /**
