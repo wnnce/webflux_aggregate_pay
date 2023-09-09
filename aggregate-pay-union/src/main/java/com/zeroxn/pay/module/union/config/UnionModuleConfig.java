@@ -1,6 +1,7 @@
 package com.zeroxn.pay.module.union.config;
 
-import com.zeroxn.pay.core.config.ModuleRegistry;
+import com.zeroxn.pay.core.register.CertRegistry;
+import com.zeroxn.pay.core.register.ModuleRegistry;
 import com.zeroxn.pay.core.config.PayModuleConfigurer;
 
 /**
@@ -9,8 +10,18 @@ import com.zeroxn.pay.core.config.PayModuleConfigurer;
  * @Description:
  */
 public class UnionModuleConfig implements PayModuleConfigurer {
+    private final UnionPayProperties properties;
+    public UnionModuleConfig(UnionPayProperties properties) {
+        this.properties = properties;
+    }
     @Override
     public void addModule(ModuleRegistry registry) {
-        registry.addModule("union");
+        registry.add("union");
+    }
+
+    @Override
+    public void addCert(CertRegistry registry) {
+        registry.add(properties.getSignCertPwd(), properties.getSignCertPath(), properties.getEncryptCertPath(),
+                properties.getMiddleCertPath(), properties.getRootCertPath());
     }
 }

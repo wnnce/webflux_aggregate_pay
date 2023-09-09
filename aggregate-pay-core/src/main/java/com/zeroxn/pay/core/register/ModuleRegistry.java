@@ -1,4 +1,4 @@
-package com.zeroxn.pay.core.config;
+package com.zeroxn.pay.core.register;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +19,7 @@ public class ModuleRegistry {
      * 添加模块
      * @param moduleName 模块名称
      */
-    public void addModule(String moduleName) {
+    public void add(String moduleName) {
         registrationList.add(new ModuleRegistration(moduleName));
     }
 

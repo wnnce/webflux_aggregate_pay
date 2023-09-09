@@ -1,5 +1,7 @@
 package com.zeroxn.pay.core.config;
 
+import com.zeroxn.pay.core.register.CertRegistry;
+import com.zeroxn.pay.core.register.ModuleRegistry;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.util.CollectionUtils;
@@ -14,16 +16,31 @@ import java.util.List;
 @Configuration
 public class PayAutoConfiguration {
     private final ModuleRegistry moduleRegistry;
+    private final CertRegistry certRegistry;
 
     public PayAutoConfiguration(List<PayModuleConfigurer> configurers) {
         moduleRegistry = new ModuleRegistry();
+        certRegistry = new CertRegistry();
         if(!CollectionUtils.isEmpty(configurers)){
-            configurers.forEach(module -> module.addModule(moduleRegistry));
+            configurers.forEach(module -> {
+                module.addModule(moduleRegistry);
+                module.addCert(certRegistry);
+            });
         }
     }
 
     @Bean
     public ModuleRegistry moduleRegistry() {
         return moduleRegistry;
+    }
+
+    @Bean
+    public CertRegistry certRegistry(){
+        return certRegistry;
+    }
+
+    @Bean
+    public PayCertManager payCertManager() throws Exception {
+        return new PayCertManager(certRegistry.getCertRegistrationList());
     }
 }

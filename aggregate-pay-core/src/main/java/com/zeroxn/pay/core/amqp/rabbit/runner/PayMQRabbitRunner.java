@@ -1,7 +1,7 @@
 package com.zeroxn.pay.core.amqp.rabbit.runner;
 
 import com.zeroxn.pay.core.amqp.rabbit.PayMQRabbitQueueManager;
-import com.zeroxn.pay.core.config.ModuleRegistry;
+import com.zeroxn.pay.core.register.ModuleRegistry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.core.AmqpAdmin;

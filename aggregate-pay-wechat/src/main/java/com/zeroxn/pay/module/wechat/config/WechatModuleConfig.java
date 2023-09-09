@@ -1,6 +1,6 @@
 package com.zeroxn.pay.module.wechat.config;
 
-import com.zeroxn.pay.core.config.ModuleRegistry;
+import com.zeroxn.pay.core.register.ModuleRegistry;
 import com.zeroxn.pay.core.config.PayModuleConfigurer;
 
 /**
@@ -11,6 +11,6 @@ import com.zeroxn.pay.core.config.PayModuleConfigurer;
 public class WechatModuleConfig implements PayModuleConfigurer {
     @Override
     public void addModule(ModuleRegistry registry) {
-        registry.addModule("wechat");
+        registry.add("wechat");
     }
 }

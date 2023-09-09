@@ -4,7 +4,7 @@ import com.zeroxn.pay.core.amqp.PayMQTemplate;
 import com.zeroxn.pay.core.amqp.kafka.PayMQKafkaTemplate;
 import com.zeroxn.pay.core.amqp.kafka.PayMQKafkaTopicManager;
 import com.zeroxn.pay.core.amqp.kafka.runner.PayMQKafkaRunner;
-import com.zeroxn.pay.core.config.ModuleRegistry;
+import com.zeroxn.pay.core.register.ModuleRegistry;
 import org.apache.kafka.clients.admin.AdminClient;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;

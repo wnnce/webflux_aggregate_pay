@@ -4,7 +4,7 @@ import com.zeroxn.pay.core.amqp.PayMQTemplate;
 import com.zeroxn.pay.core.amqp.rabbit.PayMQRabbitQueueManager;
 import com.zeroxn.pay.core.amqp.rabbit.PayMQRabbitTemplate;
 import com.zeroxn.pay.core.amqp.rabbit.runner.PayMQRabbitRunner;
-import com.zeroxn.pay.core.config.ModuleRegistry;
+import com.zeroxn.pay.core.register.ModuleRegistry;
 import com.zeroxn.pay.core.config.PayAutoConfiguration;
 import org.springframework.amqp.core.AmqpAdmin;
 import org.springframework.amqp.core.DirectExchange;
