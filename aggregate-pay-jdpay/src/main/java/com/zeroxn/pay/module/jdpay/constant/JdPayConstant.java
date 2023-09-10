@@ -6,5 +6,8 @@ package com.zeroxn.pay.module.jdpay.constant;
  * @Description: 京东支付常量类
  */
 public class JdPayConstant {
-    private static final String CONFIRM_ORDER_URL = "https://paygate.jd.com/service/uniorder";
+    public static final String CONFIRM_ORDER_URL = "https://paygate.jd.com/service/uniorder";
+    public static final String QUERY_ORDER_URL = "https://paygate.jd.com/service/query";
+    public static final String REFUND_ORDER_URL = "https://paygate.jd.com/service/refund";
+    public static final String REVOKE_ORDER_URL = "https://paygate.jd.com/service/revoke";
 }
