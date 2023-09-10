@@ -1,13 +1,17 @@
 package com.zeroxn.pay.test;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.dataformat.xml.XmlMapper;
+import com.fasterxml.jackson.dataformat.xml.ser.ToXmlGenerator;
+import com.zeroxn.pay.module.jdpay.business.JdPayBusiness;
+import com.zeroxn.pay.module.jdpay.model.JdPayMap;
 import com.zeroxn.pay.module.jdpay.utils.JdPayUtils;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.util.MultiValueMap;
 
-import java.nio.charset.Charset;
-import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -15,7 +19,12 @@ import java.util.Map;
  * @DateTime: 2023-09-09 16:03:43
  * @Description:
  */
+@SpringBootTest
 public class JdPayTest {
+
+    @Autowired
+    private JdPayBusiness jdPayBusiness;
+
     @Test
     public void testMapFilter() {
         Map<String, String> map = new HashMap<>();
@@ -41,9 +50,45 @@ public class JdPayTest {
         System.out.println(paramsStr);
         String sha265 = JdPayUtils.bytesToHexString(JdPayUtils.sha256(paramsStr.getBytes()));
         System.out.println(sha265);
-        MultiValueMap<String, String> multiValueMap = JdPayUtils.mapToMultiValueMap(map);
+        String sign = JdPayUtils.sign(paramsStr);
+        MultiValueMap<String, String> multiValueMap = JdPayUtils.mapToEncryptMultiValueMap(map);
+        multiValueMap.add("sign", sign);
         System.out.println(multiValueMap);
         long endTime = System.currentTimeMillis();
         System.out.println("handleTime:" + (endTime - startTime));
+    }
+
+    @Test
+    public void testWapConfirmOrder() {
+        JdPayMap<String, String> map = new JdPayMap<>();
+        map.put("tradeNum", "SADAS456456161");
+        map.put("tradeName", "测试商品");
+        map.put("amount", "1");
+        map.put("orderType", "1");
+        map.put("userId", "464161879846");
+        Map<String, Object> response = jdPayBusiness.confirmOrder(map);
+        System.out.println(response);
+    }
+
+    @Test
+    public void testJacksonXml() throws JsonProcessingException {
+        XmlMapper xmlMapper = new XmlMapper();
+        xmlMapper.configure(ToXmlGenerator.Feature.WRITE_XML_DECLARATION, true);
+        Map<String, String> map = new JdPayMap<>();
+        map.put("tradeNum", "SADAS456456161");
+        map.put("tradeName", "测试商品");
+        map.put("amount", "1");
+        map.put("orderType", "1");
+        map.put("userId", "464161879846");
+        String xmlString = xmlMapper.writeValueAsString(map);
+        String sign = JdPayUtils.sign(xmlString);
+        map.put("sign", sign);
+        xmlString = xmlMapper.writeValueAsString(map);
+        String encryptString = JdPayUtils.encryptBy3DES(xmlString);
+        Map<String, String> requestMap = new JdPayMap<>();
+        requestMap.put("version", "2.0");
+        requestMap.put("meid", "216161");
+        requestMap.put("encrypt", encryptString);
+        System.out.println(xmlMapper.writeValueAsString(requestMap));
     }
 }
