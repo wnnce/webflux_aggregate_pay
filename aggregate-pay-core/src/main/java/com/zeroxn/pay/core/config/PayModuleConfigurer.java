@@ -1,5 +1,6 @@
 package com.zeroxn.pay.core.config;
 
+import com.zeroxn.pay.core.register.CertRegistry;
 import com.zeroxn.pay.core.register.ModuleRegistry;
 
 /**
@@ -8,5 +9,6 @@ import com.zeroxn.pay.core.register.ModuleRegistry;
  * @Description: 支付模块配置接口
  */
 public interface PayModuleConfigurer {
-    default void addModule(ModuleRegistry registry) {}
+    default void addModule(ModuleRegistry registry) {};
+    default void addCert(CertRegistry registry) {};
 }

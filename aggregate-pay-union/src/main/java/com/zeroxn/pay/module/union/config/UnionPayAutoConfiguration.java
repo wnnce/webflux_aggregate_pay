@@ -20,18 +20,13 @@ import org.springframework.web.client.RestTemplate;
 @EnableConfigurationProperties(UnionPayProperties.class)
 public class UnionPayAutoConfiguration {
     @Bean
-    public UnionModuleConfig unionModuleConfig() {
-        return new UnionModuleConfig();
+    public UnionModuleConfig unionModuleConfig(UnionPayProperties properties) {
+        return new UnionModuleConfig(properties);
     }
     @Bean
     @ConditionalOnMissingBean(RestTemplate.class)
     public RestTemplate restTemplate() {
         return new RestTemplate();
-    }
-    @Bean
-    @ConditionalOnClass(UnionPayProperties.class)
-    public UnionPayCertManager unionPayCertManager(UnionPayProperties unionPayProperties) throws Exception{
-        return new UnionPayCertManager(unionPayProperties);
     }
     @Bean
     @ConditionalOnClass(UnionPayProperties.class)

@@ -1,7 +1,8 @@
 package com.zeroxn.pay.module.union.utils;
 
+import com.zeroxn.pay.core.config.PayCertManager;
 import com.zeroxn.pay.core.exception.PaySystemException;
-import com.zeroxn.pay.module.union.config.UnionPayCertManager;
+import com.zeroxn.pay.module.union.config.ConditionalOnUnion;
 import com.zeroxn.pay.module.union.config.UnionPayProperties;
 import com.zeroxn.pay.module.union.constant.UnionConstant;
 import org.bouncycastle.crypto.digests.SM3Digest;
@@ -9,18 +10,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
+import org.springframework.context.annotation.Conditional;
 import org.springframework.stereotype.Component;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.security.*;
-import java.security.cert.CertificateException;
-import java.security.cert.CertificateFactory;
-import java.security.cert.X509Certificate;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.*;
@@ -32,14 +29,14 @@ import java.util.stream.Collectors;
  * @Description:
  */
 @Component
-@ConditionalOnBean(UnionPayCertManager.class)
+@Conditional(ConditionalOnUnion.class)
 public class UnionUtils {
     private static final Logger logger = LoggerFactory.getLogger(UnionUtils.class);
-    private static UnionPayCertManager certManager;
+    private static PayCertManager certManager;
     private static UnionPayProperties properties;
 
     @Autowired
-    public void setUnionPayCertManager(UnionPayCertManager certManager){
+    public void setUnionPayCertManager(PayCertManager certManager){
         UnionUtils.certManager = certManager;
     }
     @Autowired
@@ -313,56 +310,6 @@ public class UnionUtils {
         return keyFactory.generatePublic(keySpec);
     }
 
-    /**
-     * 读取pfx后缀的证书文件，读取其中的私钥、公钥、证书ID
-     * @param certPath 证书文件路径 支持classpath:路径和绝对路径
-     * @param certPassword 证书密码
-     * @return 返回证书类
-     * @throws Exception
-     */
-    public static UnionCert readerCertByPfx(String certPath, String certPassword) throws Exception {
-        KeyStore keyStore = KeyStore.getInstance(UnionConstant.SIGN_CERT_TYPE);
-        FileInputStream inputStream = readerFile(certPath);
-        keyStore.load(inputStream, certPassword.toCharArray());
-        inputStream.close();
-        String privateKeyAlias = keyStore.aliases().nextElement();
-        PrivateKey privateKey = (PrivateKey) keyStore.getKey(privateKeyAlias, certPassword.toCharArray());
-        X509Certificate x509Certificate = (X509Certificate) keyStore.getCertificate(privateKeyAlias);
-        String certId = x509Certificate.getSerialNumber().toString(10);
-        PublicKey publicKey = x509Certificate.getPublicKey();
-        return new UnionCert(certId, privateKey, publicKey);
-    }
-
-    /**
-     * 读取cer后缀的证书文件，读取其中的公钥
-     * @param certPath 证书文件路径
-     * @return 返回证书类
-     * @throws FileNotFoundException 文件不存在异常
-     * @throws CertificateException 获取证书异常
-     */
-    public static UnionCert readerCertByCer(String certPath) throws FileNotFoundException, CertificateException {
-        FileInputStream inputStream = readerFile(certPath);
-        CertificateFactory factory = CertificateFactory.getInstance(UnionConstant.CERT_TYPE);
-        X509Certificate certificate = (X509Certificate) factory.generateCertificate(inputStream);
-        PublicKey publicKey = certificate.getPublicKey();
-        return new UnionCert(publicKey);
-    }
-
-    /**
-     * 读取指定路径的文件并转换为文件输入流
-     * @param path 文件路径 支持classpath:路径和绝对路径
-     * @return 返回文件的文件输入流
-     * @throws FileNotFoundException 文件不存在异常
-     */
-    private static FileInputStream readerFile(String path) throws FileNotFoundException {
-        if(path.startsWith("classpath:")){
-            ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-            String filePath = path.substring(path.indexOf(":") + 1);
-            return new FileInputStream(classLoader.getResource(filePath).getPath());
-        }else {
-            return new FileInputStream(path);
-        }
-    }
     public static <K, V> MultiValueMap<K, V> mapToMultiValueMap(Map<K, V> sourceMap){
         MultiValueMap<K, V> multiValueMap = new LinkedMultiValueMap<>();
         sourceMap.forEach(multiValueMap::add);

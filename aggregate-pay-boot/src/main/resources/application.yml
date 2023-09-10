@@ -25,11 +25,18 @@ pay:
     sign-type: '01'
     success-notify-url: http://xxx.123.com
     refund-notify-url: http://xxx.213.com
+    root-cert-path: classpath:certs/acp_test_root.cer
   paypal:
     client-id: 'AepSvAFACXR9Hn47x0y3k1djxEZcyddsu38-1lljCc46QL7qDPnzumLVHd0jGQP6j4nusHJn-vilViKN'
     secret: 'EOlieRfkze-IeEEbT1tvYsVXUXncs0UYHoXeKIW4fUOrL3Mjmw5a-bpWj7nhHW93f624U6QXnO2YZ9uC'
     notify-url: 'https://baidu.com'
     currency: USD
+  jd:
+    des-key: 0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF
+    merchant-id: 16546165132191165
+    notify-url: https://baidu.com
+    public-key-path: classpath:jd/public_key.pem
+    private-key-path: classpath:jd/private_key.pem
   mq:
     rabbitmq:
       enable: true
