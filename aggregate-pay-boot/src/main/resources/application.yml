@@ -4,7 +4,7 @@ spring:
   mvc:
     static-path-pattern: classpath:/static
   rabbitmq:
-    host: 82.156.25.185
+    host: 10.10.10.10
     port: 5672
     username: root
     password: admin

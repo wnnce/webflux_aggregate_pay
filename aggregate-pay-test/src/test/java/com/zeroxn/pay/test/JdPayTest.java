@@ -22,6 +22,7 @@ import java.util.Map;
  * @DateTime: 2023-09-09 16:03:43
  * @Description:
  */
+@SpringBootTest
 public class JdPayTest {
     private static final Logger logger = LoggerFactory.getLogger(JdPayTest.class);
     @Autowired
