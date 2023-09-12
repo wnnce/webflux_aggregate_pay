@@ -9,7 +9,8 @@ public enum PayPlatform {
     WECHAT ("wechat"),
     ALIPAY ("alipay"),
     UNION ("union"),
-    PAYPAL ("paypal");
+    PAYPAL ("paypal"),
+    JDPAY ("jdpay");
     private final String value;
     PayPlatform(String value){
         this.value = value;

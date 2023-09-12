@@ -2,6 +2,7 @@ package com.zeroxn.pay.module.jdpay.utils;
 
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.fasterxml.jackson.dataformat.xml.ser.ToXmlGenerator;
 import com.zeroxn.pay.core.config.PayCertManager;
@@ -109,10 +110,42 @@ public class JdPayUtils {
             throw new PaySystemException("请求签名失败");
         }
     }
+
+    public static String decryptNotify(String encrypt) {
+        try{
+            byte[] decodeBytes = Base64.getDecoder().decode(encrypt);
+            Cipher cipher = Cipher.getInstance("RSA");
+            PublicKey publicKey = certManager.getPublicKey(properties.getPublicKeyPath());
+            cipher.init(Cipher.DECRYPT_MODE, publicKey);
+            byte[] decryptBytes = cipher.doFinal(decodeBytes);
+            return new String(decryptBytes, StandardCharsets.UTF_8);
+        }catch (Exception e) {
+            logger.error("京东支付通知解密失败，错误消息:{}", e.getMessage());
+            throw new RuntimeException("通知解密失败");
+        }
+    }
+    public static String decryptBy3DES(String encrypt) {
+        try{
+            Cipher cipher = Cipher.getInstance("DESede/ECB/NoPadding");
+            cipher.init(Cipher.ENCRYPT_MODE, JdPayUtils.initSecretKey("0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF"));
+            byte[] decodeBytes = Base64.getDecoder().decode(encrypt.getBytes(StandardCharsets.UTF_8));
+            byte[] bytes = cipher.doFinal(decodeBytes);
+            int len = (bytes[0] & 0xff) << 24 |
+                    (bytes[1] & 0xff) << 16 |
+                    (bytes[2] & 0xff) << 8 |
+                    (bytes[3] & 0xff);
+            byte[] plaintextWithPadding = new byte[len];
+            System.arraycopy(bytes, 4, plaintextWithPadding, 0, len);
+            return new String(plaintextWithPadding, StandardCharsets.UTF_8);
+        }catch (Exception e){
+            logger.error("3DES解密失败，错误消息：{}", e.getMessage());
+            throw new PaySystemException("响应数据解析异常");
+        }
+    }
     public static String encryptBy3DES(String plaintext) {
         try{
             Cipher cipher = Cipher.getInstance("DESede/ECB/NoPadding");
-            cipher.init(Cipher.ENCRYPT_MODE, properties.getSecretKey());
+            cipher.init(Cipher.DECRYPT_MODE, JdPayUtils.initSecretKey("0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF"));
             byte[] originBytes = plaintext.getBytes(StandardCharsets.UTF_8);
             byte[] encryptBytes = cipher.doFinal(paddingBytes(originBytes));
             return Base64.getEncoder().encodeToString(encryptBytes);
@@ -121,7 +154,7 @@ public class JdPayUtils {
             throw new PaySystemException("请求数据异常");
         }
     }
-    public static byte[] paddingBytes(byte[] bytes){
+    private static byte[] paddingBytes(byte[] bytes){
         int len = bytes.length;
         int x = (len + 4) % 8;
         int y = (x == 0) ? 0 : (8 - x);
@@ -191,5 +224,15 @@ public class JdPayUtils {
             logger.error("序列化为xml失败，错误消息：{}", e.getMessage());
             throw new PaySystemException("参数序列化失败");
         }
+    }
+
+    public static <T> T xmlToObject(String xmlString, TypeReference<T> valueRef) {
+        try{
+            return xmlMapper.readValue(xmlString, valueRef);
+        }catch (JsonProcessingException e) {
+            logger.error("反序列化xml失败，错误消息：{}", e.getMessage());
+            throw new PaySystemException("返回参数反序列化失败");
+        }
+
     }
 }

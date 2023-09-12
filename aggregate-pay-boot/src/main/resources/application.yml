@@ -4,7 +4,7 @@ spring:
   mvc:
     static-path-pattern: classpath:/static
   rabbitmq:
-    host: 10.10.10.10
+    host: 82.156.25.185
     port: 5672
     username: root
     password: admin
@@ -34,9 +34,10 @@ pay:
   jd:
     des-key: 0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF
     merchant-id: 16546165132191165
-    notify-url: https://baidu.com
     public-key-path: classpath:jd/public_key.pem
     private-key-path: classpath:jd/private_key.pem
+    success-notify-url: https://baidu.com
+    refund-notify-url: https://baidu.com
   mq:
     rabbitmq:
       enable: true

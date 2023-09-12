@@ -1,5 +1,6 @@
 package com.zeroxn.pay.module.jdpay.business;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.zeroxn.pay.core.exception.PayServiceException;
 import com.zeroxn.pay.core.exception.PaySystemException;
 import com.zeroxn.pay.module.jdpay.config.JdPayProperties;
@@ -134,7 +135,9 @@ public class JdPayBusiness {
         }
         Map<String, Object> result = response.getBody();
         if (String.valueOf(result.get("result")).contains("000000")){
-            return result;
+            String encryptString = String.valueOf(result.get("encrypt"));
+            String decryptString = JdPayUtils.decryptBy3DES(encryptString);
+            return JdPayUtils.xmlToObject(decryptString, new TypeReference<Map<String, Object>>() {});
         }else {
             logger.error("京东支付请求异常，返回消息：{}", result.get("result"));
             throw new PayServiceException(result.toString());
